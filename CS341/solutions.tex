@@ -1,0 +1,637 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{bilal2vec}
+
+\title{CS 341 - Solutions}
+\author{Bilal Khan\\
+\href{mailto:bilal2vec@gmail.com}{bilal2vec@gmail.com}}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+Many answers copied from \href{https://github.com/elena-pan/UW-Practice-Problem-Solutions}{Elena's solutions}
+
+\tableofcontents
+
+\section{Cheatsheet}
+
+\subsection{Master Theorem}
+
+\[ T(n) = a T(\frac{n}{b}) + n^c \]
+
+\[
+    \begin{cases}
+        T(n) = \Theta(n^c)          & \text{if } \log_b a < c \\
+        T(n) = \Theta(n^c \log n)   & \text{if } \log_b a = c \\
+        T(n) = \Theta(n^{\log_b a}) & \text{if } \log_b a > c
+    \end{cases}
+\]
+
+\section{A1 F22}
+
+\subsection{Question 1}
+
+\begin{enumerate}
+    \item True, False
+    \item Depends, Depends
+    \item True, False
+    \item True, False
+\end{enumerate}
+
+\subsection{Question 2}
+
+\begin{enumerate}
+    \item $\log \log n$
+    \item $n$ amount of work at each step, so $n \log \log n$
+    \item At most constant term larger than $\sqrt{n}$.
+\end{enumerate}
+
+\subsection{Question 3}
+
+2d binary search, find min element in row, recurse in the top/bottom half of the matrix depending on if the min element is $<$ or $>$ its up/down neighbors. This is $O(n \log n)$. Algorithm is correct because if the min element is not a solution, then it is in the top/bottom half of the matrix, and by recursing into the half with a border element that is always smaller than the min element, we will eventually find the solution.
+
+\subsection{Question 4}
+
+\begin{enumerate}
+    \item If more than half of the chips are bad, then every good chip could be paired with a bad chip, and the test results of that will be inconclusive and we cannot trust the results of any of the chips.
+    \item recursively pair up chips, remove all pairs that are not good-good. Since there are always more good chips than bad chips, and removing all non good-good pairs will mean we remove all good-bad and bad-good pairs, keeping the invariant that there are more good chips than bad. eventually we reach the base case that there are no bad chips.
+    \item $T(n) = T(n/2) + 1$. $T(n) = O(\log n) \in O(n)$
+\end{enumerate}
+
+\section{A1 S17}
+
+\subsection{Question 1}
+
+Programming question N/A
+
+\subsection{Question 2}
+
+\begin{enumerate}
+    \item $T(n) = T(2n/3) + T(n/3) + n^2$.
+
+          \begin{align*}
+              T(n)         & \leq 2 T(2n/3) + n^2 \\
+              \log_{3/2} 2 & < 2                  \\
+              T(n)         & \in O(n^2)           \\
+          \end{align*}
+
+          \begin{align*}
+              T(n)     & \geq 2 T(n/3) + n^2 \\
+              \log_3 2 & < 2                 \\
+              T(n)     & \in \Omega(n^2)     \\
+          \end{align*}
+
+          \[T(n) \in \Theta(n^2)\]
+
+    \item size of each level decreases at a rate of $n^{1/2^k}$, so there are $\log \log n$ levels. We do $n$ amount of work at each level, so $T(n) = n \log \log n$.
+
+\end{enumerate}
+
+\subsection{Question 3}
+
+Problem can be decomposed into, given upper/lower bounds on a rectangle, what should be the left/right bounds of the rectangle to maximize the sum. Iterate over all $n^2$ upper/lower bounds and for each pair, compute a prefix sum array, summing column-wise, then use kadane's algorithm to find the maximum subarray sum with the left/right bounds in $n \log n$ time. Total time is then $n^3 \log n$.
+
+\subsection{Question 4}
+
+Recursively build the binary tree given preorder and inorder. preorder[0] is always the root of the tree, so remove that from the preorder array and set that as the value of the node. We can find the index of the root in the inorder array. Count the number of elements $n$ before the root in the inorder array. Split the preorder and inorder arrays into two parts for each of the left and right subtrees by taking the first $n$ elements of the preorder array and the first $n$ elements of the inorder array for the left subtree, and the rest of the elements in both the preorder and inorder arrays for the right subtree. Recurse on the left and right subtrees and add their root nodes as left/right children of the current node. This is correct because the preorder traversal starts at the root node, and the inorder traversal starts at the leftmost node and traverses through all left-children of the root before visiting the root. We can then inductively apply this to each of the left and right subtrees to prove correctness.
+
+\section{A1 S18}
+
+\subsection{Question 1}
+
+\begin{enumerate}
+    \item False, $1^0 + 1^1 + 1^2 + \dots + 1^{n-1} + 1^n = n > c$
+    \item False
+    \item True
+\end{enumerate}
+
+\subsection{Question 2}
+
+\begin{enumerate}
+    \item $\log_3 9 = 2$, so $T(n) = \Theta(n^2 \log n)$
+    \item Total work at level $d$ is $n \log n - 2nd$, and there are $\log n$ levels, so $T(n) = \Theta(n \log^2 n)$
+    \item Using master theorem and upper/lower bounding it, we get $T(n) = \Theta(n \log n)$
+    \item $T(n) = O(n \log \log n)$
+\end{enumerate}
+
+\subsection{Question 3}
+
+Outer loop runs $\sqrt(n)$ times, inner loop runs $n/j$ times for each iteration of the outer loop, so total work is $\sum_{j=1}^{\sqrt{n}} n/j = n \sum_{j=1}^{\sqrt{n}} 1/j n \log \sqrt{n} = 1/2 n \log n $
+
+\subsection{Question 4}
+
+Run two-sum on A, storing all possible sums in a hash table (keys=possible sums, values=indices of the two elements that sum to that value). Then run two-sum on B, and for each pair of elements that sum to a value, look up that corresponding value in A's hashtable and return the indices of the four elements if it exists. A's two sum takes $O(n^2)$ time and $O(n^2)$ auxillary memory, and B's two sum takes $O(n^2 \log n)$ time as we need to do a lookup in A's hashtable for each pair of elements in B (assuming binary search lookup time of $O(\log n)$). Total time is $O(n^2 \log n)$.
+
+\subsection{Question 5}
+
+Programming question N/A
+
+\section{A1 S21}
+
+\subsection{Question 1}
+
+Programming question N/A
+
+\subsection{Question 2}
+
+\begin{enumerate}
+    \item $O(n^2)$
+    \item $O(n \log \log n)$
+\end{enumerate}
+
+\subsection{Question 3}
+
+Variant of merge sort, split intervals across midpoint, recurse on each half, merge by moving two pointers from mid point and choosing interval with higher height reassigning end time for lower height interval. Total time is $O(n \log n)$.
+
+\subsection{Question 4}
+
+Choose points for x-start and x-end points for each square, sort by x-start, then iterate through the list and add/remove the y-start and y-end points of that square to an AVL tree. when adding, check if the element before its y-start is a y-start, if the element after its y-end is a y-end (overlapping squares) or if the element after its y-start is before its y-end (overlapping or nested). If so, then there are overlapping squares. Sorting takes $n \log n$, iterating takes $2n$, and there are a constant number of $\log n$ AVL tree operations. Total time is $O(n \log n)$.
+
+\section{A1 W16}
+
+\subsection{Question 1}
+
+Programming question N/a
+
+\subsection{Question 2}
+
+\begin{enumerate}
+    \item $O(n^2)$
+    \item $O(n \log \log n)$
+\end{enumerate}
+
+\subsection{Question 3}
+
+Sort points by x-coordinate, find inversions in the y-coordinate. This is WLOG equivalent to finding the number of incomparable pairs.
+
+\subsection{Question 4}
+
+\begin{enumerate}
+    \item Variant of merge sort, split across mid point, recurse on each half and find largest rectangle in each half. Then find largest rectangle that spans across mid point by starting with height of midpoint and decreasing it as you iterate over both halves and multiplying by the width. Total time is $O(n \log n)$.
+    \item Find max space of rectangle while decreasing baseline height from top of rectangle down to bottom, use a prefix sum array to record current height of each column. Total time is $O(n^2)$.
+\end{enumerate}
+
+\section{A2 F22}
+
+\subsection{Quesrion 1}
+
+\begin{enumerate}
+    \item
+          \[ 5^k n/3^k \sqrt{n/3^k} \]
+          \[ 5^k n \sqrt{n} 1/3^k \sqrt{1/3^k} \]
+          \[ (5/3)^k (1/3^{k/2}) n \sqrt{n} \]
+          \[ n \sqrt{n} \sum_{k=1}^{\log n} (5/3)^k 1/3^{k/2} \]
+    \item
+          \[ 6^k (3/7)^{2k} n^{2k}  \]
+\end{enumerate}
+
+\subsection{Question 2} Not doing this one
+
+\subsection{Question 3}
+
+\begin{enumerate}
+    \item $opt(i, j) = \min_{k \in [i + 1, j]} (C(i, k) + opt(k, j))$
+    \item $n \times 1$ table, Each entry is the minimum cost to travel between city $i$ and city $n$, The table is initialized to $C[i][j]$, The table will be filled in by iterating over source cities in reverse (n-1 down to 1) and for each of those iterating over intermediate cities (i + 1 to n).
+    \item
+          \begin{minted}{python}
+
+ks = []
+for i in n-1 down to 1:
+    best_k = -1
+    for k in i+1 to n:
+        if C[i][k] + opt[k][n] < opt[i][n]:
+            best_k = k
+            opt[i][n] = C[i][k] + opt[k][n]
+    ks.append(best_k)
+print(ks.reverse())
+\end{minted}
+\end{enumerate}
+
+\subsection{Question 4}
+
+\begin{enumerate}
+    \item The subproblems are $\text{knapsack}(i, W_1, W_2) = v$ which is maximum value of items stored in both knapsacks using items in $\{i, \cdots, n\}$ when total weight in knapsack 1 is $W_1$ and total weight in knapsack 2 is $W_2$.
+
+          \[ \text{knapsack}(i, W_1, W_2) = \max_{S_1 \bigcup S_2 \subseteq \{1, \cdots, i\}} \left\{ \sum_{k \in S_1} v_k + \sum_{k \in S_2} v_k | \sum_{k \in S_1} w_k \leq W \sum_{k \in S_2} w_k \leq W \right\} \]
+
+    \item Initialize all elements in the table when $W < 0$ to be $-\infty$ and all elements in the table when $i > n$ to be $0$.
+
+    \item We can observe that at any state we can not add an item to either knapsack, add it to the first, or add it to the second to derive the recurrence:
+
+          \begin{align*}
+              \text{knapsack}(i, W, W) & = \max \{ \text{knapsack}(i + 1, W, W),     \\
+                                       & v_i + \text{knapsack}(i + 1, W - w_i, W),   \\
+                                       & v_i + \text{knapsack}(i + 1, W, W - w_i) \}
+          \end{align*}
+
+    \item
+
+          \begin{minted}{python}
+knapsack[i][W][W] = 0 in all i and W
+knapsack[i][W][W] = -inf in all i and W < 0
+knapsack[i][W][W] = -1 in all W and i > n
+for i in n down to 1:
+    for L_1 in 1 to W:
+        for L_2 in 1 to W:
+            if i == n:
+                knapsack[i][L_1][L_2] = w_n
+            else:
+                knapsack[i][L_1][L_2] = max(knapsack[i + 1][L_1][L_2],
+                                            v[i] + knapsack[i + 1][L_1 - w[i]][L_2],
+                                            v[i] + knapsack[i + 1][L_1][L_2 - w[i]]
+                                        )
+return knapsack[1][W][W]
+\end{minted}
+
+    \item Not doing, but follows from tracing optimal solution through table w/ aux space.
+
+    \item running time is clearly $O(nW^2)$ and space is $O(nW^2)$, but can be reduced by only keeping the last two rows of the table.
+
+\end{enumerate}
+
+\section{A2 S17}
+
+\subsection{Question 1}
+
+Programming question N/A
+
+\subsection{Question 2}
+
+Dijksta, but modified to keep track of the number of shortest paths to each node, incrementing whenever we find a new path to a node with equal length and resetting to num shortest paths of new parent when we find a shorter path.
+
+\subsection{Question 3}
+
+This is the same as asking can we find a topological sort such that there is a single source vertex. All vertices in a strongly connected component are reachable from each other and so there can be no single source vertex if this is the case. We can fix this by using SCC to find and collapse all SSC into a single vertex and then running topological sort on the new graph. Ofc, if there is more than one component, then there is no single source vertex and we can return false.
+
+\subsection{Question 4}
+
+Run kosaraju's to find SCC, run the following on each component individually. Odd cycle in directed graph iff graph isn't bipartite, so run BFS and assign colors based on even/odd levels, if you find an edge between two vertices of the same color, then there is an odd cycle that includes that vertex. Print it out by running BFS again from that vertex and keeping track of the parent of each vertex along the way until you reach the same vertex again.
+
+\section{A2 S18}
+
+\subsection{Question 1}
+
+Not doing
+
+\subsection{Question 2}
+
+Recursively find longest path in subtree of left/right child and longest path starting at left/right child (so to pass through root)
+
+\subsection{Question 3} Not covered
+
+\subsection{Question 4} Schedule by earliest deadline, then by highest value if there are ties. proof by exchange argument from notes :skull:
+
+\subsection{Question 5} Not doing
+
+\section{A2 S21}
+
+\subsection{Question 1}
+
+Programming question N/A
+
+\subsection{Question 2}
+
+modified BFS, keeping track of the last three vertices visited and if the current path has three consecutive edges of the same color, set its weight to $\infty$ to force another path to be taken.
+
+\subsection{Question 3}
+
+Already done.
+
+\subsection{Question 4}
+
+Problem of converting an undirected graph into a strongly connected directed graph. Every edge must be included in a cycle and cannot be a bridge, so we can check if this is possible by checking if there are no cut-edges. Modify the cut vertex algorithm and set directions of tree edges from ancestor to descendant and back edges from descendant to ancestor.
+
+\section{A2 W16}
+
+\subsection{Question 1}
+
+Programming question N/A
+
+\subsection{Question 2}
+
+Lol I'm not touching this $O(\min(n^{2k}, n! \cdot n^2))$ runtime.
+
+\subsection{Question 3}
+
+Already done
+
+\subsection{Question 4}
+
+Already done
+
+\section{A3 F22}
+
+\subsection{Question 1}
+
+The idea is to greedily place every tower as far away from each house as possible in order to cover as much space as possible. We can do this by sorting the houses by their x-coordinate and then placing the first tower at $P[1] + R$. Keep track of the last tower placed and iterate through the rest of the houses. If $|P_i - T_i| > R$, for any house, place a new tower as far away as possible from that house so that it is just covered at location $P_i + R$. The runtime is $O(n \log n)$ and the space is $O(n)$. This is a correct solution as every house is covered by at least one tower and an optimal one as no two towers will have a range that will overlap (since a precondition to placing a tower is that the house is not covered by any tower) and the number of towers is minimal as we place a tower as far away as possible from each house as to maximize the number of future houses that could be covered by that tower.
+
+\subsection{Question 2}
+
+Not doing
+
+\subsection{Question 3}
+
+Already Done.
+
+\subsection{Question 4}
+
+Run Kosaraju's, if more than one component then there is no ultimate vertex. If there is, then topologically sort the graph and run BFS from every source vertex to every sink vertex, keeping track of the number of vertices on the path from the source vertex when visiting a vertex. Reverse the edges and run BFS again and keep the count of the number of vertices on the path from the new source vertex. Vertices with a count of $|V| - 1$ are ultimate vertices as every other vertex is reachable from them and they are reachable from every other vertex. This is correct because this is a directed acyclic graph so there are no cycles to count vertices twice and BFS ensures that we visit every vertex exactly once and increment the count along a path exactly once for every vertex on that path.
+
+\section{A3 S17}
+
+\subsection{Question 1}
+
+Programming question N/A
+
+\subsection{Question 2}
+
+They snuck a programming question in here :skull:
+
+\subsection{Question 3}
+
+Dijksta's but updating thickness of paths so that we check if the minimum thickness along a new path is wider than the current minimum thickness along the current path. Correctness proofs follow that of Dijksta's algorithm. We can print out a path using a parent array.
+
+\begin{minted}{python}
+    if min(thickness[u], t_{uv}) > thickness[v]:
+        thickness[v] = min(thickness[u], t_{uv})
+\end{minted}
+
+\subsection{Question 4}
+
+Modify the interval coloring algorithm from the notes to make it work in the general case of trying to color as many intervals as possible given $k$ colors. The approach is to sort by non-decreasing finishing time and assign each interval the color of the last colored interval that finished before the start of the current interval, if there exists one. If not, leave the interval uncolored. Use an AVL tree to search for the last interval that ended before the start of the current interval. The runtime is $O(n \log n)$. Correctness proofs follow from the correctness proofs of the interval coloring algorithm by induction.
+
+\section{A3 S18}
+
+\subsection{Question 1}
+
+Basically just a modified version of LCS that does comparisons on all $m$ strings instead of just two.
+
+\subsection{Question 2}
+
+Keep placing books on the current bookshelf until you run out of space and then start a new bookshelf?? proof by exchange, if both books from optimal/greedy solution are on the same shelf we can swap with no change in cost, if they are on different shelves, then we can swap them to add a book to the current shefl.
+
+\subsection{Quesrion 3}
+
+This is equivalent to the two-knapsack sum problem. Already done. Note we can do knapsack either from n down to 1 or from 1 to n.
+
+\subsection{Question 4}
+
+DP from n down to 1, setting $dp$ for a location $i$ to true if there exists a word that starts at $i$ and ends at some $j > i$ such that $dp[j]$ is true. $n^2$ time complexity.
+
+\subsection{Question 5}
+
+Programming question in disguise
+
+\section{A3 S21}
+
+\subsection{Question 1}
+
+Programming question N/A
+
+\subsection{Question 2}
+
+Greedy solution. Sort jobs by release times. Iterate through release times for each job and add each job to a BST sorted by earliest deadline. Schedule the job with the earliest deadline. If there's a currently running job when a new job is released that we want to schedule, pause it and insert it into its respective place in the deadline-first BST. Runtime is $O(n \log n)$ by obviousness and proof is by exchange, an optimal solution cannot be more optimal than the greedy solution since if there is some part of a job that can run for a while before being preempted in an optimal solution (instead of it being preempted immediately) and still finish by the deadline, we can exchange those time units for the time units of the job with the earliest deadline and still finish all jobs by their deadlines.
+
+\subsection{Question 3}
+
+Not sure how to do this one.
+
+\subsection{Question 4}
+
+Check the tree is actually a tree (no cycles, connected) so run DFS on the tree. At the same time check that the shortest path length from the root to a vertex in the tree is $\leq$ the distance to any neighbor of that vertex plus the edge length between the two (to make sure it is in fact a shortest path tree).
+
+\section{A3 W16}
+
+\subsection{Question 1}
+
+Programming question N/A
+
+\subsection{Question 2}
+
+Huffman coding, this is from CS 240
+
+\subsection{Question 3}
+
+Already done.
+
+\subsection{Question 4}
+
+Already done.
+
+\section{A4 F22}
+
+\subsection{Question 1}
+
+Run Dijkstra's algorithm from every vertex and keep track of the minimum distance to each vertex. Keep track of which s,t pairs have paths in both directions and take the sum of the minimum length paths. Dijkstra's takes $O(|V| + |E|)$ time and there are $O(|V|)$ vertices to run it from, so the runtime is $O(|V|(|V| + |E|))$.
+
+\subsection{Question 2}
+
+\begin{enumerate}
+    \item Reducing the weight of an edge in a MST will not change the MST. Follows from the cut property of MSTs.
+    \item Increasing the weight of an edge in a MST will not change the MST.
+    \item Form a bipartition of the MST by removing $e$ and choosing all the edges in the MST that are now connected to form the bipartition. The cut property states that the lowest-cost edge in the cut of the bipartition will be part of a MST for the graph. We can iterate over all edges in the graph with one end in either side of the bipartition to find the lowest-cost edge in the cut and add that to our MST to complete it in linear time.
+    \item There is a chance this now reduced-cost edge is part of a MST for the graph. We can check if this is so and if it is, then this edge will be a part of the MST using a similar idea as to what Kruskal's algorithm does (add edges to the MST in increasing order of cost, but only if adding edges does not create a cycle). We would do something in the opposite direction: add $e$ to the MST, creating a cycle as adding an edge to a tree will always create a cycle, then remove the edge with the highest cost from the cycle. If the edge with the highest cost in the cycle ends up being $e$, then we can see that $T$ is still a MST after changing the cost of the edge. On the other hand if there is some other highest-cost edge in the cycle $e^\prime$, we can remove that and keep $e$ to form a new MST of lower cost.
+\end{enumerate}
+
+\subsection{Question 3}
+
+Dijkstra's?
+
+\subsection{Question 4}
+
+Optional, Not relevant anyways
+
+\section{A4 S17}
+
+\subsection{Question 1}
+
+Programming question N/A
+
+\subsection{Question 2}
+
+Sort by increasing height, then apply LIS to the widths. Runtime is $O(n \log n)$ given the fast LIS algorithm.
+
+\subsection{Question 3}
+
+Programming question in disguise
+
+\subsection{Question 4}
+
+This is a special case of a min vertex set problem and equivalent to finding a minimum vertex cover in a bipartite graph by bipartitioning the tree on even/odd levels. We can then use the same max flow min cut algorithm to find a minimum cut of the bipartite graph and the vertices in it will be a minimum vertex cover (we need at least one vertex in each edge to be in the .covering set). Ford-Fulkerson takes linear time.
+
+\subsection{Question 5}
+
+This problem can be reduced to finding a cycle in a directed graph where each weight is non-negative and the product of the weights is positive. We can use the log property of multiplication to reduce the problem to finding a cycle in a directed graph where each weight is non-negative and the sum of the log of the weights is positive. We can further reduce this to the problem of finding a negative cycle in a graph where we further flip the signs of the weights. Bellman-ford is a natural choice for this by running it for $n$ iterations and checking if it finds a negative cycle by not updating the distance of any vertex in the $n$th iteration. Lastly, we need to run this on each SCC of the graph independently, this takes $O(|V| + |E|)$ time. The graph is represented as a $|V| \times |V|$ matrix where the entry at row $i$ and column $j$ is the weight of the edge from $i$ to $j$. and so there are $|V|^2$ edges. The runtime is $O(|V|^3)$.
+
+\section{A4 S18}
+
+\subsection{Question 1}
+
+Doesn't seem relevant
+
+\subsection{Question 2}
+
+All conceptual graph theory questions wtf, not relevant.
+
+\subsection{Question 3}
+
+Dijkstra's lol.
+
+\subsection{Question 4}
+
+I hate these sort of brainteaser questions. Not relevant.
+
+\subsection{Question 5}
+
+Ew. programming question. Too lazy to do this and it focues too much on the minutae of the problem to be relevant.
+
+\section{A4 S21}
+
+\subsection{Question 1}
+
+Programming question N/A
+
+\subsection{Question 2}
+
+I'm not sure how to do this one.
+
+\subsection{Question 3}
+
+Already done.
+
+\subsection{Question 4}
+
+Dijkstra's with the added constraint of "waiting" at a vertex for the full time of the meeting and minimizing travel time. maximize the number of meetings that can be attended. not sure how to do this :(
+
+\section{A4 W16}
+
+\subsection{Question 1}
+
+Programming question N/A
+
+\subsection{Question 2}
+
+Facility location, already done.
+
+\subsection{Question 3}
+
+Top-down DP with the following recurrence, choosing the left/right coin that will give the player the best possible winnings once its their turn again after the other player makes the best possible move (the reason why we assume we get the min of the two possible other player results).
+
+\[ opt(i, j) = \max \{ v_i + \min (opt(i + 2, j), opt(i + 1, j - 1)), v_j + \min(opt(i + 1, j - 1), opt(i, j - 2)) \} \]
+
+\subsection{Question 4}
+
+Already done.
+
+\subsection{Question 5}
+
+Already done.
+
+\section{A5 F22}
+
+\subsection{Question 1}
+
+\begin{enumerate}
+    \item The decision problem is to determine if for some $n$ there are two disjoin subsets of which satisfy the combined value and individual subset weight constraints. This version is in NP as given two disjoint subsets of $n$ items we can check if they satisfy the constraints in polynomial time by just summing up their weights and values.
+    \item Not really covered in our term, but the idea is about if we knew the problem was solvable for some combined value, it takes polynomial time (really just O(1)) to return the solution (the combined value).
+    \item Again, just reverse engineering from the values of $W_1$ and $W_2$.
+\end{enumerate}
+
+\subsection{Question 2}
+
+Compute cardinality of subset, GCD of subset and original set. easily polynomial time.
+
+Reduce vertex cover to subset gcd by assigning vertives values from the set, and edges between every pair of vertices being the GCD of its endpoints. Then if we choose a subset of vertices to form a vertex cover, the GCD of the values of the vertices in the vertex cover will be the GCD of the original set. Not sure how the backwards direction works...
+
+\subsection{Question 3}
+
+3-SAT reduction with gadgets not covered.
+
+\subsection{Question 4}
+
+Approximation algorithms not covered.
+
+\section{A5 s17}
+
+\subsection{Question 1}
+
+Convert to d-regular bipartite by adding duplicate vertices, then running d iterations of bipartite matching with Floyd-Fulkerson will give us a schedule that will take at most $d$ days.
+
+\subsection{Question 2}
+
+Reduction from TSP where the hamiltonian cycle gets edge weights of 1 and all other edges get weight 2. Then it has a hamiltonian cycle iff there is a TSP tour of weight n.
+
+\subsection{Question 3}
+
+Reduction from Hamiltonian path as a hamiltonian path is a degree-2 bounded spanning tree
+
+\subsection{Question 4}
+
+Reduction from vertex cover by choosing a set in the set cover to be all edges incident to a vertex in the vertex cover. ez.
+
+\subsection{Question 5}
+
+Reduction from (directed) Hamiltonian path as choosing all $k$ non-hamiltonian path edges from the graph gives you a subset with at most $k$ edges such that $G - F$ is a (directed) hamiltonian path and therefore acyclic.
+
+\subsection{Question 6}
+
+This is just finding a maximum bipartite matching using Ford-Fulkerson.
+
+\section{A5 S18}
+
+\subsection{Question 1}
+
+\begin{enumerate}
+    \item reducible from clique and IS.
+    \item reducible from clique.
+\end{enumerate}
+
+\subsection{Question 2}
+
+\begin{enumerate}
+    \item Reducible from vertex cover, each club is an edge, vertex cover is a set of people that are in all clubs.
+    \item Reducible from subset sum by choosing a subset whos sum is half the total sum.
+\end{enumerate}
+
+\subsection{Question 3}
+
+\begin{enumerate}
+    \item Opposite direction reduction.
+    \item Shows independent set reduction, not clique reduction.
+    \item Lol, the size of the clique is bounded at 4 bc the maximum degree is 3 so we can enumerate all n choose 4 4-element subsets in polynomial time.
+\end{enumerate}
+
+\subsection{Question 4}
+
+Not doing, seems overly long.
+
+\subsection{Question 5}
+
+Not covered.
+
+\section{A5 S21}
+
+\subsection{Question 1}
+
+Already done.
+
+\subsection{Question 2}
+
+Modified version of W23 assignment question, NP-complete, using a reduction from subset sum.
+
+\subsection{Question 3}
+
+Iteratively set each variable to true then false until the the black box says there is a satisfying assignment for the formula, then set the variable to the value to that true/false value, and remove all (disjunctive) clauses with that variable in it as they short-circuit to true and the truth values of the other variables make no difference. Repeat until all clauses are removed or the black box says there is no satisfying assignment. The proof of correctness follows from this observation and so does the proof of the algorithm being polynomial time.
+
+\subsection{Question 4}
+
+Already Done
+
+\subsection{Question 5}
+
+Already Done
+
+\end{document}
