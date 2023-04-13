@@ -634,4 +634,250 @@ Already Done
 
 Already Done
 
+\section{Tutorial 1-1}
+
+\subsection{2.4}
+
+A: $\log_2 5 > 1$ so $O(n^{\log_2 5})$
+
+B: $2^n$ since the amount of work basically increases by a power of 2 every level.
+
+C: $\log_3 9 = 2$, so $O(n^2 \log n)$
+
+\subsection{2.17}
+
+Modified binary search checking for $A[mid] = mid$
+
+\subsection{2.28}
+
+Modified Karatsuba's. $H_{k-1}$ is a $2^{k-1} \times 2^{k - 1}$ matrix and $v$ is a $2^{k} \times 1$ column vector. Split $v$ into two $2^{k-1} \times 1$ column vectors $v_1$ and $v_2$ and compute $H_{k-1}v_1$ and $H_{k-1}v_2$ in $O(n \log n)$ time before combining them to form the final answer in $O(n)$ time.
+
+\subsection{2.29}
+
+Not doing
+
+\subsection{2}
+
+Modify the inversion algorithm to increment the inversion counter if the new condition holds.
+
+\subsection{2.22}
+
+Modified binary search looking for sum of midpoints = k, adjust boundaries accordingly if midpoints are larger/smaller than k and depending on which of the values at the midpoints are larger/smaller.
+
+\subsection{2.23}
+
+Already done.
+
+\section{Tutorial 2-1}
+
+\subsection{3.5}
+
+Create new adjacency list, traverse over current adjacency list and add all edges to the new adjacency list in reverse order.
+
+\subsection{3.9}
+
+First pass to find degree of each vertex, second pass to sum up the degrees of all vertices adjacent to a vertex.
+
+\subsection{3.13}
+
+Run DFS, remove a leaf.
+
+\subsection{3.16}
+
+Topologically sort, keep removing vertices with in-degree 0. The number of iterations of this loop is the number of semesters required.
+
+\subsection{3.18}
+
+Annotate each vertex with start/finishing arrays in an pre-order traversal of the tree (root down to all leaves then back up to root). Check for ancestors by checking if a node's start/finish time is between the start/finish times of the ancestor.
+
+\subsection{3.22}
+
+Topologically sort, then check if there is exactly one source vertex.
+
+\subsection{3.24}
+
+Hamiltonian path, Topologically sort the graph to find a single source vertex then run DFS/BFS from that vertex until you get a path of length n-1.
+
+\subsection{3.21}
+
+Exists iff a component of the graph is non-bipartite. Find each component with SCC then check each component for bipartiteness using BFS (even/odd level coloring). An edge between two vertices of the same color means it is in an odd cycle.
+
+\subsection{3.26}
+
+If not even degree, then there is no way to use one of its edges. Konigsberg has no vertex of even degree.
+
+\subsection{22-4}
+
+Reverse edges so we can traverse the graph in the reverse order of reachability to assign the min labels (min labels are assigned to vertices given min label of all vertices reachable from it). Run BFS from every vertex in increasing label order and assign min label of that vertex to all vertices reachable from it. Remove already set vertices from the graph (since there will be no other smaller label that can be assigned to it), repeat until all vertices are removed.
+
+\subsection{22-3}
+
+equal indegree and outdegree means that you can visit a vertex an even number of times without using an edge twice. Backwards direction can be proved by removing non-euler tour cycles from the graph without changing the indegree=outdegree invariant until you are left with a graph with only euler tour cycles.
+
+\section{Tutorial 3-1}
+
+\subsection{Question 1}
+
+Place the first station 4 miles to the right of the first house, then iterate through the rest of the houses and every time the distance between the current house and the current station is greater than 4 miles, place a new station 4 miles to the right of the current house. This is a greedy solution and always places a station as far as possible from the last station while still being within 4 miles of the first house that cannot be covered by the last station, leaving as much space as possible for future houses to be covered by it.
+
+\subsection{Question 2}
+
+Application of the minimum completion time algorithm from the notes, we should order jobs on the supercomputer in order of decreasing finishing time. Since we can run all finishing times in parallel once the respective preprocessing is done for that job, we should schedule the jobs with the longest finishing time first so that we can start the longest finishing time jobs as soon as possible. Note that for any jobs with the same finishing times, it doesn't matter if we schedule them in order of shortest preprocessing time as the last job in that set will finish preprocessing at the same time and start its finishing time at the same time no matter how we order them, the choice of which finishing time to start first doesn't matter in this case as they all have the same.
+
+\* There's a better proof of optimality for this by exchange \*
+
+\subsection{Question 3}
+
+This question is asking to choose a minimal set of intervals that overlaps with all intervals in a schedule. Sort the intervals by earliest finishing time, then for each interval find the set of all intervals that overlap with it and choose the interval in that set with the latest finishing time. Delete all intervals that overlap with the chosen interval and repeat. Max time to find all intersecting intervals for a given interval is $O(n)$, so the total time is $O(n^2)$.
+
+This is a correct solution because for every interval in the schedule, it will choose an interval that overlaps with it (one that has the latest finishing time) to be in the supervising committee as that student can supervise all the intervals that overlap with it. We can then safely remove all intervals that overlap with the chosen interval as they will be covered by the interval we chose. This will leave us with a set of intervals that are disjoint and cover all intervals in the schedule.
+
+For optimality, we can prove this by exchange through the observation that since we choose the interval with the latest finishing time that overlaps with the interval in the schedule with the earliest finishing time, this will cover as many intervals as possible as, at each step of the algorithm, there is no interval that will end before the start time of the chosen interval, and no interval that has a later finishing time so that it can cover more intervals in the schedule than the chosen interval. They might want a more formal proof this by exchange.
+
+\subsection{Question 4}
+
+This question is a circular version of the interval scheduling problem where we can have some number of intervals that run across midnight. We can reduce this to the interval scheduling problem by choosing one interval that runs across midnight, remove all other intervals that overlap with it, and run our earliest-finishing-time interval scheduling algorithm on the remaining intervals. We can run this algorithm on each interval that runs across midnight and the schedule that maximizes the number of jobs scheduled. This is a correct and optimal solution because there can only be one interval that runs at any given time (midnight in our case) and we try all possible intervals that run across that time.
+
+\subsection{Question 5}
+
+Huffman is from CS 240, not covered (hopefully).
+
+\subsection{Question 6}
+
+Also Huffman (CS 240).
+
+\subsection{Question 7}
+
+Consider each equality constraint as an edge in a graph, where the vertices are the variables. All vertices in a connected component of the graph must be equivalent. Run SCC to find and number all connected components and assign each vertex a value of its connected component number. Go through each inequality constraint and check if the two variables/vertices are in the same connected component, if they are, then the inequality constraint is unsatisfiable.
+
+\subsection{Question 8}
+
+Modified Dijkstra that keeps track of the number of shortest paths to a vertex seen so far and passes on the number of shortest paths to all children of a vertex. True if the number of shortest paths to the destination is exactly 1.
+
+\subsection{Question 9}
+
+Add a condition to Dijkstra's that when two shortest paths have the same distance, we choose the one with the smallest number of edges. Keep track of the number of edges to a vertex in a shortest path and pass it on to all children of a vertex (plus 1 ofc).
+
+\subsection{Question 10}
+
+Modify the graph by adding half the cost of the vertex to each edge that is incident to it since we will encounter a cost of 1/2 when visiting the vertex through an in-edge and another 1/2 cost when leaving it through an out-edge. Run Dijkstra's algorithm on the modified graph and return the shortest path from the source to the destination and cost of each target vertex is the cost of the shortest path to that vertex.
+
+\subsection{Question 11}
+
+Not doing
+
+\subsection{Question 12}
+
+Make change for $n$ cents by using as many quarters as possible, then dimes, then nickels, then pennies. This is a greedy algorithm because it always uses the largest coin possible to make change, and since we can always make change with the largest coin possible, this is a correct algorithm. This is also optimal because we always make change with the largest coin possible, which will use a strictly smaller number of coins as compared to change made using a smaller denomination.
+
+Not optimal in the general case where this is basically subset sum.
+
+\subsection{Question 13}
+
+Sketch: Evicting the farthest-in-future item from the cache means that every time we get a cache miss, we keep replace the farthest-in-future item with the new item if the new item's next use happens before the current item's next use. This is optimal because all other items in the cache have a next use that happens before the farthest-in-future item, and all other items may also get called again before the farthest-in-future item, but the farthest-in-future item will never get called again before any other item in the cache. In this case then, removing any other item from the cache will result in at least one cache miss (and likely more) before we get to the farthest-in-future item, but removing the farthest-in-future item will result in exactly one cache at the farthest-in-future item. Again, more formal proof would be by showing the greedy solution stays ahead of any other solution.
+
+\section{Tutorial 4-1}
+
+\subsection{6.2}
+
+Recurrence $opt(i) = \min_{k \in [0, i]} opt(k) + (200 - (a_i - a_k))^2$
+
+Compute $opt(i)$s from $i = 0$ to $i = n$. Each $opt(i)$ is computed in $O(n)$ time, so total time is $O(n^2)$.
+
+\subsection{6.4}
+
+Initialize DP table of length $n$ to false. Use the recurrence $opt(i) = \bigvee_{j \in [1, i]} (dict(s[1, i]) \wedge opt(j))$. Compute $opt(i)$s from $i = 1$ to $i = n$. Each $opt(i)$ is computed in $O(n)$ time, so total time is $O(n^2)$. Print out the words recursively from $opt(0)$ by finding a $j$ such that $opt(j)$ is true and $dict(s[1, j])$ is true.
+
+\subsection{6.7}
+
+Initialize $n \times n$ DP table to all false. Set $opt(i, i) = true$ for all $i \in [1, n]$. Set $opt(i, i + 1) = true$ if $x_i = x_{i+1}$ for all $i \in [1, n-1]$. Now in the general case for $opt(i, j)$, set it to true if $opt(i + 1, j - 1)$ is true and $x_i = x_j$. Compute $opt(i, j)$s from $i = 1$ to $i = n$ and $j = 1$ to $j = n$. Find the length of the longest palindrome by keeping track of the maximum length of a palindrome seen so far as given by $j - i + 1$. Time complexity is $O(n^2)$.
+
+\subsection{6.9}
+
+For the recurrence, choose the minimum cost of the locations to split a string of length $n$ on, given that splitting a string at a location will cost $n$ operations plus the cost of splitting the two substrings on the locations that appear to the left/right of the split location. $M$ is a set that gives the locations of the $m$ cuts in the string.
+
+$opt(n, M) = \min_{m \in M} n + opt(m, \{ m_i : m_i \leq m, m_i \in M \setminus m \}) + opt(n - m, \{ m_i - m : m_i > m, m_i \in M \setminus m \})$
+
+\subsection{6.21}
+
+For all subtrees, either root will be in cover or not. If root is in cover, then all children do not need to be in a min vertex cover. If root is not in cover, then all children must be in a min vertex cover. So, the recurrence is:
+
+$opt(v) = \min( n\_children(v) + \sum_{u \in grandchildren(v)} opt(u), 1 + \sum_{u \in children(v)} opt(u))$
+
+With memoization computing this top down will only take $O(n)$ time as it will visit each vertex once.
+
+\subsection{6.26}
+\begin{align*}
+    match_i  & = \delta(x[i], y[j]) + opt(i + 1, j + 1) :  i \leq n \wedge j \leq m \wedge x[i] = y[j]    \\
+    add_i    & = \delta(-, y[j]) + opt(i, j + 1) : j \leq m                                               \\
+    delete_i & = \delta(x[i], -) + opt(i + 1, j) : i \leq n                                               \\
+    change_i & = \delta(x[i], y[i]]) + opt(i + 1, j + 1) : i \leq n \wedge j \leq m \wedge x[i] \neq y[j] \\
+\end{align*}
+
+Set the score of the DP table to $0$ initially to handle the base cases where we look up $opt(n + 1, m + 1)$.
+
+The score of each case is $- \infty$ if the constraints on the case are not satisfied.
+
+\[ opt(i, j) = \max \{ match_i, add_i, delete_i, change_i \} \]
+
+Fill out the opt table from $i = n$ down to $i = 0$ and $j = m$ down to $j = 0$. The time complexity is $O(nm)$.
+
+\subsection{15-4}
+
+This is a long one, skipping for now.
+
+\section{Tutorial 5-1}
+
+\subsection{8.7}
+
+We can create a bipartite graph with clauses and variables as vertices and edges between them if a variable is included in a clause. If each clause has edges to exactly three variables and each variable has edges to at most three clauses, then we can find a matching of the graph of size equal to that of the number of clauses (so each clause gets a satisfying assignment), and this matching will be a satisfying assignment by setting the values of the variables in the matching to satisfy the literal in each clause.
+
+There will necessarily be a matching as the fact that each variable appears at most 3 times forces there to be at least as many variables as clauses for each clause to have three literals. This satisfies Hall's theorem and proves the existence of a matching.
+
+\subsection{41}
+
+We can reduce cycle cover to bipartite matching and as bipartite matching is in P, so is cycle cover. We can create a bipartite graph by duplicating the graph twice to create bipartitions $A$ and $B$. For every edge in the original graph, add an edge between the corresponding vertex in $A$ and the corresponding vertex in $B$. These edges form a perfect matching between $A$ and $B$. Now we show that there is a perfect matching in the bipartite graph if and only if there is a cycle cover in the original graph.
+
+\paragraph{$\Rightarrow$} Every vertex in the matching has corresponding vertices in $A$ and $B$. There is a perfect matching in the duplicate graph and so each vertex is incident to an edge in the matching. Following this back to the original graph, this means that each vertex in the original graph is incident to two edges (incoming, outgoing) in the matching. Forming a graph out of these edges gives you a graph where every vertex is of degree two and so every vertex is in a cycle (with no non-cyclic edges), the definition of a cycle cover.
+
+\paragraph{$\Leftarrow$} Use our reduction to create a duplicate graph and add edges between the vertices in $A$ and $B$. We will show this is a perfect matching. Given that the edges in the cycle cover visit all vertices in the graph, adding them to the duplicate graph as directed edges between $A$ and $B$ will result in all vertices in the duplicate graph being incident to an edge. This is a perfect matching.
+
+Clearly this is polynomial-time.
+
+Sketch: 3-edge cycle cover is NP-complete through a reduction from 3-SAT wher you replace each clause with a 3-edge cycle and edges between clauses. Might require gadget so not doing the rest of this.
+
+\subsection{8.10}
+
+Generalization not specialization so i ignore. Probably could prove NP-completeness by specialization/reduction...
+
+\subsection{8.20}
+
+Reduction from vertex cover. As every edge in a graph is incident to at least one vertex in a vertex cover and every vertex in the graph is either in a dominating set or adjacent to a vertex in a dominating set, we must reduce incident edges in a vertex cover to adjacent vertices when reducing from vertex cover to dominating set. We can do so by mapping incident edges in a vertex cover to adjacent vertices in a dominating set. We then replace every edge in the graph with a triangle by adding a new vertex and connecting the two vertices in the edge to the new vertex. Every edge between two vertices in the vertex cover must be incident to a vertex in the vertex cover and so in our new graph, the new vertex will be adjacent to a vertex in the vertex cover and is dominated by it. The original edge in the triangle connects the two original vertices; one of them will be in the vertex dominating set and the other will be adjacent to it. Note that any non-connected vertices in the original graph did not have to be part of a vertex cover but must be part of a dominating set. The size of the corresponding dominating set is the size of the vertex cover plus the number of isolated vertices in the original graph. We now need to show that there is a vertex cover of size at most $k$ if and only if there is a dominating set of size at most $k + n$.
+
+The proof of the forwards direction follows from the reduction.
+
+If there is a dominating set of size at most $k + n$, then we will show that there is a vertex cover of size at most $k$. To do so, remove all isolated vertices from the vertex cover. Then, we can remove any vertices and edges from the dominating set that are not part of the graph that the dominating set is a dominating set of, and we will be left with a set of size at most $k$ such that every vertex is either in the set, or shares an edge with a vertex in the set, the definition of a vertex cover. This follows from the observation that all vertices in the dominating set that we removed have edges with exactly two vertices, at least one of which is in the dominating set, and that these two vertices share an edge. Removing this vertex and its edges from the set will not change the fact that the two vertices share an edge and will recover the vertex cover for the original graph.
+
+\subsection{9}
+
+Reduction from maximum independent set. MIS asks if there is a set of vertices of size at least $k$ with no incident edges in the graph. We are asking if there is a set of paths of size at least $k$ such that no two paths share a vertex.
+
+We can reduce MIS to this problem by swapping the roles of vertices and edges in the graph. We can do so by creating a vertex for every edge in the graph and creating a path for every vertex in the graph. So for every vertex in the graph with some number of edges incident to it, we create a new path using every edge incident to that vertex as a vertex in the path. We can then see that if there is a set of vertices of size at least $k$ with no incident edges, then there is a set of paths of size at least $k$ such that no two paths share a vertex. Proving the forward direction follows from the reduction. We can also prove the backwards direction by again swapping the roles of vertices and edges in the graph. All paths will be replaced by a vertex, and all vertices along a path will be replaced by an edge between the vertices for two paths if there are two paths that share a vertex. I'm not quite sure about the backwards direction???
+
+\subsection{14}
+
+We reduce Maximum Independent Set to Multiple Interval Scheduling. MIS asks if there is a set of vertices of size at least $k$ with no incident edges in the graph. We want to ask if there is a set of intervals of size at least $k$ such that no two intervals overlap. We can reduce MIS to this problem by considering each vertex to be a job and edges between vertices to refer to a pair of jobs that both want to use the processor at the same time. As a job can require multiple intervals of time and therefore overlap with several jobs at different times, our edges between pairs of jobs will encode this. Forwards and backwards directions are simple to prove as the reduction is and we can see that an independent set corresponds to a set of jobs that have no overlap and a valid schedule of jobs corresponds to a set with no overlap.
+
+\subsection{28}
+
+Reducible from MIS. Reduce by subdividing each edge $uv$ in the graph and adding an additional vertex $w$. All edges incident to the original endpoints of the edge $u$ and $v$ should also be added to the new vertex. This will ensure that any length two path between vertices in the original graph that contained the edge $uv$ i.e. $uvx$ will go through $w$ to maintain its length-two status; $uwx$ and $vwx$. The forward direction follows from this as we can see that any independent set in the original graph will be an strongly independent set in the new graph as the at least $k$ vertices in the independent set that are not incident to the same edge will now be not incident to any length-two path. The backwards direction follows from the fact that a strongly independent set is by definition an independent set with at least $k$ vertices.
+
+\subsection{34-4}
+
+Did a similar question in an assignment from a previous year.
+
+\subsection{8.23}
+
+Not doing this one lol.
+
 \end{document}
