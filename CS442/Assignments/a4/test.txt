@@ -1,0 +1,30 @@
+fac(A, B).
+fac(1, X).
+fac(10, X).
+fac(Y, 1).
+fac(X, 2).
+fib(2, X).
+fib(2, X).
+fib(15, X).
+fib2(15, X).
+fib2(90, X).
+isprime(7).
+isprime(8).
+iscomposite(7).
+iscomposite(8).
+prime(1, P).
+prime(2, P).
+prime(5, P).
+prime(N, 11).
+cogito(foo).
+cogito(descartes).
+sum(X).
+p2(Q).
+sumto(100, N).
+sumto(N, 5050).
+goodPet(porcupine).
+goodPet(descartes).
+supervisorbyname(villefort, X).
+supervisorbyname(dantes, X).
+supervisorbyname(B, villefort).
+supervisorbyname(B, dantes).

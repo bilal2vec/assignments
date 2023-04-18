@@ -1,0 +1,13 @@
+procedure fac(n);
+begin
+    if n = 1 then
+        x := 1
+    else
+        begin
+        fac(n + -1);
+        x := x * n
+        end
+end;
+temp := fac;
+temp(arg);
+print x

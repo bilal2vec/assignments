@@ -1,0 +1,27 @@
+procedure div(x, y);
+ct;
+begin
+    ct := 0;
+    while x > y or x = y do
+        begin
+        x := x + -y;
+        ct := ct + 1
+        end;
+    if x = 0 then
+        res := ct
+    else
+        res := 0
+end;
+
+n := 2;
+while n < arg or n = arg do
+    begin
+    div(arg, n);
+    if res = 0 then
+        n := n + 1
+    else
+        begin
+        print n;
+        arg := res
+        end
+    end

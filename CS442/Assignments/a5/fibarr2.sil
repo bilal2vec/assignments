@@ -1,0 +1,23 @@
+procedure fibarr(arr, ct);
+idx;
+begin
+    idx := 0;
+    while idx < ct do
+        begin
+        if idx = 0 then
+            arr[0] := 1
+        else if idx = 1 then
+            arr[1] := 1
+        else
+            arr[idx] := arr[idx + -1] + arr[idx + -2];
+        idx := idx + 1
+        end
+end;
+arr := array[arg];
+fibarr(arr, arg);
+idx := 0;
+while idx < arg do
+    begin
+    print arr[idx];
+    idx := idx + 1
+    end

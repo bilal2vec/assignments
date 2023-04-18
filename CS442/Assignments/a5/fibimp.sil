@@ -1,0 +1,11 @@
+a := 1;
+b := 1;
+n := 2;
+while n < arg do
+    begin
+    tmp := b;
+    b := a + b;
+    a := tmp;
+    n := n + 1
+    end;
+print b

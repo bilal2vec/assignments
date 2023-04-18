@@ -1,0 +1,65 @@
+| x s l |
+x := LambdaParser parse: '(^mul.^two.mul two two) (^m.^n.^f.m(n f)) (^f.^x.f (f x))'.
+l := Lambda new: x.
+l aoe.
+l aoe.
+l aoe.
+x := l aoe dup.
+l toDeBruijn.
+l := Lambda new: x.
+l aoe.
+x := LambdaParser parse: '(^mul.^two.mul two two) (^m.^n.^f.m(n f)) (^f.^x.f (f x))'.
+l := Lambda new: x.
+x := l aoe: 1000.
+s := x displayString.
+l toDeBruijn.
+x := LambdaParser parse: s , 'f x'.
+l := Lambda new: x.
+l aoe.
+l aoe.
+l aoe.
+l aoe.
+l aoe.
+l aoe.
+x := LambdaParser parse: '(^head.^tail.^cons.^zero.^two.(^succ.(^pred.(pred two)) (^n.(tail(n(^p.cons(succ(head p))
+l := Lambda new: x.
+x := l aoe: 1000.
+l toDeBruijn.
+x := LambdaParser parse: '(^mul.^two.mul two two) (^m.^n.^f.m(n f)) (^f.^x.f (f x))'.
+l := Lambda new: x.
+l nor.
+l nor.
+l nor.
+l nor.
+l nor.
+l nor.
+l nor.
+l nor.
+x := l nor dup.
+l toDeBruijn.
+l := Lambda new: x.
+l nor.
+x := LambdaParser parse: '(^mul.^two.mul two two) (^m.^n.^f.m(n f)) (^f.^x.f (f x))'.
+l := Lambda new: x.
+x := l nor: 1000.
+s := x displayString.
+l toDeBruijn.
+x := LambdaParser parse: s , 'f x'.
+l := Lambda new: x.
+l nor: 1000.
+x := LambdaParser parse: '(^head.^tail.^cons.^zero.^two.(^succ.(^pred.(pred two)) (^n.(tail(n(^p.cons(succ(head p))
+l := Lambda new: x.
+x := l nor: 1000.
+l toDeBruijn.
+x := LambdaParser parse: '(^head.^tail.^cons.^isNull.^nil.^zero.^succ.(^Y.^F.(^len.(len (cons zero (cons zero nil))
+l := Lambda new: x.
+l nor: 1000.
+x := LambdaParser parse: '^m.^n.^f.^x.m(n f)x'.
+l := Lambda new: x.
+l eta.
+l eta.
+x := LambdaParser parse: '^m.^n.^f.^x.n m f x'.
+l := Lambda new: x.
+l eta.
+l eta.
+l eta.
