@@ -1,0 +1,85 @@
+memory_init: kernel space end: 10000380
+memory_init: gp_pcbs[0] = 0x100003a0
+memory_init: gp_pcbs[1] = 0x100003c0
+memory_init: gp_pcbs[2] = 0x100003e0
+memory_init: gp_pcbs[3] = 0x10000400
+memory_init: gp_pcbs[4] = 0x10000420
+memory_init: gp_pcbs[5] = 0x10000440
+memory_init: gp_pcbs[6] (NULL Process) = 0x10000460
+memory_init: ready_queues = 0x10000500
+memory_init: blocked_queues = 0x10000528
+memory_init: heap_start = 0x2007c008
+proc1: 
+proc2: 
+k_send_message: Sending block @ 0x2007c008
+k_send_message: Caused preemption (dest process is higher priority than src one)
+Proc 1 got 0-th message from PID 2: THEY'RE IN MY WALLS
+k_release_memory_block: Releasing block @ 0x2007c008
+k_send_message: Sending block @ 0x2007c088
+k_send_message: Caused preemption (dest process is higher priority than src one)
+Proc 1 got 1-th message from PID 2: THEY'RE IN MY WALLS
+k_release_memory_block: Releasing block @ 0x2007c088
+k_send_message: Sending block @ 0x2007c108
+k_send_message: Caused preemption (dest process is higher priority than src one)
+Proc 1 got 2-th message from PID 2: THEY'RE IN MY WALLS
+k_release_memory_block: Releasing block @ 0x2007c108
+k_send_message: Sending block @ 0x2007c188
+k_send_message: Caused preemption (dest process is higher priority than src one)
+Proc 1 got 3-th message from PID 2: THEY'RE IN MY WALLS
+k_release_memory_block: Releasing block @ 0x2007c188
+k_send_message: Sending block @ 0x2007c208
+k_send_message: Caused preemption (dest process is higher priority than src one)
+Proc 1 got 4-th message from PID 2: THEY'RE IN MY WALLS
+k_release_memory_block: Releasing block @ 0x2007c208
+k_send_message: Sending block @ 0x2007c288
+k_send_message: Caused preemption (dest process is higher priority than src one)
+Proc 1 got 5-th message from PID 2: THEY'RE IN MY WALLS
+k_release_memory_block: Releasing block @ 0x2007c288
+k_send_message: Sending block @ 0x2007c308
+k_send_message: Caused preemption (dest process is higher priority than src one)
+Proc 1 got 6-th message from PID 2: THEY'RE IN MY WALLS
+k_release_memory_block: Releasing block @ 0x2007c308
+k_send_message: Sending block @ 0x2007c388
+k_send_message: Caused preemption (dest process is higher priority than src one)
+Proc 1 got 7-th message from PID 2: THEY'RE IN MY WALLS
+k_release_memory_block: Releasing block @ 0x2007c388
+k_send_message: Sending block @ 0x2007c408
+k_send_message: Caused preemption (dest process is higher priority than src one)
+Proc 1 got 8-th message from PID 2: THEY'RE IN MY WALLS
+k_release_memory_block: Releasing block @ 0x2007c408
+k_send_message: Sending block @ 0x2007c488
+k_send_message: Caused preemption (dest process is higher priority than src one)
+Proc 1 got 9-th message from PID 2: THEY'RE IN MY WALLS
+k_release_memory_block: Releasing block @ 0x2007c488
+k_send_message: Sending block @ 0x2007c508
+k_send_message: Sending block @ 0x2007c588
+k_send_message: Sending block @ 0x2007c608
+k_send_message: Sending block @ 0x2007c688
+k_send_message: Sending block @ 0x2007c708
+k_send_message: Sending block @ 0x2007c788
+k_send_message: Sending block @ 0x2007c808
+k_send_message: Sending block @ 0x2007c888
+k_send_message: Sending block @ 0x2007c908
+k_send_message: Sending block @ 0x2007c988
+proc3: 
+Proc 3 got 0-th message from PID 2: THEY'RE IN MY WALLS
+k_release_memory_block: Releasing block @ 0x2007c508
+Proc 3 got 1-th message from PID 2: THEY'RE IN MY WALLS
+k_release_memory_block: Releasing block @ 0x2007c588
+Proc 3 got 2-th message from PID 2: THEY'RE IN MY WALLS
+k_release_memory_block: Releasing block @ 0x2007c608
+Proc 3 got 3-th message from PID 2: THEY'RE IN MY WALLS
+k_release_memory_block: Releasing block @ 0x2007c688
+Proc 3 got 4-th message from PID 2: THEY'RE IN MY WALLS
+k_release_memory_block: Releasing block @ 0x2007c708
+Proc 3 got 5-th message from PID 2: THEY'RE IN MY WALLS
+k_release_memory_block: Releasing block @ 0x2007c788
+Proc 3 got 6-th message from PID 2: THEY'RE IN MY WALLS
+k_release_memory_block: Releasing block @ 0x2007c808
+Proc 3 got 7-th message from PID 2: THEY'RE IN MY WALLS
+k_release_memory_block: Releasing block @ 0x2007c888
+Proc 3 got 8-th message from PID 2: THEY'RE IN MY WALLS
+k_release_memory_block: Releasing block @ 0x2007c908
+Proc 3 got 9-th message from PID 2: THEY'RE IN MY WALLS
+k_release_memory_block: Releasing block @ 0x2007c988
+
