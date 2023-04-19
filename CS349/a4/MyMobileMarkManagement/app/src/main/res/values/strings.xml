@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">MyMobileMarkManagement</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="filter_options">
+        <item>All Courses</item>
+        <item>CS Only</item>
+        <item>Math Only</item>
+        <item>Other Only</item>
+    </string-array>
+
+    <string-array name="sort_options">
+        <item>By Course Code</item>
+        <item>By Term</item>
+        <item>By Mark</item>
+    </string-array>
+
+</resources>

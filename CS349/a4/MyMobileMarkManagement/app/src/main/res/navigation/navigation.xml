@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools" android:id="@+id/navigation"
+            app:startDestination="@id/mainFragment">
+
+    <fragment
+            android:id="@+id/mainFragment"
+            android:name="com.example.mymobilemarkmanagement.MainFragment"
+            android:label="Main Fragment"
+            tools:layout="@layout/fragment_main">
+        <action
+                android:id="@+id/action_mainFragment_to_addFragment"
+                app:destination="@id/addFragment" />
+    </fragment>
+
+    <fragment
+            android:id="@+id/addFragment"
+            android:name="com.example.mymobilemarkmanagement.AddFragment"
+            android:label="Add Fragment"
+            tools:layout="@layout/fragment_add">
+    </fragment>
+
+
+    <fragment
+            android:id="@+id/edit_fragment"
+            android:name="com.example.mymobilemarkmanagement.EditFragment"
+            android:label="Edit Fragment"
+            tools:layout="@layout/fragment_edit">
+    </fragment>
+
+</navigation>
