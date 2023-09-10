@@ -1,0 +1,167 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{bilal2vec}
+
+\title{CS 341 - Solutions}
+\author{Bilal Khan\\
+\href{mailto:bilal2vec@gmail.com}{bilal2vec@gmail.com}}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section{Tutorial Set 1}
+
+\subsubsection{Problem 2}
+
+\begin{enumerate}[(a)]
+    \item $(S/L-1) * L/C = S/L * L/C - L/C = S/C - L/C = (S - L) / C$
+    \item TODO
+\end{enumerate}
+
+\subsubsection{Problem 5}
+
+\begin{enumerate}[(a)]
+    \item $2*10^6 / 3*10^5 = 6.6 = 6$ users
+    \item $p = 0.12$
+    \item There are $M \choose n$ ways to choose $n$ active users from our pool of $M$ total users. The probability that they are all active is $(p)^n(1-p)^{M-n}$
+    \item (meta: IIUC this should depend on our total number of users so we can't return a number here) Let $P(X)$ be the probability that $X$ users are active. The probability that more than $7$ users is active is then $1 - (P(X=0) + P(X=1) + \cdots + P(X=7))$. 
+    
+    
+    \[ P(X > n) = 1 - \sum_{i=1}^{n} {M \choose i} (p)^{i} (1-p)^{n-i} \]
+    \item (meta: I don't see how this if different from the previous part, other than just plugging the numbers in)
+    \[ P(X > n) = 1 - \sum_{i=1}^{n} {M \choose i} (p)^{i} (1-p)^{n-i} \]
+
+    \item Some value that keeps the probability of of having more than 6 users close enough to zero? — not exactly sure...
+\end{enumerate}
+
+\subsubsection{Problem 6}
+
+\begin{enumerate}[(a)]
+    \item You're bottlenecked by the slowest link, $500$kbps
+    \item I'n all cases, $8*4*10^6/5*10^5 = 320/5 = 64$s
+\end{enumerate}
+
+\subsubsection{R15}
+
+\begin{enumerate}[(a)]
+    \item $2*10^6 / (10^6) = 2$ users.
+    \item Even if two users use the link simultaneously, the amount of data in process of being transferred ($2 \times 10^6$) will never exceed the link capacity of $2*10^6$, if three users transmit at the same time however, it will exceed the link capacity and there will be a queuing delay.
+    \item $p = 0.2$
+    \item The probability of all three users transmitting (which is also the fraction of time the queue grows) at the same time is $0.2^3$. The queue will grow only when all three users are transmitting (even if there are messages in the queue when there are one or two users transmitting, the size of the queue will not increase as the link transmission rate is always $\geq$ the maximum of $2*10^6$bps that one or two users could transmit simultaneously.)
+\end{enumerate}
+
+\subsubsection{P12}
+
+(meta: packets arrive simultaneously, not on avg)
+
+First packet has no queuing delay, sent off down the link immediately. The second packet has to wait $L/R$s for the first packet to go through, the third has to wait $2L/R$, and so on. The average queuing delay is then $\dfrac{1}{N} \dfrac{L}{R} \sum_{i=0}^{n-1} i = \dfrac{L}{RN} (n)(n-1)/2 = \dfrac{L(n-1)}{2R}$
+
+\subsubsection{P20}
+
+\begin{enumerate}[(a)]
+    \item $10^9 * 10^7 / 2.5*10^8 = 4*10^7$
+    \item $4*10^5$, there are less bits transmitted then the maximum possible
+    \item $10^7/4*10^7 = 1/4$m (we use the bandwidth-delay, not number of bits transferred as that dictates the time/distance interval between bits on the link)
+\end{enumerate}
+
+\subsection{Problem Set 1}
+
+\subsubsection{Problem 1}
+
+\begin{enumerate}[(a)]
+    \item Since there are three links and each node must recieve the entire message before sending it to the next node it will take  \[ t = 3 \dfrac{M}{C} = 3 \dfrac{1.5*10^7}{1.5*10^6} = 30s \] time to recieve the whole file, assuming no propogation delay.
+    \item There are $M/L = 1.5*10^7/1.5*10^3 = 1*10^4$ packets to send. The first packet will arrive at B in $3L/C$ time, The first link will start transmitting the second packet as soon as the first packet has been read (in $L/C$ time) and the remaining $M/L - 1$ packets will each arrive at B $L/C$ seconds after the last.
+    
+    \[ t = 3 \dfrac{L}{C} + \left(\dfrac{M}{L} - 1\right) \dfrac{L}{C} = \left(\dfrac{M}{L} + 2\right) \dfrac{L}{C} = \left(\dfrac{1.5*10^7}{1.5*10^3} + 2\right) \dfrac{1.5*10^3}{1.5*10^6} = (10^4 + 2) 10^{-3} = 10 + 2 * 10^{-3} = 10.002s \]
+\end{enumerate}
+
+\subsubsection{Problem 3}
+
+\begin{enumerate}
+    \item b
+    \item b; $10^7/2*10^8 = 0.05$
+    \item d; $0.05 * 10^7 = 5*10^5$
+    \item a; $2(3 + 0.025) = 6.05$
+    \item b; The first packet takes $2 (10^7/10^7 + 0.0125) = 2.05$s to reach the destination. There are two more packets to be sent after that each arriving at a node $10^7/10^7 = 1$s after the previous packet arrived at that node, propogation delay doesn't count for the second and third packets as they are sent as soon as the first packet has left the node, and not when the first packet has reached the next node. They still take $0.0125$s to travel between nodes but the spacing between the arrival times of two packets is $1$s. Total time: $2.05 + 2 * 1 = 4.05s$ 
+    \item a; $3*10^7/(10^7/10) + 0.05 = 30.05$s
+\end{enumerate}
+
+\subsubsection{Problem 4}
+
+\begin{enumerate}[(a)]
+    \item m/s
+    \item L/R
+    \item m/s + L/R
+    \item At host A
+    \item in transit
+    \item At host B
+    \item $m/2.5*10^8 = 10^3/2.84*10^5$ $m = 2.5*10^8/284$
+\end{enumerate}
+
+\subsubsection{Problem 6}
+
+\begin{enumerate}[(a)]
+    \item You're bottlenecked by the slowest link, $500$kbps
+    \item I'n all cases, $8*4*10^6/5*10^5 = 320/5 = 64$s
+\end{enumerate}
+
+\subsubsection{P6}
+
+$48 * 8 / 64*10^3 = 6*10^{-3}$s to encode/decode a packet, $48*8/10^6 + 2*10^{-3} = 2.384*10^{-3}$s to transmit the packet. Total of $8.384*10^{-3}$s until decoding. 
+
+\subsubsection{P8}
+
+\begin{enumerate}[(a)]
+    \item $10^9/(0.1 * 10^3) = 10^4$
+    \item Let $P(X)$ be the probability that $X$ users are active. The probability that more than $N$ users is active is then $1 - (P(X=0) + P(X=1) + \cdots + P(X=N))$. For any given $P(X)$, there are $M \choose N$ ways to choose $N$ active users out of a total population of $M$ users and the probability that exactly $N$ of them are active is $(p)^N (1-p)^{M-N}$. Putting this all together,
+    
+    \[ P(>N) = 1 - \sum_{i=0}^{N} {M \choose i} (p)^i (1-p)^{M-i} \]
+\end{enumerate} 
+
+\subsubsection{P9}
+
+\[ d_{\text{proc}} + \sum_{i=1}^{2} (8*L) / R_i + d_i / s_i \]
+
+\[ 10^{-3} + (8*1000) / 10^6 + 4*10^6 / 2.5*10^8 + (8/1000) / 10^6 + 10^6 / 2.5*10^8 \]
+\[ 10^{-3} + 8*10^{-3} + 1.6*10^{-2} + 8*10^{-3} + 0.4*10^{-2} \]
+\[ 10^{-3} + 8*10^{-3} + 8*10^{-3} + 20*10^{-3} = 1 + 16 + 20 = 37*10^{-3}s \]
+
+\subsubsection{P18}
+
+\begin{enumerate}[(a)]
+    \item $10^6 * 10^7/2.5*10^8 = 10^6 * 0.4 * 10^{-1} = 4 * 10^4$
+    \item $4*10^4$
+    \item The bandwidth delay product tells you how many bits can be on the link at any given time.
+    \item $10^7 / 4*10^4 = 2.5 * 10^2$ meters.
+    \item $s/R$
+\end{enumerate}
+
+\subsubsection{P19}
+
+$$m = s/R$$
+
+$$R = s/m = 2.5*10^8 / 10^7 = 25bps$$
+
+\subsubsection{P21}
+
+\begin{enumerate}[(a)]
+    \item $4*10^5 / 10^6 + 10^7/2.5*10^8 = 0.4 + 4*10^{-2} = 4.4*10^{-1}$s
+    \item This one's different, packets do not continously leave the sender as soon as the last packet has been sent so propogation delays for each packet accumulate $10 * (4*10^4 / 10^6 + 2 * 10^7 / 2.5*10^8) = 10 * (4*10^{-2} + 2 * 0.4*10^{-1}) = 10 * (0.04 + 0.08) = 10 * 0.12 = 1.2$s
+    \item transmission delay and propogation delay are equal for the packet switching approach and two packets are sent (data+ack) for every data packet we want to send so propogation delay dominates communication time. For the message switching approach, we send the same amount of data packets and over the same amount of time as the packet switching approach, but not having to sending extra ack packets means the total time for it is much less.
+\end{enumerate}
+
+\subsubsection{P24}
+
+\begin{enumerate}[(a)]
+    \item $7.5*10^6/1.5*10^6 = 5$s to first switch. Total time $3 * 5 = 15$s.
+    \item $1.5*10^3/1.5*10^6 = 10^{-3}$s for the first packet, $2 * 10^{-3}$s for the second packet.
+    \item $3 * 0.001 + 4999 * 0.001 = 0.003 + 4.999 = 5.002$s
+    \item propogation delay can make it slower, more complexity, header bits, etc
+\end{enumerate}
+
+\end{document}
