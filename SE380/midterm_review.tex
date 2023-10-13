@@ -848,7 +848,7 @@ Compute the transfer function, determine the poles and zeros of the system, and 
     y(t) &= cx(t) + du(t) \\
 \end{align*}
 
-Doing the same steps as above, we get the transfer function $G(s) = \dfrac{s - 6}{(s - 6)(s - 1)}$, with a zero at $s = 6$ and poles at $s = 6$ and $s = 1$. Our system has two poles and so it is not a first-order system and cannot be represented as one.
+Doing the same steps as above, we get the transfer function $G(s) = \dfrac{s - 6}{(s - 6)(s - 1)}$, with a zero at $s = 6$ and poles at $s = 6$ and $s = 1$. The zero at $s = 6$ and the pole at $s = 6$ cancel out (noting that we now have a discontinuity at $s = 6$) giving us a new transfer function of $G(s) = \dfrac{1}{s - 1}$ Our system now has one pole and so it is a first-order system.
 
 \section{P3.11}
 
