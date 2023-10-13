@@ -1167,4 +1167,181 @@ Determine the poles and sketch the bode plot.
 
 The zeros are at $s = \pm i \omega_n$ (from numerator) and the poles are given by $\zeta \omega_n \pm i \omega_n \sqrt{1 - \zeta^2}$. We have that $\zeta = 1/Q$. The poles are at $(1/Q) \omega_n \pm i \omega_n \sqrt{1 - 1/Q^2}$.
 
+\section{Midterm 2012}
+
+\subsection{Question 1}
+
+\subsubsection{a}
+
+Is the system $G(s) = \dfrac{1}{s^2 + 1}$ BIBO stable? if not, find a bounded input that produces a bounded output.
+
+The system has poles at $0 + \pm j$, so it is not BIBO stable. For a constant input $x(t) = 1$, its laplace transform is $X(s) = 1/s$ and the output of the system with this input is $Y(s) = \frac{1}{s(s^2 + 1)}$. Wolfram alpha has its inverse laplace transform as $y(t) = 1 - \cos(t)$. As $\cos(t)$ is bounded in $[0, 2]$, this is a bounded input that produces a bounded output.
+
+\subsubsection{b}
+
+Draw the piece-wise lienar approximate magnitude and phase Bode plots for the system $G(s) = \dfrac{40s^2(s - 100)}{(s + 1000)(s^2 + 20s + 400)}$ Be sure to indicate the slopes on your final plots.
+
+We have zeros at $s = 0$ (with multiplicity two) and $s = 100$. We have a real pole at $s = -1000$ and complex poles at $s = -10 \pm j 10 \sqrt{3}$. $\mu = 40$.
+
+For the magnitude part of the Bode plot, we have the constant $\mu = 40$ which contributes a constant $20 \log_{10}(40)$ to the magnitude. We have two zeros at $s = 0$ that each contribute a total of $+40$db (individually $+20$dB) to the magnitude through the origin. We have a zero at $s = 100$ that contributes $+20$dB starting at $\omega = 1/100$. We have a pole at $s = -1000$ that contributes $-20$dB starting at $\omega = 1/1000$. Finally, we have a complex pole at $s = -10 \pm j 10 \sqrt{3}$ that contributes $-40$dB starting at $\omega = 1$.
+
+For the phase part of the Bode plot, we have a constant phase of $0^\circ$ from the constant $\mu = 40$. We have two zeros at $s = 0$ that contribute a constant total $+180^\circ$ (individually $+90^\circ$) to the phase through the origin. We have a zero at $s = 100$ that contributes $+90^\circ$ starting at $\omega = 1/100$. We have a pole at $s = -1000$ that contributes $-90^\circ$ starting at $\omega = 1/1000$. Finally, we have a complex pole at $s = -10 \pm j 10 \sqrt{3}$ that contributes $-180^\circ$ starting at $\omega = 1$.
+
+\subsection{Question 2}
+
+Suppose that we want to suspend a metal ball in the air by adjusting the current in an electromagnet as shown in Figure 2. In Figure 2, $u$ is the input voltage; $y$ is the position of the ball; $i$ is the current in the windings, $M$ is the mass of the ball; $g$ is the acceleration due to gravity; $L$ and $R$ are the inductance and resistance of the coil. The magnet exerts an attractive force on the ball according to $F_{ball}(i, y) = \dfrac{Ki^2}{y}$ where $K$ is  a positive constant.
+
+\subsubsection{a}
+
+Assume that $L = 0$, Introduce the state variables $x_1 = y, x_2 = \dot y$. Find a nonlinear state model
+
+\[ \dot x = f(x, u) \]
+\[ y = h(x) \]
+
+of the system. Note: we take the downward direction to be positive $y$ as indicated in the figure.
+
+We can see that $\dot x_1 = x_2$. From kinematic equations we can derive that $M \ddot y = Mg - \dfrac{Ki^2}{y}$ and that $\dot x_2 = g - \frac{Ki^2}{x_1}$. Our nonlinear state model is then
+
+\[
+    \dot x = f(x, u) =
+    \begin{bmatrix}
+        \dot x_1 \\
+        \dot x_2 \\
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        x_2 \\
+        g - \frac{Ki^2}{x_1} \\
+    \end{bmatrix}
+\]
+\[ y = h(x) = x_1 \]
+
+\subsubsection{b}
+
+Suppose that we want the ball to be suspended at $y = 0.5$. Find the equilibrium values corresponding to the ball being at this desired position.
+
+We want to find equilibrium values (so that $\dot x_1 = \dot x_2 = x_2 = 0$) corresponding to the ball being at position $y = x_1 = 0.5$. $\dot x_2 = 0 = g - \frac{Ki^2}{x_1}$, so $g = \frac{Ki^2}{0.5}$ and $i = \sqrt{\frac{0.5g}{K}}$. We're given that inductance is zero, so $u = Ri = R \sqrt{\frac{0.5g}{K}}$. The equilibrium values are then $\bar x_1 = 0.5, \bar x_2 = 0, \bar u = R \sqrt{\frac{0.5g}{K}}$, for some given $K, R$.
+
+\subsubsection{c}
+
+Linearize the system about the equilibrium point from part (b).
+
+Note that $u = Ri$ and $\dot x_2 = g - \frac{Ki^2}{x_1}$, so $\dot x_2 = g - \frac{K}{x_1 R^2} u^2$
+
+(i didn't check my math here too closely, might be mistakes in the differentiation)
+
+\begin{align*}
+    A &= \dfrac{\partial f}{\partial x} =
+    \begin{bmatrix}
+        \frac{\partial f_1}{\partial x_1} & \frac{\partial f_1}{\partial x_2} \\    
+        \frac{\partial f_2}{\partial x_1} & \frac{\partial f_2}{\partial x_2} \\ 
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        0 & 1 \\
+        \frac{Ki^2}{x_1^2} & 0 \\
+    \end{bmatrix} \\
+    B &= \dfrac{\partial f}{\partial u} =
+    \begin{bmatrix}
+        \frac{\partial f_1}{\partial u} \\
+        \frac{\partial f_2}{\partial u} \\    
+    \end{bmatrix} =
+    \begin{bmatrix}
+        0 \\
+        -\frac{2Ki}{x_1 R^2} u \\    
+    \end{bmatrix}\\
+    C &= \dfrac{\partial h}{\partial x} = \begin{bmatrix}
+        \frac{\partial h}{\partial x_1} \\
+        \frac{\partial h}{\partial x_2} \\
+    \end{bmatrix} =
+    \begin{bmatrix}
+        1 \\
+        0 \\    
+    \end{bmatrix}\\
+    D &= \dfrac{\partial h}{\partial u} = 0\\
+\end{align*}
+
+\subsubsection{d}
+
+Let $K = 1, R = 1, M = 1, g = 9.8$. Find the transfer function from $\delta u$ to $\delta y$ for the linearalized system.
+
+Not doing, but you would compute $G(s) = C(sI - A)^{-1}B + D$, then compute its inverse laplace transform.
+
+\subsection{Question 3}
+
+\includegraphics[width=300pt]{midterm_2012_q3.png}
+
+Let the output after each junction be $J_1(s), J_2(s), J_3(s)$ respectively. Then we have
+
+\begin{align*}
+    Y(s) &= J_3(s) \\
+    J_3(s) &= G_3(s) J_1(s) + G_2(s) J_2(s) \\
+    J_2(s) &= G_1(s) J_1(s) - G_4(s) G_2(s) J_2(s) \\
+    J_1(s) &= R(s) - G_5(s) G_2(s) J_2(s) \\
+\end{align*}
+
+\begin{align*}
+    J_2(s) &= G_1(s) J_1(s) - G_4(s) G_2(s) J_2(s) \\
+    J_2(s) -  J_2(s) G_4(s) G_2(s) &= G_1(s) J_1(s) \\
+    J_2(s) (1 - G_4(s) G_2(s)) &= G_1(s) J_1(s) \\
+    J_2(s) &= \dfrac{G_1(s)}{1 - G_4(s) G_2(s)} J_1(s) \\
+\end{align*}
+
+\begin{align*}
+    J_1(s) &= R(s) - G_5(s) G_2(s) J_2(s) \\
+    J_1(s) &= R(s) - \dfrac{G_1(s) G_5(s) G_2(s)}{1 - G_4(s) G_2(s)} J_1(s) \\
+    J_1(s) + \dfrac{G_1(s) G_5(s) G_2(s)}{1 - G_4(s) G_2(s)} J_1(s) &= R(s) \\
+    J_1(s) \left(1 + \dfrac{G_1(s) G_5(s) G_2(s)}{1 - G_4(s) G_2(s)} \right) &= R(s) \\
+    J_1(s) &= \dfrac{R(s)}{1 + \dfrac{G_1(s) G_5(s) G_2(s)}{1 - G_4(s) G_2(s)}}  \\
+\end{align*}
+
+\begin{align*}
+    Y(s) &= J_3(s) \\
+    J_3(s) &= G_3(s) J_1(s) + G_2(s) J_2(s) \\
+    Y(s) &= G_3(s) J_1(s) + G_2(s) J_2(s) \\
+    Y(s) &= G_3(s) \left( \dfrac{R(s)}{1 + \dfrac{G_1(s) G_5(s) G_2(s)}{1 - G_4(s) G_2(s)}} \right) + G_2(s) \left( \dfrac{G_1(s)}{1 - G_4(s) G_2(s)} \right) \left( \dfrac{R(s)}{1 + \dfrac{G_1(s) G_5(s) G_2(s)}{1 - G_4(s) G_2(s)}} \right)
+\end{align*}
+
+\subsection{Question 4}
+
+Consider the feedback system in Figure 4 with
+
+\includegraphics[width=300pt]{midterm_2012_q4.png}
+
+\[ C = K_p + \dfrac{K_i}{s} \]
+\[ P(s) = \dfrac{1}{2s + 1} \]
+
+Where $K_p, K_I$ are real, constant, controller gains.
+
+\subsubsection{a}
+
+Find conditions on $K_p$, $K_I$ so that the output response, due to the reference input $r$, is underdamped.
+
+The overall transfer function (ignoring $d$ for now bc we want to only consider the reference input $r$) is given by $G(s) = \dfrac{C(s) P(s)}{1 + C(s) P(s)}$ and we want to choose values so that the poles of this overall transfer function have a non-zero imaginary part. (i'm not sure how they'd want you to manually do this).
+
+\subsubsection{b}
+
+Suppose that we are given the following specifications for the transfer function from $R$ to $Y$:
+
+\begin{enumerate}
+    \item BIBO stability
+    \item $T_s \leq 3$ for a step input
+    \item Less than 10 percent overshoot for a step input
+\end{enumerate}
+
+Treating the closed-loop systema s a prototype second order system draw the region of allowable s-plane pole locations so that the system meets these specifications.
+
+A rough sketch of the answer: all poles must be $< 0$ for it go be bibo stable. For settling time to be within a certain bound, the negative parts of all poles must be less than some small value. For less than a certain amount of overshoot, the zeta values of our poles must be greater than some value which puts another restrictions on the min/max values of the imaginary parts of our poles.
+
+\subsubsection{c}
+
+Choose values of $K_P$ and $K_I$ so that the specifications from part (b) are met. Comment on how the actual closed-loop system will respond given that it isn't actually a prototype second order system.
+
+Not sure how to do, also long.
+
+\subsubsection{d}
+
+Using the values of $K_I$ and $K_P$ from part (c), find the steady-state output $y_{ss}(t)$ due to a unit step disturbance $d(t) = 1(t)$ when $r(t) = 0$.
+
+The steady state output should be given by our value of $\mu$ from the transfer function, which can be computed after plugging in the values of $K_I$ and $K_P$ from part (c).
+
 \end{document}
