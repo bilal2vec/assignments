@@ -1181,11 +1181,21 @@ The system has poles at $0 + \pm j$, so it is not BIBO stable. For a constant in
 
 Draw the piece-wise lienar approximate magnitude and phase Bode plots for the system $G(s) = \dfrac{40s^2(s - 100)}{(s + 1000)(s^2 + 20s + 400)}$ Be sure to indicate the slopes on your final plots.
 
-We have zeros at $s = 0$ (with multiplicity two) and $s = 100$. We have a real pole at $s = -1000$ and complex poles at $s = -10 \pm j 10 \sqrt{3}$. $\mu = 40$.
+We have zeros at $s = 0$ (with multiplicity two) and $s = 100$. We have a real pole at $s = -1000$ and complex poles at $s = -10 \pm j 10 \sqrt{3}$. $\mu = 40$. Putting each of these components into the transfer function form (with $\tau$ and $\omega$) from the notes, we get:
 
-For the magnitude part of the Bode plot, we have the constant $\mu = 40$ which contributes a constant $20 \log_{10}(40)$ to the magnitude. We have two zeros at $s = 0$ that each contribute a total of $+40$db (individually $+20$dB) to the magnitude through the origin. We have a zero at $s = 100$ that contributes $+20$dB starting at $\omega = 1/100$. We have a pole at $s = -1000$ that contributes $-20$dB starting at $\omega = 1/1000$. Finally, we have a complex pole at $s = -10 \pm j 10 \sqrt{3}$ that contributes $-40$dB starting at $\omega = 1$.
+\begin{align*}
+    G_1(s) &= 40 \\
+    G_2(s) &= s^2 \\
+    G_3(s) &= s - 100 = \frac{s}{-100} + 1 \\
+    G_4(s) &= \frac{1}{s + 1000} = \frac{1}{\frac{s}{1000} + 1} \\
+    G_5(s) &= \frac{1}{s^2 + 20s + 400} = \frac{1}{\frac{s^2}{400} + \frac{20s}{400} + 1} \\
+\end{align*}
 
-For the phase part of the Bode plot, we have a constant phase of $0^\circ$ from the constant $\mu = 40$. We have two zeros at $s = 0$ that contribute a constant total $+180^\circ$ (individually $+90^\circ$) to the phase through the origin. We have a zero at $s = 100$ that contributes $+90^\circ$ starting at $\omega = 1/100$. We have a pole at $s = -1000$ that contributes $-90^\circ$ starting at $\omega = 1/1000$. Finally, we have a complex pole at $s = -10 \pm j 10 \sqrt{3}$ that contributes $-180^\circ$ starting at $\omega = 1$.
+For $G_3$, and $G_4$, we can see that the corresponding $\omega = 1/|\tau|$ values are $100$ and $1000$ respectively. For $G_5$, we can see that $s^2 / \omega^2 = s^2 / 400$ and that $\omega = 20$.
+
+For the magnitude part of the Bode plot, we have the constant $\mu = 40$ which contributes a constant $20 \log_{10}(40)$ to the magnitude. We have two zeros at $s = 0$ that each contribute a total of $+40$db (individually $+20$dB) to the magnitude through the origin and on both sides of the origin. We have a zero at $s = -100$ that contributes $+20$dB starting at $\omega = 100$. We have a pole at $s = -1000$ that contributes $-20$dB starting at $\omega = 1000$. Finally, we have a complex pole at $s = -10 \pm j 10 \sqrt{3}$ that contributes $-40$dB starting at $\omega = 20$.
+
+For the phase part of the Bode plot, we have a constant phase of $0^\circ$ from the constant $\mu = 40$. We have two zeros at $s = 0$ that contribute a constant total $+180^\circ$ (individually $+90^\circ$) to the phase through the origin and on both sides of the origin. We have a zero at $s = 100$ that contributes $+90^\circ$ starting at $\omega = 100$. We have a pole at $s = -1000$ that contributes $-90^\circ$ starting at $\omega = 1000$. Finally, we have a complex pole at $s = -10 \pm j 10 \sqrt{3}$ that contributes $-180^\circ$ starting at $\omega = 20$.
 
 \subsection{Question 2}
 
