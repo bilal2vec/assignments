@@ -1193,9 +1193,13 @@ We have zeros at $s = 0$ (with multiplicity two) and $s = 100$. We have a real p
 
 For $G_3$, and $G_4$, we can see that the corresponding $\omega = 1/|\tau|$ values are $100$ and $1000$ respectively. For $G_5$, we can see that $s^2 / \omega^2 = s^2 / 400$ and that $\omega = 20$.
 
-For the magnitude part of the Bode plot, we have the constant $\mu = 40$ which contributes a constant $20 \log_{10}(40)$ to the magnitude. We have two zeros at $s = 0$ that each contribute a total of $+40$db (individually $+20$dB) to the magnitude through the origin and on both sides of the origin. We have a zero at $s = -100$ that contributes $+20$dB starting at $\omega = 100$. We have a pole at $s = -1000$ that contributes $-20$dB starting at $\omega = 1000$. Finally, we have a complex pole at $s = -10 \pm j 10 \sqrt{3}$ that contributes $-40$dB starting at $\omega = 20$.
+We scale each part of the transfer function to convert it into the appropriate reference transfer function form to get
 
-For the phase part of the Bode plot, we have a constant phase of $0^\circ$ from the constant $\mu = 40$. We have two zeros at $s = 0$ that contribute a constant total $+180^\circ$ (individually $+90^\circ$) to the phase through the origin and on both sides of the origin. We have a zero at $s = 100$ that contributes $+90^\circ$ starting at $\omega = 100$. We have a pole at $s = -1000$ that contributes $-90^\circ$ starting at $\omega = 1000$. Finally, we have a complex pole at $s = -10 \pm j 10 \sqrt{3}$ that contributes $-180^\circ$ starting at $\omega = 20$.
+\[ \dfrac{ 40 \times \dfrac{-100}{1000 \times 400} s^2 \left( \dfrac{s}{-100} + 1 \right)}{\left( \dfrac{s}{1000} + 1 \right) \left( \dfrac{s^2}{400} + \dfrac{20s}{400} + 1 \right)} \]
+
+For the magnitude part of the Bode plot, we have the constant $\mu = 40 * \frac{-100}{1000 \times 400} = -0.01$ which contributes a constant $20 \log_{10}(| -0.01 |)$ to the magnitude. We have two zeros at $s = 0$ that each contribute a total of $+40$db (individually $+20$dB) to the magnitude through the origin and on both sides of the origin. We have a zero at $s = -100$ that contributes $+20$dB starting at $\omega = 100$. We have a pole at $s = -1000$ that contributes $-20$dB starting at $\omega = 1000$. Finally, we have a complex pole at $s = -10 \pm j 10 \sqrt{3}$ that contributes $-40$dB starting at $\omega = 20$.
+
+For the phase part of the Bode plot, we have a constant phase of $-180^\circ$ from the constant $\mu = -0.01$ (since its negative, it contributes $-180^\circ$ instead of $0^\circ$). We have two zeros at $s = 0$ that contribute a constant total $+180^\circ$ (individually $+90^\circ$) to the phase through the origin and on both sides of the origin. We have a zero at $s = 100$ that contributes $+90^\circ$ starting at $\omega = 100$. We have a pole at $s = -1000$ that contributes $-90^\circ$ starting at $\omega = 1000$. Finally, we have a complex pole at $s = -10 \pm j 10 \sqrt{3}$ that contributes $-180^\circ$ starting at $\omega = 20$.
 
 \subsection{Question 2}
 
