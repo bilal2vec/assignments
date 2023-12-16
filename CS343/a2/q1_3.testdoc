@@ -1,0 +1,17 @@
+# Checking for proper sorting of non-basic types
+
+In our case we defined a `Point(x, y)` type and we will sort a list of points by their distance from `(0, 0)`
+
+To run this, set `TYPE:=Point` in `Makefile` and run `make`
+
+Our points are (1, 1), (3, 3), (0, 3), and (-1, 2)
+
+```bash
+$ cat q1_3.txt
+4 1 1 3 3 0 3 -1 2
+$ ./binsertsort q1_3.txt
+(1,1) (3,3) (0,3) (-1,2)
+(1,1) (-1,2) (0,3) (3,3)
+
+$
+```

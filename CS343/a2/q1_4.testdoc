@@ -1,0 +1,19 @@
+$ Testing for lists of zero or one element
+
+1. Test for empty list (zero elements)
+2. Test for list of one element
+
+```bash
+$ cat q1_4.txt
+0
+1 42
+$ ./bininsertsort q1_4.txt
+
+
+
+42
+42
+
+$
+```
+As there are no elements in the first list, the program prints only newlines The second list has one element, so it is printed as is.

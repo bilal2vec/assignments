@@ -1,0 +1,49 @@
+# Q3
+
+## i
+
+```bash
+$ make vote VIMPL=MC OUTPUT=NOOUTPUT
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./vote 200 10 10000 1003
+1.37u 0.00s 0:01.39r 7648kb
+```
+
+```bash
+$ make vote VIMPL=SEM OUTPUT=NOOUTPUT
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./vote 200 10 10000 1003
+1.07u 0.01s 0:01.09r 7760kb
+```
+
+```bash
+$ make vote VIMPL=BAR OUTPUT=NOOUTPUT
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./vote 200 10 10000 1003
+1.08u 0.00s 0:01.08r 7792kb
+```
+
+```bash
+$ make vote VIMPL=MC OUTPUT=NOOUTPUT
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./vote 200 10 10000 1003 2
+60.95u 0.11s 0:30.46r 7668kb
+```
+
+```bash
+$ make vote VIMPL=SEM OUTPUT=NOOUTPUT
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./vote 200 10 10000 1003 2
+53.57u 0.11s 0:26.85r 7832kb
+```
+
+```bash
+$ make vote VIMPL=BAR OUTPUT=NOOUTPUT
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./vote 200 10 10000 1003 2
+51.40u 0.06s 0:25.66r 8052kb
+```
+
+## ii
+
+Results for one processor are generally fast and consistent between the three implementations (MC vs SEM vs BAR), and slightly decreases in this order. User time decreases from 1.37s to 1.07s to 1.08s, and real time decreases from 1.39s to 1.09s to 1.08s.
+
+Results for two processors are generally slower between the three implementations (MC vs SEM vs BAR), and slightly decreases in this order. User time decreases from 60.95s to 53.57s to 51.40s, and real time decreases from 30.46s to 26.85s to 25.66s.
+
+## iii
+
+Using more two vs one process results in timings taking >10x as long. This is because the overhead of creating and switching between processes is greater than the time saved by having two processes.

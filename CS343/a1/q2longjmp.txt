@@ -1,0 +1,32 @@
+(b) i:
+
+This is where the output is diferent between the two programs:
+
+original:       calls 159906171 exceptions 7724100 destructors 7724100
+transformed:    calls 159906171 exceptions 7724100 destructors 0
+
+C++ exceptions guarantee that exceptions call destructors of all objects, longjmp does not. The difference is that the original program will call the destructors for struct T that is created before throwing an exception and is run when unwinding the stack after throwing, the destructors incremment the value of dtors. The transformed program will longjmp to the appropriate exception handler directly and not call the destructors for any object that's on the stack frame for the function.
+
+(b) ii:
+
+/usr/bin/time -f "%Uu %Ss %E" ./throwcatch 12 12 103 28
+/usr/bin/time -f "%Uu %Ss %E" ./longjmp 12 12 103 28
+
+w/o compiler optimizations:
+
+throwcatch:     7.14u 0.00s 0:07.15
+longjmp:        2.33u 0.00s 0:02.33
+
+w/ compiler optimizations:
+
+throwcatch:     7.17u 0.00s 0:07.18
+longjmp:        1.81u 0.00s 0:01.81
+
+
+(b) iii:
+
+The transformed program is faster b/c it c++ exceptions are slow and take O(n) time to unwind the stack to find the appropriate exception handler. The transformed program uses longjmp which is O(1) time to find the appropriate exception handler.
+
+(b) iv:
+
+The same reasons apply to the program with compiler optimizations, There is only so much you can do to optimize the c++ exception handling mechanism. The compiler is able to slightly optimize the longjmp program though.

@@ -1,0 +1,81 @@
+# Q3
+
+## i
+
+### BUSY
+
+```bash
+$ make clean
+$ make BIMPL=BUSY
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./buffer 55 50 20000 20 10 1
+total: 1410565408
+1.03u 0.00s 0:01.03r 6264kb
+$ make clean
+$ make BIMPL=BUSY OPT=-O2
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./buffer 55 50 20000 20 10 1
+total: 1410565408
+0.69u 0.00s 0:00.70r 6228kb
+```
+
+### NOBUSY
+
+```bash
+$ make clean
+$ make BIMPL=NOBUSY BCHECK=BARGINGCHECK
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./buffer 55 50 20000 20 10 1
+total: 1410565408
+1.05u 0.00s 0:01.05r 6500kb
+$ make clean
+$ make BIMPL=NOBUSY BCHECK=BARGINGCHECK OPT=-O2
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./buffer 55 50 20000 20 10 1
+total: 1410565408
+0.98u 0.00s 0:00.98r 6256kb
+```
+
+## ii
+
+Optimization decreases runtime by about 30% for BUSY, but only by <10% for NOBUSY. Overall, NOBUSY runs slightly slower than BUSY regardless of optimization level.
+
+## iii
+
+### BUSY
+
+```bash
+$ make clean
+$ make BIMPL=BUSY
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./buffer 20 20 2000 20 20 4
+total: 40020000
+3.94u 0.00s 0:00.98r 5896kb
+$ make clean
+$ make BIMPL=BUSY OPT=-O2
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./buffer 20 20 2000 20 20 4
+total: 40020000
+3.89u 0.01s 0:00.97r 5572kb
+```
+
+### NOBUSY
+
+```bash
+$ make clean
+$ make BIMPL=NOBUSY BCHECK=BARGINGCHECK
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./buffer 20 20 2000 20 20 4
+total: 40020000
+4.73u 0.02s 0:01.19r 5764kb
+$ make clean
+$ make BIMPL=NOBUSY BCHECK=BARGINGCHECK OPT=-O2
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./buffer 20 20 2000 20 20 4
+total: 40020000
+4.23u 0.02s 0:01.06r 5704kb
+```
+
+## iv
+
+NOBUSY takes about 0.3s longer than BUSY when running with -O2, but takes 0.8s longer when running without optimization. 
+
+## v
+
+The value of the number of times the producers/consumers block should account for the performance difference. For example with `./buffer 20 20 2000 20 20 4`, NOBUSY will wait 1214 times, compared to BUSY that blocks 315 times. Blocking more often will result in a longer runtime.
+
+## vi
+
+The multiprocessor version runs 4 threads in parallel, which is why the time is ~ 4x the single threaded runtime.

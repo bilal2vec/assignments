@@ -1,0 +1,80 @@
+# Test 1:
+
+## Input
+
+000123456789e01
++000123456789e-01
+-000123456789E+01
+000123456789e01f
+000123456789e01l
+000123456789e01F
+000123456789e01L
+
+## Output
+
+"000123456789e01" : "000123456789e01" yes, value 1234567890
+"+000123456789e-01" : "+000123456789e-01" yes, value 12345678.9
+"-000123456789E+01" : "-000123456789E+01" yes, value -1234567890
+"000123456789e01f" : "000123456789e01f" yes, value 1234567890
+"000123456789e01l" : "000123456789e01l" yes, value 1234567890
+"000123456789e01F" : "000123456789e01F" yes, value 1234567890
+"000123456789e01L" : "000123456789e01L" yes, value 1234567890
+
+## Explanation
+
+This test checks that all digits from 0-9 are accepted in the mantissa and the exponent. It also checks that the mantissa and exponent can be positive or negative. It also checks that both the "e" and "E" characters are accepted as the exponent delimiter. It also checks that the floating suffix is optional and can be either "f", "F", "l", or "L".
+
+# Test 2:
+
+## Input
+
+00012.3456789e01
+.000123456789e01
+
+000123456789.e01
+
+## Output
+
+"00012.3456789e01" : "00012.3456789e01" yes, value 123.456789
+".000123456789e01" : ".000123456789e01" yes, value 0.00123456789
+"" : Warning! Blank line.
+"000123456789.e01" : "000123456789.e01" yes, value 1234567890
+
+
+## Explanation
+
+This test checks that the decimal point is accepted in the mantissa and that it can be placed anywhere in the mantissa (beginning, middle, end). It also checks that the blank line warning message is printed when a blank line is encountered.
+
+# Test 3:
+
+## Input
+
+ 12.34
+abc
+123eabc
+1.2345678901234567890
+1.23e12345
+123.ff
+a
++.
+12.0   
+1.2.0a
+- 12.5F
+
+## Output
+
+" 12.34" : " " no -- extraneous characters "12.34"
+"abc" : "a" no -- extraneous characters "bc"
+"123eabc" : "123ea" no -- extraneous characters "bc"
+"1.2345678901234567890" : "1.2345678901234567" no -- extraneous characters "890"
+"1.23e12345" : "1.23e1234" no -- extraneous characters "5"
+"123.ff" : "123.f" yes, value 123 -- extraneous characters "f"
+"a" : "a" no
+"+." : "+." no
+"12.0   " : "12.0 " no -- extraneous characters "  "
+"1.2.0a" : "1.2." no -- extraneous characters "0a"
+"- 12.5F" : "- " no -- extraneous characters "12.5F"
+
+## Explanation
+
+This test checks for the parser gracefully failing when provided with misformed input and that it properly reports the extraneous characters. In order of appearance, we check for leading whitespace, non-digit characters in the mantissa, non-digit characters in the exponent, too many digits in the mantissa, too many digits in the exponent, too many floating suffixes, a single non-digit character, a single non-digit character before the dot in the mantissa, trailing whitespace, multiple decimal points, and whitespace between parts of the floating point number (specifically between the sign and the mantissa).

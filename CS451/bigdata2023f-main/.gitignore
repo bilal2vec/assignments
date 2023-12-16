@@ -1,0 +1,4 @@
+data/
+target/
+check_assignment*_public_*.py
+cs451-*

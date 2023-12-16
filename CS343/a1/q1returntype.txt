@@ -1,0 +1,80 @@
+1 (b) i:
+
+Commands:
+
+/usr/bin/time -f "%Uu %Ss %E" ./exception 100000000 10000 1003
+/usr/bin/time -f "%Uu %Ss %E" ./returnglobal 100000000 10000 1003
+/usr/bin/time -f "%Uu %Ss %E" ./returntype 100000000 10000 1003
+/usr/bin/time -f "%Uu %Ss %E" ./returntypec 100000000 10000 1003
+
+W/O compiler optimizations:
+
+exception:      11.73u 0.00s 0:11.73
+returnglobal:   11.51u 0.00s 0:11.51
+returntype:     38.40u 0.00s 0:38.41
+returntypec:    12.07u 0.00s 0:12.07
+
+W/ compiler optimizations:
+
+exception:      10.81u 0.00s 0:10.81
+returnglobal:   11.04u 0.00s 0:11.04
+returntype:     12.31u 0.00s 0:12.32
+returntypec:    10.85u 0.00s 0:10.85
+
+1 (b) ii:
+
+returnglobal: 11.51 - 11.73 = -0.22
+returntype: 38.40 - 11.73 = 26.67
+returntypec: 12.07 - 11.73 = 0.34
+
+Not using exceptions that have a high cost of handling rare exceptions makes returnglobal slightly faster. Returntype uses std::variants which are know to be expensive and slow for all calls of the functions which makes it the slowest. returntypec uses tagged unions which don't have the same overhead as std::variants which makes it competitive with returnglobal.
+
+1 (b) iii:
+
+returnglobal: 11.04 - 10.81 = 0.23
+returntype: 12.31 - 10.81 = 1.50
+returntypec: 10.85 - 10.81 = 0.04
+
+The same reasons as (ii) apply to here, but compiler optimizations heavily reduce the slowness of returntype and its std:variants.
+
+1 (c) i:
+
+eperiod 1000:
+
+/usr/bin/time -f "%Uu %Ss %E" ./exception 100000000 1000 1003
+/usr/bin/time -f "%Uu %Ss %E" ./returnglobal 100000000 1000 1003
+/usr/bin/time -f "%Uu %Ss %E" ./returntype 100000000 1000 1003
+/usr/bin/time -f "%Uu %Ss %E" ./returntypec 100000000 1000 1003
+
+exception:      11.98u 0.00s 0:11.99
+returnglobal:   11.43u 0.00s 0:11.49
+returntype:     13.00u 0.00s 0:13.01
+returntypec:    12.81u 0.00s 0:12.84
+
+eperiod 100:
+
+/usr/bin/time -f "%Uu %Ss %E" ./exception 100000000 100 1003
+/usr/bin/time -f "%Uu %Ss %E" ./returnglobal 100000000 100 1003
+/usr/bin/time -f "%Uu %Ss %E" ./returntype 100000000 100 1003
+/usr/bin/time -f "%Uu %Ss %E" ./returntypec 100000000 100 1003
+
+exception:      15.72u 0.00s 0:15.74
+returnglobal:   11.06u 0.00s 0:11.06
+returntype:     12.73u 0.00s 0:12.74
+returntypec:    11.77u 0.00s 0:11.77
+
+eperiod 59:
+
+/usr/bin/time -f "%Uu %Ss %E" ./exception 100000000 50 1003
+/usr/bin/time -f "%Uu %Ss %E" ./returnglobal 100000000 50 1003
+/usr/bin/time -f "%Uu %Ss %E" ./returntype 100000000 50 1003
+/usr/bin/time -f "%Uu %Ss %E" ./returntypec 100000000 50 1003
+
+exception:      21.11u 0.01s 0:21.12
+returnglobal:   11.42u 0.00s 0:11.42
+returntype:     12.85u 0.00s 0:12.87
+returntypec:    12.26u 0.07s 0:12.34
+
+1 (c) ii:
+
+As the exception period decreases the amount of time each of the alternatives take stays relatively similar, the cost of returning sucessfully vs using flags/variants/ tagged unions is not affected by the exception period, but the cost of throwing exceptions increases as the exception period decreases.

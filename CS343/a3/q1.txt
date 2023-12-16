@@ -1,0 +1,273 @@
+# Q1
+
+# Part A
+
+### STACK
+
+```bash
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./q1 1 200000000
+
+Heap statistics: (storage request / allocation)
+  malloc    >0 calls 58; 0 calls 0; storage 2,589,403 / 2,721,040 bytes
+  aalloc    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  calloc    >0 calls 2; 0 calls 0; storage 1,344 / 1,856 bytes
+  memalign  >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  amemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  cmemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  resize    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  realloc   >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  free      !null calls 4; null calls 4; storage 254,589 / 266,832 bytes
+  return    pulls 0; pushes 0; storage 0 / 0 bytes
+  sbrk      calls 1; storage 10,485,760 bytes
+  mmap      calls 0; storage 0 / 0 bytes
+  munmap    calls 0; storage 0 / 0 bytes
+  threads   started 2; exited 0
+  heaps     new 2; reused 0
+1.25u 0.01s 0:01.26r 5008kb
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./q1 2 200000000
+
+Heap statistics: (storage request / allocation)
+  malloc    >0 calls 64; 0 calls 0; storage 3,340,419 / 3,508,544 bytes
+  aalloc    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  calloc    >0 calls 3; 0 calls 0; storage 1,648 / 2,176 bytes
+  memalign  >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  amemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  cmemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  resize    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  realloc   >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  free      !null calls 5; null calls 4; storage 504,605 / 528,992 bytes
+  return    pulls 0; pushes 0; storage 0 / 0 bytes
+  sbrk      calls 1; storage 10,485,760 bytes
+  mmap      calls 0; storage 0 / 0 bytes
+  munmap    calls 0; storage 0 / 0 bytes
+  threads   started 3; exited 0
+  heaps     new 3; reused 0
+2.38u 0.00s 0:01.22r 4828kb
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./q1 4 200000000
+
+Heap statistics: (storage request / allocation)
+  malloc    >0 calls 76; 0 calls 0; storage 4,842,451 / 5,083,552 bytes
+  aalloc    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  calloc    >0 calls 5; 0 calls 0; storage 2,256 / 2,816 bytes
+  memalign  >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  amemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  cmemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  resize    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  realloc   >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  free      !null calls 7; null calls 4; storage 1,004,637 / 1,053,312 bytes
+  return    pulls 0; pushes 0; storage 0 / 0 bytes
+  sbrk      calls 1; storage 10,485,760 bytes
+  mmap      calls 0; storage 0 / 0 bytes
+  munmap    calls 0; storage 0 / 0 bytes
+  threads   started 5; exited 0
+  heaps     new 5; reused 0
+4.61u 0.01s 0:01.20r 5156kb
+```
+
+### DARRAY
+
+```bash
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./q1 1 200000000
+
+Heap statistics: (storage request / allocation)
+  malloc    >0 calls 200,000,058; 0 calls 0; storage 8,002,589,403 / 12,802,721,040 bytes
+  aalloc    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  calloc    >0 calls 2; 0 calls 0; storage 1,344 / 1,856 bytes
+  memalign  >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  amemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  cmemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  resize    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  realloc   >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  free      !null calls 200,000,004; null calls 4; storage 8,000,254,589 / 12,800,266,832 bytes
+  return    pulls 0; pushes 0; storage 0 / 0 bytes
+  sbrk      calls 1; storage 10,485,760 bytes
+  mmap      calls 0; storage 0 / 0 bytes
+  munmap    calls 0; storage 0 / 0 bytes
+  threads   started 2; exited 0
+  heaps     new 2; reused 0
+4.13u 0.01s 0:04.13r 5128kb
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./q1 2 200000000
+
+Heap statistics: (storage request / allocation)
+  malloc    >0 calls 400,000,064; 0 calls 0; storage 16,003,340,419 / 25,603,508,544 bytes
+  aalloc    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  calloc    >0 calls 3; 0 calls 0; storage 1,648 / 2,176 bytes
+  memalign  >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  amemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  cmemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  resize    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  realloc   >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  free      !null calls 400,000,005; null calls 4; storage 16,000,504,605 / 25,600,528,992 bytes
+  return    pulls 0; pushes 0; storage 0 / 0 bytes
+  sbrk      calls 1; storage 10,485,760 bytes
+  mmap      calls 0; storage 0 / 0 bytes
+  munmap    calls 0; storage 0 / 0 bytes
+  threads   started 3; exited 0
+  heaps     new 3; reused 0
+9.03u 0.01s 0:04.53r 5072kb
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./q1 4 200000000
+
+Heap statistics: (storage request / allocation)
+  malloc    >0 calls 800,000,076; 0 calls 0; storage 32,004,842,451 / 51,205,083,552 bytes
+  aalloc    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  calloc    >0 calls 5; 0 calls 0; storage 2,256 / 2,816 bytes
+  memalign  >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  amemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  cmemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  resize    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  realloc   >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  free      !null calls 800,000,007; null calls 4; storage 32,001,004,637 / 51,201,053,312 bytes
+  return    pulls 0; pushes 0; storage 0 / 0 bytes
+  sbrk      calls 1; storage 10,485,760 bytes
+  mmap      calls 0; storage 0 / 0 bytes
+  munmap    calls 0; storage 0 / 0 bytes
+  threads   started 5; exited 0
+  heaps     new 5; reused 0
+16.41u 0.02s 0:04.15r 5256kb
+```
+
+### VECTOR1
+
+```bash
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./q1 1 200000000
+
+Heap statistics: (storage request / allocation)
+  malloc    >0 calls 200,000,058; 0 calls 0; storage 8,002,589,403 / 12,802,721,040 bytes
+  aalloc    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  calloc    >0 calls 2; 0 calls 0; storage 1,344 / 1,856 bytes
+  memalign  >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  amemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  cmemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  resize    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  realloc   >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  free      !null calls 200,000,004; null calls 4; storage 8,000,254,589 / 12,800,266,832 bytes
+  return    pulls 0; pushes 0; storage 0 / 0 bytes
+  sbrk      calls 1; storage 10,485,760 bytes
+  mmap      calls 0; storage 0 / 0 bytes
+  munmap    calls 0; storage 0 / 0 bytes
+  threads   started 2; exited 0
+  heaps     new 2; reused 0
+5.02u 0.02s 0:05.03r 5024kb
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./q1 2 200000000
+
+Heap statistics: (storage request / allocation)
+  malloc    >0 calls 400,000,064; 0 calls 0; storage 16,003,340,419 / 25,603,508,544 bytes
+  aalloc    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  calloc    >0 calls 3; 0 calls 0; storage 1,648 / 2,176 bytes
+  memalign  >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  amemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  cmemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  resize    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  realloc   >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  free      !null calls 400,000,005; null calls 4; storage 16,000,504,605 / 25,600,528,992 bytes
+  return    pulls 0; pushes 0; storage 0 / 0 bytes
+  sbrk      calls 1; storage 10,485,760 bytes
+  mmap      calls 0; storage 0 / 0 bytes
+  munmap    calls 0; storage 0 / 0 bytes
+  threads   started 3; exited 0
+  heaps     new 3; reused 0
+10.65u 0.03s 0:05.42r 5248kb
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./q1 4 200000000
+
+Heap statistics: (storage request / allocation)
+  malloc    >0 calls 800,000,076; 0 calls 0; storage 32,004,842,451 / 51,205,083,552 bytes
+  aalloc    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  calloc    >0 calls 5; 0 calls 0; storage 2,256 / 2,816 bytes
+  memalign  >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  amemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  cmemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  resize    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  realloc   >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  free      !null calls 800,000,007; null calls 4; storage 32,001,004,637 / 51,201,053,312 bytes
+  return    pulls 2; pushes 0; storage 0 / 0 bytes
+  sbrk      calls 1; storage 10,485,760 bytes
+  mmap      calls 0; storage 0 / 0 bytes
+  munmap    calls 0; storage 0 / 0 bytes
+  threads   started 5; exited 0
+  heaps     new 5; reused 0
+20.33u 0.05s 0:05.14r 5264kb
+```
+
+### VECTOR2
+
+```bash
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./q1 1 200000000
+
+Heap statistics: (storage request / allocation)
+  malloc    >0 calls 1,000,000,058; 0 calls 0; storage 24,802,589,403 / 44,802,721,040 bytes
+  aalloc    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  calloc    >0 calls 2; 0 calls 0; storage 1,344 / 1,856 bytes
+  memalign  >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  amemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  cmemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  resize    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  realloc   >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  free      !null calls 1,000,000,004; null calls 4; storage 24,800,254,589 / 44,800,266,832 bytes
+  return    pulls 0; pushes 0; storage 0 / 0 bytes
+  sbrk      calls 1; storage 10,485,760 bytes
+  mmap      calls 0; storage 0 / 0 bytes
+  munmap    calls 0; storage 0 / 0 bytes
+  threads   started 2; exited 0
+  heaps     new 2; reused 0
+26.02u 0.06s 0:26.03r 5008kb
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./q1 2 200000000
+
+Heap statistics: (storage request / allocation)
+  malloc    >0 calls 2,000,000,064; 0 calls 0; storage 49,603,340,419 / 89,603,508,544 bytes
+  aalloc    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  calloc    >0 calls 3; 0 calls 0; storage 1,648 / 2,176 bytes
+  memalign  >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  amemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  cmemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  resize    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  realloc   >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  free      !null calls 2,000,000,005; null calls 4; storage 49,600,504,605 / 89,600,528,992 bytes
+  return    pulls 0; pushes 0; storage 0 / 0 bytes
+  sbrk      calls 1; storage 10,485,760 bytes
+  mmap      calls 0; storage 0 / 0 bytes
+  munmap    calls 0; storage 0 / 0 bytes
+  threads   started 3; exited 0
+  heaps     new 3; reused 0
+53.26u 0.09s 0:26.64r 4960kb
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./q1 4 200000000
+
+Heap statistics: (storage request / allocation)
+  malloc    >0 calls 4,000,000,076; 0 calls 0; storage 99,204,842,451 / 179,205,083,552 bytes
+  aalloc    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  calloc    >0 calls 5; 0 calls 0; storage 2,256 / 2,816 bytes
+  memalign  >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  amemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  cmemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  resize    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  realloc   >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  free      !null calls 4,000,000,007; null calls 4; storage 99,201,004,637 / 179,201,053,312 bytes
+  return    pulls 1; pushes 0; storage 0 / 0 bytes
+  sbrk      calls 1; storage 10,485,760 bytes
+  mmap      calls 0; storage 0 / 0 bytes
+  munmap    calls 0; storage 0 / 0 bytes
+  threads   started 5; exited 0
+  heaps     new 5; reused 0
+108.31u 0.14s 0:27.31r 5348kb
+```
+
+## Part B
+
+### STACK
+
+This program runs the fastest at ~1.2s with max variation of 0.05 (real time). The number of bytes malloc-ed scales sublinearly wrt number of tasks (58 -> 64 -> 76)
+
+### DARRAY
+
+This program runs second-fastest at ~4.15s (+- 0.35) real-time. The number of bytes malloc-ed scales linearly wrt number of processes (200k -> 400k -> 800k)
+
+### VECTOR1
+
+This program runs third-fastest at ~5.14s (+- 0.5) real-time. The number of bytes malloc-ed scales linearly wrt number of processes (200k -> 400k -> 800k)
+
+### VECTOR2
+
+This program runs the slowest at ~26.5s (+- 1.0) real-time. The number of bytes malloc-ed scales linearly wrt number of processes (1M -> 2M -> 4M)
+
+## Part C
+
+The runtime of each version of the program is depends weakly on the number of calls to malloc it has to do. STACK uses a statically allocated VLA and only requires a few malloc calls to handle things like setting up tasks. DARRAY allocates a fixed-size array on the heap using malloc and so requires one malloc call per task. VECTOR1 preallocate a std::vector of our target size and as such requires the same number of malloc calls as DARRAY. VECTOR2 allocates a std::vector and then uses push_back to add elements to it. This means that it's vector will be resized on the fly as it is filled up and so will require more malloc calls than the other two. It also ends up allocating more memory than the other two because it allocates a vector of size 4M and then only uses the first 200k elements. The total number of malloc-ed bytes increases linearly for all programs as tasks are increased since each task needs to allocate a certain amount of memory. The runtime is then a direct function of the number of malloc calls and the number of bytes allocated.

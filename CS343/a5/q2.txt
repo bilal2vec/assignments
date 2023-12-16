@@ -1,0 +1,71 @@
+# Q2
+
+## i
+
+```bash
+$ make vote VIMPL=EXT OUTPUT=NOOUTPUT
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./vote 200 10 10000 1003
+1.06u 0.00s 0:01.06r 7628kb
+```
+
+```bash
+$ make vote VIMPL=INT OUTPUT=NOOUTPUT
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./vote 200 10 10000 1003
+2.31u 0.02s 0:02.32r 7848kb
+```
+
+```bash
+$ make vote VIMPL=INTB OUTPUT=NOOUTPUT
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./vote 200 10 10000 1003
+[TIMEOUT]
+```
+
+```bash
+$ make vote VIMPL=AUTO OUTPUT=NOOUTPUT
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./vote 200 10 10000 1003
+1.01u 0.00s 0:01.02r 7960kb
+```
+
+```bash
+$ make vote VIMPL=TASK OUTPUT=NOOUTPUT
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./vote 200 10 10000 1003
+1.75u 0.01s 0:01.76r 7768kb
+```
+
+```bash
+$ make vote VIMPL=EXT OUTPUT=NOOUTPUT
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./vote 200 10 10000 1003 2
+52.15u 0.11s 0:26.07r 8028kb
+```
+
+```bash
+$ make vote VIMPL=INT OUTPUT=NOOUTPUT
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./vote 200 10 10000 1003 2
+55.66u 0.10s 0:27.85r 8100kb
+```
+
+```bash
+$ make vote VIMPL=INTB OUTPUT=NOOUTPUT
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./vote 200 10 10000 1003 2
+[TIMEOUT]
+```
+
+```bash
+$ make vote VIMPL=AUTO OUTPUT=NOOUTPUT
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./vote 200 10 10000 1003 2
+42.43u 0.06s 0:21.23r 8072kb
+```
+
+```bash
+$ make vote VIMPL=TASK OUTPUT=NOOUTPUT
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./vote 200 10 10000 1003 2
+73.46u 0.12s 0:36.74r 8008kb
+```
+
+## ii
+
+The performance difference between different implementations is relatively small. For one processor, EXT takes about 1.06s with AUTO being about equivalent at 1.02s. INT takes about 2.32s, and TASK takes about 1.76s. INTB times out entirely. For two processors, EXT takes about 26.07s, AUTO takes about 21.23s, INT takes about 27.85s, and TASK takes the longest at about 36.74s. INTB times out entirely.
+
+## iii
+
+As the number of threads increases, the amount of time to run the programs increases significantly, from ~2s to ~20s. This is probably due to the overhead of switching threads overwhelming the speedups from running independent parts of the program in parallel. This makes sense bc the monitors only let one caller in at a time, so there is no huge benefit to having multiple threads.

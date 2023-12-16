@@ -1,0 +1,23 @@
+# Checking for proper sorting of values
+
+1. Check if the values are sorted in ascending order for a list of randomish values
+2. Check if the values are sorted in ascending order for a list sorted in reverse order (a tree with a single branch)
+3. Check if the values are sorted in ascending order for a list with duplicate values
+
+```bash
+$ cat q1_2.txt
+5 3 1 4 8 9
+10 10 9 8 7 6 5 4 3 2 1
+5 4 4 4 4 4
+$ ./bininsertsort q1_2.txt
+3 1 4 8 9
+1 3 4 8 9
+
+10 9 8 7 6 5 4 3 2 1
+1 2 3 4 5 6 7 8 9 10
+
+4 4 4 4 4
+4 4 4 4 4
+
+$
+```

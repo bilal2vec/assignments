@@ -1,0 +1,3 @@
+# Q1
+
+Deadlock. The deadlock is that each angel is able to look at all the other angels and that is preventing them from (ever) moving. This is not a livelock because the state of the system is not changing (i.e. in a livelock the angels would be individually moving around and the mapping of which angels are looking at which angels would be changing, but them as a whole would not be changing).

@@ -1,0 +1,173 @@
+# Q1
+
+## (a)
+
+### -DARRAY, no optimizations
+
+```
+$ u++ -DARRAY q1.cc -o q1.o
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./q1.o 100000000 20
+u++ -DARRAY q1.cc -o q1.o
+
+Heap statistics: (storage request / allocation)
+  malloc    >0 calls 47; 0 calls 0; storage 88,907 / 99,024 bytes
+  aalloc    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  calloc    >0 calls 1; 0 calls 0; storage 1,040 / 1,536 bytes
+  memalign  >0 calls 6; 0 calls 0; storage 1,799,248 / 1,835,104 bytes
+  amemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  cmemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  resize    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  realloc   >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  free      !null calls 3; null calls 4; storage 4,573 / 4,672 bytes
+  return    pulls 0; pushes 0; storage 0 / 0 bytes
+  sbrk      calls 1; storage 10,485,760 bytes
+  mmap      calls 0; storage 0 / 0 bytes
+  munmap    calls 0; storage 0 / 0 bytes
+  threads   started 1; exited 0
+  heaps     new 1; reused 0
+8.46u 0.03s 0:08.49r 4812kb
+```
+
+### -DARRAY, -O2
+
+```
+$ u++ -DARRAY -O2 q1.cc -o q1.o
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./q1.o 100000000 20
+
+Heap statistics: (storage request / allocation)
+  malloc    >0 calls 47; 0 calls 0; storage 88,907 / 99,024 bytes
+  aalloc    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  calloc    >0 calls 1; 0 calls 0; storage 1,040 / 1,536 bytes
+  memalign  >0 calls 6; 0 calls 0; storage 1,799,248 / 1,835,104 bytes
+  amemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  cmemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  resize    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  realloc   >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  free      !null calls 3; null calls 4; storage 4,573 / 4,672 bytes
+  return    pulls 0; pushes 0; storage 0 / 0 bytes
+  sbrk      calls 1; storage 10,485,760 bytes
+  mmap      calls 0; storage 0 / 0 bytes
+  munmap    calls 0; storage 0 / 0 bytes
+  threads   started 1; exited 0
+  heaps     new 1; reused 0
+5.58u 0.00s 0:05.59r 4888kb
+```
+
+### -DSTRING, No optimizations
+
+```
+$ u++ -DSTRING q1.cc -o q1.o
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./q1.o 100000000 20
+[TIMEOUT]
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./q1.o 1000000 20
+
+Heap statistics: (storage request / allocation)
+  malloc    >0 calls 40,000,053; 0 calls 0; storage 1,840,091,685 / 2,560,102,112 bytes
+  aalloc    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  calloc    >0 calls 1; 0 calls 0; storage 1,040 / 1,536 bytes
+  memalign  >0 calls 6; 0 calls 0; storage 1,799,248 / 1,835,104 bytes
+  amemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  cmemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  resize    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  realloc   >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  free      !null calls 40,000,008; null calls 4; storage 1,840,005,942 / 2,560,006,224 bytes
+  return    pulls 0; pushes 0; storage 0 / 0 bytes
+  sbrk      calls 1; storage 10,485,760 bytes
+  mmap      calls 0; storage 0 / 0 bytes
+  munmap    calls 0; storage 0 / 0 bytes
+  threads   started 1; exited 0
+  heaps     new 1; reused 0
+8.29u 0.00s 0:08.29r 4972kb
+```
+
+### -DSTRING, -O2
+
+```
+$ u++ -DSTRING -O2 q1.cc -o q1.o
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./q1.o 100000000 20
+[TIMEOUT]
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./q1.o 1000000 20
+Heap statistics: (storage request / allocation)
+  malloc    >0 calls 40,000,053; 0 calls 0; storage 1,840,091,685 / 2,560,102,112 bytes
+  aalloc    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  calloc    >0 calls 1; 0 calls 0; storage 1,040 / 1,536 bytes
+  memalign  >0 calls 6; 0 calls 0; storage 1,799,248 / 1,835,104 bytes
+  amemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  cmemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  resize    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  realloc   >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  free      !null calls 40,000,008; null calls 4; storage 1,840,005,942 / 2,560,006,224 bytes
+  return    pulls 0; pushes 0; storage 0 / 0 bytes
+  sbrk      calls 1; storage 10,485,760 bytes
+  mmap      calls 0; storage 0 / 0 bytes
+  munmap    calls 0; storage 0 / 0 bytes
+  threads   started 1; exited 0
+  heaps     new 1; reused 0
+3.79u 0.00s 0:03.79r 4944kb
+```
+
+### -DSTRSTREAM, No optimizations
+
+```
+$ u++ -DSTRSTREAM q1.cc -o q1.o
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./q1.o 100000000 20
+[TIMEOUT]
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./q1.o 1000000 20
+
+Heap statistics: (storage request / allocation)
+  malloc    >0 calls 49; 0 calls 0; storage 90,445 / 101,200 bytes
+  aalloc    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  calloc    >0 calls 1; 0 calls 0; storage 1,040 / 1,536 bytes
+  memalign  >0 calls 6; 0 calls 0; storage 1,799,248 / 1,835,104 bytes
+  amemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  cmemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  resize    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  realloc   >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  free      !null calls 4; null calls 4; storage 5,086 / 5,312 bytes
+  return    pulls 0; pushes 0; storage 0 / 0 bytes
+  sbrk      calls 1; storage 10,485,760 bytes
+  mmap      calls 0; storage 0 / 0 bytes
+  munmap    calls 0; storage 0 / 0 bytes
+  threads   started 1; exited 0
+  heaps     new 1; reused 0
+3.48u 0.00s 0:03.48r 4884kb
+```
+
+### -DSTRSTREAM, -O2
+
+```
+$ u++ -DSTRSTREAM -O2 q1.cc -o q1.o
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./q1.o 100000000 20
+[TIMEOUT]
+$ /usr/bin/time -f "%Uu %Ss %Er %Mkb" ./q1.o 1000000 20
+
+Heap statistics: (storage request / allocation)
+  malloc    >0 calls 49; 0 calls 0; storage 90,445 / 101,200 bytes
+  aalloc    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  calloc    >0 calls 1; 0 calls 0; storage 1,040 / 1,536 bytes
+  memalign  >0 calls 6; 0 calls 0; storage 1,799,248 / 1,835,104 bytes
+  amemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  cmemalign >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  resize    >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  realloc   >0 calls 0; 0 calls 0; storage 0 / 0 bytes
+  free      !null calls 4; null calls 4; storage 5,086 / 5,312 bytes
+  return    pulls 0; pushes 0; storage 0 / 0 bytes
+  sbrk      calls 1; storage 10,485,760 bytes
+  mmap      calls 0; storage 0 / 0 bytes
+  munmap    calls 0; storage 0 / 0 bytes
+  threads   started 1; exited 0
+  heaps     new 1; reused 0
+3.53u 0.00s 0:03.59r 4884kb
+``
+
+## (b)
+
+-DARRAY is the fastest, followed by -DSTRSTREAM, then -DSTRING. It is also the only one that does not timeout for 100000000 iterations. -DARRAY and -DSTRSTREAM use the same amount of memory, while -DSTRING uses significantly more (100k vs 1.8G). 
+
+## (c)
+
+Using -O2 speeds up -DARRAY by almost 50% but doesn't significantly impact the speed of the other two. Using -O2 does not impact the memory usage of any of the three.
+
+## (d)
+
+I expect the reason why -DARRAY is the only one that runs within the time limit for the full test case input is because it allocates a static amount of memory at the beginning of the program. -DSTRING allocates a std::string which can grow during the execution of the program requiring resizes and copies which takes time and memory. -DSTRSTREAM dynamically allocates a std::stringstream that doesn't materialize the whole string in memory.

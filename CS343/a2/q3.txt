@@ -1,0 +1,57 @@
+# Question 3
+
+## (a)
+
+```bash
+$ u++ q3.cc -multi -o q3
+$ ./q3 1000000000 1
+shared:3954425070
+$ ./q3 1000000000 1
+shared:3977186202
+$ ./q3 1000000000 1
+shared:3954480886
+$ ./q3 1000000000 1
+shared:3954488506
+$ ./q3 1000000000 1
+shared:3977228206
+$ ./q3 1000000000 1
+shared:3933637044
+$ ./q3 1000000000 1
+^[[Ashared:3977271502
+$ ./q3 1000000000 1
+shared:3977249090
+$ ./q3 1000000000 1
+shared:3908893272
+$ ./q3 1000000000 1
+shared:3977254771
+```
+
+```bash
+$ u++ q3.cc -multi -o q3
+$ ./q3 1000000000 2
+shared:2249283958
+$ ./q3 1000000000 2
+shared:2301401381
+$ ./q3 1000000000 2
+shared:2061067472
+$ ./q3 1000000000 2
+shared:2170425667
+$ ./q3 1000000000 2
+shared:2013762428
+$ ./q3 1000000000 2
+shared:2028730924
+$ ./q3 1000000000 2
+shared:2018990733
+$ ./q3 1000000000 2
+shared:2051901752
+$ ./q3 1000000000 2
+shared:2199988531
+$ ./q3 1000000000 2
+shared:2080211670
+```
+
+## (b) No, some writes to shared can read, increment, and write to shared out of order and concurrently with other threads leading to different results.
+
+## (c) The smallest is 1000000000 / (n - 1) if all writes happen concurrently for n processes, the largest is 2 * 1000000000 if all writes happen sequentially with a single process.
+
+## (d) Having two processors means that both tasks will run concurrently and on both processes will read, increment, and store to shared at the same time resulting in average only one of the two shared += 1 calls actualy incrementing the value of shared and not being overwritten. This is why the second run of commands with two processes results in values of shared that are approximately half of that of the first run of commands with one process.
