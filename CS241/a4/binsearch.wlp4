@@ -1,0 +1,65 @@
+//int binsearch(int value){
+//int binsearch(int* begin, int size, int value) {
+//    int l = 0;
+//    int r = 0;
+//    int m = 0;
+//    int out = -1;
+
+//    return out;
+
+//    r = size - 1;
+//
+//    while (l <= r) {
+//        m = (l + r) / 2;
+//
+//        if (begin[m] < value) {
+//            l = m + 1;
+//        } else {
+//            if (begin[m] > value) {
+//                r = m - 1;
+//            } else {
+//                out = m;
+//                l = r - 1;
+//            }
+//        }
+//    }
+//
+//    return out;
+//}
+
+int binsearch(int* begin, int size, int value) {
+    int l = 0;
+    int r = 0;
+    int m = 0;
+    int out = 0;
+    int temp1 = 0;
+    int temp2 = 0;
+
+    out = out - 1;
+
+    r = size - 1;
+
+    while (l <= r) {
+        m = (l + r) / 2;
+
+        temp1 = *(begin + m);
+        if (temp1 < value) {
+            l = m + 1;
+        } else {
+            if (temp1 > value) {
+                r = m - 1;
+            } else {
+                out = m;
+                l = r + 1;
+            }
+        }
+
+    }
+
+    return out;
+}
+
+//int wain(int* begin, int size) {
+//    int value = 4;
+//    return binsearch(begin, size, value);
+//}   

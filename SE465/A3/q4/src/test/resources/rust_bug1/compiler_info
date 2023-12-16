@@ -1,0 +1,12 @@
+version:
+rustc 1.58.1 (db9d1b20b 2022-01-20)
+
+install rustup:
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+install rustc:
+rustup toolchain install 1.58.1
+rustup default 1.58.1
+
+check the version after installation:
+rustc --version

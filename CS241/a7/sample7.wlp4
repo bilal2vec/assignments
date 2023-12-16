@@ -1,0 +1,7 @@
+int nothing() { return 241; }
+int id(int x, int ya, int z) { int y = 0; return x; }
+int wain(int *a, int b) {
+  int c = 0;
+  int *d = NULL;
+  return *a + id(b, b, b) + c;
+}

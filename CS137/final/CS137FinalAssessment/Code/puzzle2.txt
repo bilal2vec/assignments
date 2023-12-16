@@ -1,0 +1,14 @@
+4
+a b b c
+a d e e
+f d g g
+f h i i
+a 6 *
+b 3 -
+c 3 =
+d 5 +
+e 3 -
+f 3 -
+g 2 /
+h 4 =
+i 1 -

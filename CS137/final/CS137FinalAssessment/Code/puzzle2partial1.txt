@@ -1,0 +1,12 @@
+4
+Guess(a,2) b b c
+a 2 1 4
+f 3 g g
+f h i i
+a 6 *
+b 3 -
+c 3 =
+f 3 -
+g 2 /
+h 4 =
+i 1 -

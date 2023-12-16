@@ -1,0 +1,51 @@
+4
+cat
+dog
+iguana
+mouse
+7
+start
+ending
+word1
+word2
+word3
+word4
+word5
+start
+1
+ending
+28
+start cat word1
+start dog start
+start iguana start
+start mouse start
+word1 cat word1
+word1 dog word2
+word1 iguana start
+word1 mouse start
+word2 cat word1
+word2 dog start
+word2 iguana word3
+word2 mouse start
+word3 cat word4
+word3 dog start
+word3 iguana start
+word3 mouse start
+word4 cat word1
+word4 dog word5
+word4 iguana start
+word4 mouse start
+word5 cat word1
+word5 dog start
+word5 iguana word3
+word5 mouse ending
+ending cat ending
+ending dog ending
+ending iguana ending
+ending mouse ending
+cat dog iguana cat dog mouse mouse
+cat cat dog iguana cat dog mouse
+cat dog cat dog iguana cat dog mouse
+cat dog iguana cat dog iguana cat dog mouse
+cat mouse
+cat mouse iguana cat dog mouse

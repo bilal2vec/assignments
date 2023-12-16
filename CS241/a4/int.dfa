@@ -1,0 +1,152 @@
+11
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+-
+18
+start
+zero
+neg
+pos1a
+pos1b
+neg1a
+neg1b
+neg2a
+neg2b
+neg2c
+neg3a
+pos2a
+pos2b
+pos2c
+pos3a
+new1
+new2
+new3
+start
+16
+zero
+pos1a
+pos1b
+neg1a
+neg1b
+neg2a
+neg2b
+neg2c
+neg3a
+pos2a
+pos2b
+pos2c
+pos3a
+new1
+new2
+new3
+97
+start 0 zero
+start - neg
+start 1 pos1a
+start 2 pos1b
+start 3 pos1b
+start 4 pos1b
+start 5 pos1b
+start 6 pos1b
+start 7 pos1b
+start 8 pos1b
+start 9 pos1b
+neg 1 neg1a
+neg 2 neg1b
+neg 3 neg1b
+neg 4 neg1b
+neg 5 neg1b
+neg 6 neg1b
+neg 7 neg1b
+neg 8 neg1b
+neg 9 neg1b
+neg1a 0 new3
+neg1a 1 new3
+neg1a 2 neg2b
+neg1a 3 neg2a
+neg1a 4 neg2a
+neg1a 5 neg2a
+neg1a 6 neg2a
+neg1a 7 neg2a
+neg1a 8 neg2a
+neg1a 9 neg2a
+neg2b 0 neg3a
+neg2b 1 neg3a
+neg2b 2 neg3a
+neg2b 3 neg3a
+neg2b 4 neg3a
+neg2b 5 neg3a
+neg2b 6 neg3a
+neg2b 7 neg3a
+neg2b 8 neg3a
+neg1b 0 neg2c
+neg1b 1 neg2c
+neg1b 2 neg2c
+neg1b 3 neg2c
+neg1b 4 neg2c
+neg1b 5 neg2c
+neg1b 6 neg2c
+neg1b 7 neg2c
+neg1b 8 neg2c
+neg1b 9 neg2c
+pos1a 0 new1
+pos1a 1 new1
+pos1a 2 pos2b
+pos1a 3 pos2c
+pos1a 4 pos2c
+pos1a 5 pos2c
+pos1a 6 pos2c
+pos1a 7 pos2c
+pos1a 8 pos2c
+pos1a 9 pos2c
+pos1b 0 pos2a
+pos1b 1 pos2a
+pos1b 2 pos2a
+pos1b 3 pos2a
+pos1b 4 pos2a
+pos1b 5 pos2a
+pos1b 6 pos2a
+pos1b 7 pos2a
+pos1b 8 pos2a
+pos1b 9 pos2a
+pos2b 0 pos3a
+pos2b 1 pos3a
+pos2b 2 pos3a
+pos2b 3 pos3a
+pos2b 4 pos3a
+pos2b 5 pos3a
+pos2b 6 pos3a
+pos2b 7 pos3a
+new1 0 new2
+new1 1 new2
+new1 2 new2
+new1 3 new2
+new1 4 new2
+new1 5 new2
+new1 6 new2
+new1 7 new2
+new1 8 new2
+new1 9 new2
+new3 0 neg3a
+new3 1 neg3a
+new3 2 neg3a
+new3 3 neg3a
+new3 4 neg3a
+new3 5 neg3a
+new3 6 neg3a
+new3 7 neg3a
+new3 8 neg3a
+new3 9 neg3a
+1 1 9
+1 0 9
+- 1 0 4
+- 1 0 9
+- 1 1 9

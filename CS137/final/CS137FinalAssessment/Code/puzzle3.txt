@@ -1,0 +1,22 @@
+6
+a b b c d d
+a e e c f d
+h h i i f d
+h h j k l l
+m m j k k g
+o o o p p g
+a 11 +
+b 2 /
+c 20 *
+d 6 *
+e 3 -
+f 3 /
+g 9 +
+h 240 *
+i 6 *
+j 6 *
+k 7 +
+l 30 *
+m 6 *
+o 8 +
+p 2 /

@@ -1,0 +1,6 @@
+drop table course
+drop table enrollment
+drop table officehour
+drop table professor
+drop table section
+drop table student

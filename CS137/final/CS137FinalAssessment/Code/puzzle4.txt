@@ -1,0 +1,14 @@
+4
+Guess(a,5) b b 3
+a d Guess(e,3) e
+2 d 1 g
+f Guess(w,2) i i
+a 6 *
+b 3 -
+c 3 =
+d 5 +
+e 300 -
+f 3 -
+g 2 /
+h 4 =
+i 17 -

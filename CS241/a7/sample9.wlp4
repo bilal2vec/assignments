@@ -1,0 +1,7 @@
+int temp(int* z) { return *z; }
+int wain(int a, int b) {
+    int c = 0;
+    c = temp(&a);
+
+    return a;
+}

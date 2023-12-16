@@ -1,0 +1,14 @@
+int id(int x) { return x; }
+int wain(int* array, int size) {
+    int index = 0;
+    int* copy = NULL;
+    copy = new int[size];
+    index = size;
+    while(index > 0) {
+        index = index-1;
+        println(*(array+index));
+        *copy = *(array+index);
+    } 
+    delete [] copy;
+    return size;
+}

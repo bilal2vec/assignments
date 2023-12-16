@@ -1,0 +1,29 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cppbuild",
+			"label": "(clang) Compile",
+			"command": "clang",
+			"args": ["-g", "-Wall", "${file}", "-o", "${fileDirname}/${fileBasenameNoExtension}.o"],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": ["$gcc"],
+			"group": "build",
+			"detail": "compiler: /usr/bin/clang"
+		},
+		{
+			"type": "cppbuild",
+			"label": "(gcc) Compile",
+			"command": "gcc",
+			"args": ["-g", "-Wall", "${file}", "-o", "${fileDirname}/${fileBasenameNoExtension}.o"],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": ["$gcc"],
+			"group": "build",
+			"detail": "compiler: /usr/bin/gcc"
+		}
+	]
+}

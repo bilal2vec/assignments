@@ -1,0 +1,14 @@
+INT int
+ID main
+LPAREN (
+INT int
+ID a
+COMMA ,
+INT int
+ID b
+RPAREN )
+LBRACE {
+RETURN return
+NUM 42
+SEMI ;
+RBRACE }

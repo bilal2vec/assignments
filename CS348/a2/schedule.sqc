@@ -1,0 +1,114 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "util.h"
+
+EXEC SQL INCLUDE SQLCA;
+
+int main(int argc, char *argv[])
+{
+    EXEC SQL BEGIN DECLARE SECTION;
+    char db[6] = "cs348";
+
+    int id;
+
+    char name[31];
+    int is_student = 0;
+    int is_professor = 0;
+
+    char current_term[6];
+
+    char day[11];
+    char time[9];
+    char cnum[6];
+    int section;
+    short int section_indicator;
+    char activity_type[2];
+    int n_duplicates;
+
+    EXEC SQL END DECLARE SECTION;
+
+    id = atoi(argv[1]);
+
+    EXEC SQL WHENEVER SQLERROR GO TO error;
+    EXEC SQL CONNECT TO : db;
+
+    EXEC SQL WHENEVER NOT FOUND GO TO get_professor;
+    EXEC SQL SELECT sname INTO : name FROM student WHERE snum = : id;
+    is_student = 1;
+
+get_professor:
+    EXEC SQL WHENEVER NOT FOUND GO TO get_professor_end;
+    EXEC SQL SELECT pname INTO : name FROM professor WHERE pnum = : id;
+    is_professor = 1;
+get_professor_end:
+
+    if (!is_student && !is_professor)
+    {
+        printf("Error\n");
+        exit(0);
+    }
+    if (is_student || is_professor)
+    {
+        printf("%s\n", name);
+    }
+
+    EXEC SQL select distinct term into : current_term from enrollment where grade is null;
+
+    printf("%s\n", current_term);
+
+    EXEC SQL DECLARE schedule CURSOR FOR select activities.day, activities.time, activities.cnum, activities.section, activities.activity_type, conflicts.n_duplicates from((select s.term, s.pnum as id, s.day, s.time, s.cnum, s.section, 'A' as activity_type from section as s) union all(select o.term, o.pnum as id, o.day, o.time, o.cnum, null as SECTION, 'B' as activity_type from officehour as o) union all(select s.term, e.snum as id, s.day, s.time, s.cnum, s.section, 'C' as activity_type from section as s inner join enrollment as e on e.cnum = s.cnum and e.term = s.term and e.section = s.section)) as activities, (select activities.term, activities.id, count(*) as n_duplicates, activities.day, activities.time from((select s.term, s.pnum as id, s.day, s.time, s.cnum, s.section, 'A' as activity_type from section as s) union all(select o.term, o.pnum as id, o.day, o.time, o.cnum, null as SECTION, 'B' as activity_type from officehour as o) union all(select s.term, e.snum as id, s.day, s.time, s.cnum, s.section, 'C' as activity_type from section as s inner join enrollment as e on e.cnum = s.cnum and e.term = s.term and e.section = s.section)) as activities group by activities.term, activities.id, activities.day, activities.time) as conflicts where conflicts.term = activities.term and conflicts.id = activities.id and conflicts.day = activities.day and conflicts.time = activities.time and activities.term = : current_term and activities.id = : id order by activities.activity_type, (case activities.day when 'Monday' then 1 when 'Tuesday' then 2 when 'Wednesday' then 3 when 'Thursday' then 4 when 'Friday' then 5 when 'Saturday' then 6 when 'Sunday' then 7 end), activities.time;
+
+    EXEC SQL OPEN schedule;
+    EXEC SQL WHENEVER NOT FOUND GO TO end;
+
+    for (;;)
+    {
+        EXEC SQL FETCH schedule INTO : day, : time, : cnum, : section indicator : section_indicator, : activity_type, : n_duplicates;
+
+        char section_val = '-';
+        if (section_indicator >= 0)
+        {
+            section_val = section + '0';
+        }
+
+        if (activity_type[0] == 'A')
+        {
+            activity_type[0] = 'S';
+        }
+        else if (activity_type[0] == 'B')
+        {
+            activity_type[0] = 'O';
+        }
+        else if (activity_type[0] == 'C')
+        {
+            activity_type[0] = 'C';
+        }
+
+        time[2] = '.';
+        time[5] = '.';
+
+        printf("%s %s %s %c %s", day, time, cnum, section_val, activity_type);
+
+        if (n_duplicates > 1)
+        {
+            printf("*\n");
+        }
+        else
+        {
+            printf("\n");
+        }
+    }
+
+end:
+    EXEC SQL COMMIT;
+    EXEC SQL CONNECT reset;
+    exit(0);
+
+error:
+    check_error("My error", &sqlca);
+    EXEC SQL WHENEVER SQLERROR CONTINUE;
+
+    EXEC SQL ROLLBACK;
+    EXEC SQL CONNECT reset;
+    exit(1);
+}

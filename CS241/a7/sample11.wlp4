@@ -1,0 +1,9 @@
+int isInteger(int id) { return 1; }
+int wain(int* a, int b) {
+  if(isInteger(b/b) == isInteger((0+0)/(0-0))) {
+    println(isInteger(*NULL/*NULL));
+  } else {
+    println(isInteger(*(a+b-1)/*(a+b*0)));
+  }
+  return 0;
+}

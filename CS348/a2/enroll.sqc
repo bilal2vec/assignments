@@ -1,0 +1,220 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "util.h"
+
+EXEC SQL INCLUDE SQLCA;
+
+int main(int argc, char *argv[])
+{
+    EXEC SQL BEGIN DECLARE SECTION;
+    char db[6] = "cs348";
+
+    int id;
+    char activity_type;
+    char day[11];
+    char time[9];
+    char cnum[6];
+    int section;
+
+    int temp;
+    char temp_str[20];
+
+    EXEC SQL END DECLARE SECTION;
+
+    id = atoi(argv[1]);
+    activity_type = argv[2][0];
+    strncpy(day, argv[3], 10);
+    strncpy(time, argv[4], 9);
+    strncpy(cnum, argv[5], 6);
+
+    if (argc == 7)
+    {
+        section = atoi(argv[6]);
+    }
+    else
+    {
+        section = -1;
+    }
+
+    EXEC SQL WHENEVER SQLERROR GO TO error;
+    EXEC SQL CONNECT TO : db;
+
+    EXEC SQL WHENEVER NOT FOUND GO TO error_no_student_professor;
+    EXEC SQL select id into : temp from((select professor.pnum as id from professor) union(select student.snum as id from student)) as ids where ids.id = : id;
+
+    if (activity_type == 'T')
+    {
+        EXEC SQL WHENEVER NOT FOUND GO TO error_assign_lec_to_non_prof;
+        EXEC SQL select pnum into : temp from professor where professor.pnum = : id;
+    }
+
+    if (section != -1)
+    {
+        EXEC SQL WHENEVER NOT FOUND GO TO section_diff_time_end;
+        EXEC SQL select section into : temp from section where exists(select time, day from section where cnum =
+                                                                          : cnum and term = (select distinct term from enrollment where grade is null) and section =
+                                                                              : section) and section = : section and (day !=
+                                                                                                                      : day or time !=
+                                                                                                                      : time);
+        printf("Error: this section exists at a different time\n");
+        goto error;
+    }
+section_diff_time_end:
+
+    if (activity_type == 'O')
+    {
+        EXEC SQL WHENEVER NOT FOUND GO TO error_assign_oh_to_non_prof;
+        EXEC SQL select pnum into : temp from professor where professor.pnum = : id;
+
+        EXEC SQL WHENEVER NOT FOUND GO TO error_oh_for_unknown_class;
+        EXEC SQL select cname into : temp_str from course where cnum = : cnum;
+    }
+
+    if (activity_type == 'C')
+    {
+        EXEC SQL WHENEVER NOT FOUND GO TO error_enrolling_non_student;
+        EXEC SQL select year into : temp from student where snum = : id;
+    }
+
+    EXEC SQL WHENEVER NOT FOUND GO TO error_class_doesnt_exist;
+    EXEC SQL select cname into : temp_str from course where cnum = : cnum;
+
+    if (activity_type == 'T')
+    {
+        int conflict = 0;
+        int update_section = 0;
+        EXEC SQL WHENEVER NOT FOUND GO TO t_no_conflicts;
+        EXEC SQL select distinct section into : temp from section where term = (select distinct term from enrollment where grade is null) and pnum = : id and day = : day and time = : time;
+
+        conflict = 1;
+        printf("Warning: time conflict\n");
+
+    t_no_conflicts:
+
+        EXEC SQL WHENEVER NOT FOUND GO TO t_end_set_update;
+        EXEC SQL select distinct pnum into : temp from section where cnum = : cnum and term = (select distinct term from enrollment where grade is null) and section = : section;
+
+        update_section = 1;
+
+    t_end_set_update:
+
+        if (update_section == 0)
+        {
+            EXEC SQL insert into section(cnum, term, section, pnum, day, time) values(
+                : cnum, (select distinct term from enrollment where grade is null),
+                : section,
+                : id,
+                : day,
+                : time);
+
+            if (conflict == 0)
+            {
+                printf("OK\n");
+            }
+        }
+        else
+        {
+            EXEC SQL update section set pnum = : id where cnum = : cnum and term = (select distinct term from enrollment where grade is null) and section = : section;
+
+            if (conflict == 0)
+            {
+                printf("OK\n");
+            }
+        }
+    }
+    else if (activity_type == 'O')
+    {
+        int conflict = 0;
+        int update_oh = 0;
+        EXEC SQL WHENEVER NOT FOUND GO TO oh_no_conflicts;
+        EXEC SQL select distinct pnum into : temp from officehour where pnum = : id and day = : day and time = : time;
+
+        conflict = 1;
+        printf("Warning: time conflict\n");
+
+    oh_no_conflicts:
+        EXEC SQL WHENEVER NOT FOUND GO TO o_end_set_update;
+        EXEC SQL select distinct pnum into : temp from officehour where cnum = : cnum and term = (select distinct term from enrollment where grade is null) and pnum = : id and day = : day and time = : time;
+
+        update_oh = 1;
+
+    o_end_set_update:
+
+        if (update_oh == 0)
+        {
+            printf("insert\n");
+            EXEC SQL insert into officehour(cnum, term, pnum, day, time) values(
+                : cnum, (select distinct term from enrollment where grade is null),
+                : id,
+                : day,
+                : time);
+        }
+
+        if (conflict == 0)
+        {
+            printf("OK\n");
+        }
+    }
+    else
+    {
+        int conflict = 0;
+        int update_e = 0;
+        EXEC SQL WHENEVER NOT FOUND GO TO e_no_conflicts;
+        EXEC SQL select distinct snum into : temp from enrollment as e inner join section as s on s.cnum = e.cnum and s.term = e.term and s.section = e.section where e.snum = : id and e.term = (select distinct term from enrollment where grade is null) and s.day = : day and s.time = : time;
+
+        conflict = 1;
+        printf("Warning: time conflict\n");
+
+    e_no_conflicts:
+        EXEC SQL WHENEVER NOT FOUND GO TO c_end_set_update;
+        EXEC SQL select term into : temp_str from enrollment where snum = : id and cnum = : cnum and term = (select distinct term from enrollment where grade is null) and section = : section;
+
+        update_e = 1;
+
+    c_end_set_update:
+
+        if (update_e == 0)
+        {
+            EXEC SQL insert into enrollment(snum, cnum, term, section) values(
+                : id,
+                : cnum, (select distinct term from enrollment where grade is null),
+                : section);
+        }
+
+        if (conflict == 0)
+        {
+            printf("OK\n");
+        }
+    }
+
+    EXEC SQL COMMIT;
+    EXEC SQL CONNECT reset;
+    exit(0);
+
+error_no_student_professor:
+    printf("Error: unknown professor/student id\n");
+    goto error;
+error_assign_lec_to_non_prof:
+    printf("Error: assigning lecture to a non-professor\n");
+    goto error;
+error_assign_oh_to_non_prof:
+    printf("Error: assigning office hours to a non-professor\n");
+    goto error;
+error_oh_for_unknown_class:
+    printf("Error: office hours for an unknown class\n");
+    goto error;
+error_enrolling_non_student:
+    printf("Error: enrolling a non-student in a class\n");
+    goto error;
+error_class_doesnt_exist:
+    printf("Error: unknown class\n");
+    goto error;
+error:
+    check_error("My error", &sqlca);
+    EXEC SQL WHENEVER SQLERROR CONTINUE;
+
+    EXEC SQL ROLLBACK;
+    EXEC SQL CONNECT reset;
+    exit(1);
+}

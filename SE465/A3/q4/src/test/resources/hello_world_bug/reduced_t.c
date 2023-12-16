@@ -1,0 +1,1 @@
+int printf(const char*,...);int main(int c,char*v[]){int;int b=printf("",b);printf("");printf("world");return 0;}

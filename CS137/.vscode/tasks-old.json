@@ -1,0 +1,22 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Compile file",
+			"type": "shell",
+			"command": "gcc",
+			"args": [
+				"-g",
+				"-o",
+				"${fileDirname}/${fileBasenameNoExtension}.out",
+				"${fileDirname}/${fileBasenameNoExtension}.c",
+				"-lm"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}
+	]
+}

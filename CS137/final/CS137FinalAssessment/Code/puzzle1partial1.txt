@@ -1,0 +1,6 @@
+2
+a Guess(b,1)
+c Guess(b,2)
+b 3 +
+c 2 =
+a 1 =

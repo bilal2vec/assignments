@@ -1,0 +1,15 @@
+int wain(int start, int decrement) {
+  int startCopy = 0;
+  int two = 2;
+  startCopy = start;
+  while(0 < two) {
+    start = startCopy;
+    while(0 < start) {
+      println(start);
+      start = start - decrement;
+    } 
+    println(0);
+    two = two - 1;
+  }
+  return start;
+}

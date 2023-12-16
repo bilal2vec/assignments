@@ -1,0 +1,7 @@
+{
+	"files.associations": {
+		"*.tcc": "c",
+		"fstream": "c"
+	},
+	"cmake.configureOnOpen": false
+}

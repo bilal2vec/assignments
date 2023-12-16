@@ -1,0 +1,5 @@
+int wain(int a, int b) {
+    int a = 241;
+    int a = 142;
+    return a;
+}

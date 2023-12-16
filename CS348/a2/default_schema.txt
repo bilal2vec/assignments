@@ -1,0 +1,89 @@
+drop table enrollment
+drop table officehour
+drop table section
+drop table course
+drop table student
+drop table professor
+
+create table professor ( \
+   pnum     integer not null, \
+   pname    varchar(30) not null, \
+   office   char(6) not null, \
+   dept     char(2) not null, \
+   primary key (pnum))
+
+insert into professor values (1, 'Dr Mary', 'DC3346', 'CS')
+insert into professor values (3, 'Dr Bob', 'DC3346', 'CS')
+
+create table student ( \
+   snum      integer not null, \
+   sname     varchar(30) not null, \
+   year      integer not null,  \
+   primary key (snum))
+
+insert into student values (1, 'Mary', 3)
+insert into student values (2, 'Fred', 2)
+
+create table course ( \
+   cnum      char(5) not null, \
+   cname     varchar(50) not null, \
+   primary key (cnum))
+
+insert into course values ('CS348', 'Intro to Databases')
+insert into course values ('CS123', 'idk')
+
+create table section ( \
+   cnum      char(5) not null, \
+   term      char(5) not null, \
+   section   integer not null, \
+   pnum      integer not null, \
+   day       char(10) not null, \
+   time      time not null, \
+   primary key (cnum,term,section), \
+   foreign key (cnum) references course(cnum), \
+   foreign key (pnum) references professor(pnum))
+
+insert into section values ('CS348', 'F2018', 1, 1, 'Tuesday', '10:00')
+insert into section values ('CS348', 'F2018', 2, 1, 'Tuesday', '12:00')
+insert into section values ('CS348', 'S2020', 1, 1, 'Wednesday', '15:00')
+insert into section values ('CS348', 'S2020', 2, 1, 'Thursday', '15:00')
+insert into section values ('CS348', 'S2020', 3, 1, 'Thursday', '15:01')
+insert into section values ('CS348', 'S2020', 4, 1, 'Monday', '10:00')
+insert into section values ('CS348', 'S2020', 5, 1, 'Tuesday', '11:00')
+insert into section values ('CS348', 'S2020', 6, 3, 'Tuesday', '11:00')
+
+create table officehour ( \
+   cnum      char(5) not null, \
+   term      char(5) not null, \
+   pnum      integer not null, \
+   day       char(10) not null, \
+   time      time not null, \
+   primary key (cnum,term,pnum,day,time), \
+   foreign key (cnum) references course(cnum), \
+   foreign key (pnum) references professor(pnum))
+
+insert into officehour values ('CS348', 'S2020', 1, 'Tuesday', '09:00')
+insert into officehour values ('CS348', 'S2020', 1, 'Thursday', '14:30')
+insert into officehour values ('CS348', 'S2020', 1, 'Monday', '10:01')
+insert into officehour values ('CS348', 'S2020', 1, 'Thursday', '15:00')
+insert into officehour values ('CS348', 'S2020', 1, 'Thursday', '23:00')
+insert into officehour values ('CS348', 'S2020', 1, 'Friday', '12:34')
+
+insert into officehour values ('CS123', 'S2020', 1, 'Friday', '12:34')
+
+
+create table enrollment ( \
+   snum      integer not null, \
+   cnum      char(5) not null, \
+   term      char(5) not null, \
+   section   integer not null, \
+   grade     integer, \
+   primary key (snum,cnum,term,section), \
+   foreign key (snum) references student(snum), \
+   foreign key (cnum,term,section) references section(cnum,term,section))
+
+insert into enrollment values (1, 'CS348', 'F2018', 1, 88)
+insert into enrollment values (2, 'CS348', 'S2020', 1, null)
+insert into enrollment values (1, 'CS348', 'S2020', 1, null)
+insert into enrollment values (1, 'CS348', 'S2020', 3, null)
+

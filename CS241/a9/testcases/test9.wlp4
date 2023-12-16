@@ -1,0 +1,20 @@
+int wain(int a, int b) {
+    int y = 0;
+    int *x = NULL;
+    int z = 0;
+    int *zz = NULL;
+
+    x = new int[1];
+    zz = new int[1];
+    *x = 16;
+    *zz = 5;
+    y = 4;
+
+    zz = x + y;
+
+    println(y);
+    println(*x);
+    println(*zz);
+    
+    return a;
+}

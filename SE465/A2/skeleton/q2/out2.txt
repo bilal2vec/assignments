@@ -1,0 +1,66 @@
+b54khan@ubuntu2004-010:~/se465/A2/skeleton/q2$ valgrind --leak-check=full ./sll_buggy.o < case2.txt 
+==180781== Memcheck, a memory error detector
+==180781== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==180781== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==180781== Command: ./sll_buggy.o
+==180781== 
+==180781== Invalid read of size 8
+==180781==    at 0x109516: delete_all (sll_buggy.c:104)
+==180781==    by 0x109B85: main (sll_buggy.c:325)
+==180781==  Address 0x4a74520 is 16 bytes inside a block of size 24 free'd
+==180781==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==180781==    by 0x109538: delete_all (sll_buggy.c:107)
+==180781==    by 0x109B42: main (sll_buggy.c:312)
+==180781==  Block was alloc'd at
+==180781==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==180781==    by 0x109819: append (sll_buggy.c:207)
+==180781==    by 0x109A45: main (sll_buggy.c:279)
+==180781== 
+==180781== Invalid read of size 8
+==180781==    at 0x109522: delete_all (sll_buggy.c:106)
+==180781==    by 0x109B85: main (sll_buggy.c:325)
+==180781==  Address 0x4a74510 is 0 bytes inside a block of size 24 free'd
+==180781==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==180781==    by 0x109538: delete_all (sll_buggy.c:107)
+==180781==    by 0x109B42: main (sll_buggy.c:312)
+==180781==  Block was alloc'd at
+==180781==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==180781==    by 0x109819: append (sll_buggy.c:207)
+==180781==    by 0x109A45: main (sll_buggy.c:279)
+==180781== 
+==180781== Invalid free() / delete / delete[] / realloc()
+==180781==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==180781==    by 0x10952C: delete_all (sll_buggy.c:106)
+==180781==    by 0x109B85: main (sll_buggy.c:325)
+==180781==  Address 0x4a744c0 is 0 bytes inside a block of size 5 free'd
+==180781==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==180781==    by 0x10952C: delete_all (sll_buggy.c:106)
+==180781==    by 0x109B42: main (sll_buggy.c:312)
+==180781==  Block was alloc'd at
+==180781==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==180781==    by 0x109315: fgets_enhanced (sll_buggy.c:31)
+==180781==    by 0x109A33: main (sll_buggy.c:279)
+==180781== 
+==180781== Invalid free() / delete / delete[] / realloc()
+==180781==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==180781==    by 0x109538: delete_all (sll_buggy.c:107)
+==180781==    by 0x109B85: main (sll_buggy.c:325)
+==180781==  Address 0x4a74510 is 0 bytes inside a block of size 24 free'd
+==180781==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==180781==    by 0x109538: delete_all (sll_buggy.c:107)
+==180781==    by 0x109B42: main (sll_buggy.c:312)
+==180781==  Block was alloc'd at
+==180781==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==180781==    by 0x109819: append (sll_buggy.c:207)
+==180781==    by 0x109A45: main (sll_buggy.c:279)
+==180781== 
+[(i)nsert,(d)elete,delete (a)ll,d(u)plicate,(e)dit,(p)rint,e(x)it]:enter the tel:>enter the name:>[(i)nsert,(d)elete,delete (a)ll,d(u)plicate,(e)dit,(p)rint,e(x)it]:enter the tel:>enter the name:>[(i)nsert,(d)elete,delete (a)ll,d(u)plicate,(e)dit,(p)rint,e(x)it]:enter the tel:>enter the name:>[(i)nsert,(d)elete,delete (a)ll,d(u)plicate,(e)dit,(p)rint,e(x)it]:enter the old tel :>enter the new tel :>enter the new name:>[(i)nsert,(d)elete,delete (a)ll,d(u)plicate,(e)dit,(p)rint,e(x)it]:[(i)nsert,(d)elete,delete (a)ll,d(u)plicate,(e)dit,(p)rint,e(x)it]:bye
+==180781== 
+==180781== HEAP SUMMARY:
+==180781==     in use at exit: 0 bytes in 0 blocks
+==180781==   total heap usage: 12 allocs, 18 frees, 9,335 bytes allocated
+==180781== 
+==180781== All heap blocks were freed -- no leaks are possible
+==180781== 
+==180781== For lists of detected and suppressed errors, rerun with: -s
+==180781== ERROR SUMMARY: 12 errors from 4 contexts (suppressed: 0 from 0)

@@ -1,0 +1,12 @@
+int wain(int *a, int b) {
+    int *d = NULL;
+    int i = 0;
+
+    while (i < 10000) {
+        d = new int[1023];
+        delete [] d;
+        i = i + 1;
+    }
+
+    return i;
+}

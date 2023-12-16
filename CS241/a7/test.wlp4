@@ -1,0 +1,7 @@
+int wain(int a, int b) {
+    int c = 0;
+    int* d = NULL;
+    int courseNumber = 241;
+    int* studentMarks = NULL;
+    return 0;
+}

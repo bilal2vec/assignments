@@ -1,0 +1,11 @@
+int mains(int *a, int b) {
+  int c = 0;
+  int *d = NULL;
+  return *a + b + c;
+}
+
+int wain(int *a, int b) {
+  int c = 0;
+  int *d = NULL;
+  return *a + b + c;
+}

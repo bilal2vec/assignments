@@ -1,0 +1,72 @@
+create table professor ( \
+   pnum     integer not null, \
+   lastname varchar(30) not null, \
+   office   char(6) not null, \
+   dept     char(2) not null, \
+   primary key (pnum))
+
+insert into professor values (1, 'Weddell', 'DC3346', 'PM')
+
+create table student ( \
+   snum      integer not null, \
+   firstname varchar(30) not null, \
+   year      integer not null,  \
+   primary key (snum))
+
+insert into student values (1, 'Mary', 2)
+insert into student values (2, 'Fred', 3)
+insert into student values (3, 'Bob', 3)
+insert into student values (4, 'Alice', 4)
+insert into student values (5, 'Eve', 4)
+insert into student values (6, 'Bilal', 4)
+insert into student values (7, 'lalib', 2)
+
+
+create table course ( \
+   cnum      char(5) not null, \
+   cname     varchar(50) not null, \
+   primary key (cnum))
+
+insert into course values ('CS348', 'Intro to Databases')
+
+create table section ( \
+   cnum      char(5) not null, \
+   term      char(5) not null, \
+   section   integer not null, \
+   pnum      integer not null, \
+   primary key (cnum,term,section), \
+   foreign key (cnum) references course(cnum), \
+   foreign key (pnum) references professor(pnum))
+
+insert into section values ('CS348', 'F2018', 1, 1)
+insert into section values ('CS348', 'F2018', 2, 1)
+insert into section values ('CS348', 'F2018', 3, 1)
+insert into section values ('CS348', 'F2018', 4, 1)
+
+create table officehour ( \
+   cnum      char(5) not null, \
+   term      char(5) not null, \
+   pnum      integer not null, \
+   day       varchar(10) not null, \
+   time      char(5) not null, \
+   primary key (cnum,term,pnum,day,time), \
+   foreign key (cnum) references course(cnum), \
+   foreign key (pnum) references professor(pnum))
+
+create table enrollment ( \
+   snum      integer not null, \
+   cnum      char(6) not null, \
+   term      char(5) not null, \
+   section   integer not null, \
+   grade     integer, \
+   primary key (snum,cnum,term,section), \
+   foreign key (snum) references student(snum), \
+   foreign key (cnum,term,section) references section(cnum,term,section))
+
+insert into enrollment values (1, 'CS348', 'F2018', 1, 88)
+insert into enrollment values (2, 'CS348', 'F2018', 2, null)
+insert into enrollment values (3, 'CS348', 'F2018', 1, 91)
+insert into enrollment values (4, 'CS348', 'F2018', 3, 92)
+insert into enrollment values (5, 'CS348', 'F2018', 3, 93)
+insert into enrollment values (6, 'CS348', 'F2018', 3, 94)
+insert into enrollment values (7, 'CS348', 'F2018', 4, 94)

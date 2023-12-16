@@ -1,0 +1,11 @@
+int test1(int a, int b) {
+    return a;
+}
+
+int test1(int* a, int b) {
+    return a;
+}
+
+int wain(int a, int b) {
+    return a;
+}

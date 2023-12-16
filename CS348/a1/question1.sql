@@ -1,0 +1,1 @@
+select distinct professor.pnum, professor.lastname from professor inner join section on professor.pnum = section.pnum inner join course on course.cnum = section.cnum inner join enrollment on enrollment.cnum = section.cnum and enrollment.term = section.term and enrollment.section = section.section where professor.dept = 'CS' and course.cnum = 'CS348' and enrollment.grade < 60

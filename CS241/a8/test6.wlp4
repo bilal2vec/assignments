@@ -1,0 +1,5 @@
+int wain(int a, int b) {
+    int c = 0;
+    ((((c)))) = 6 + 3 + a;
+    return c;
+}

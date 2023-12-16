@@ -1,0 +1,4 @@
+int wain (int *b, int a) { 
+    *b = 23456; 
+    return *b;
+}

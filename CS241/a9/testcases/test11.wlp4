@@ -1,0 +1,9 @@
+int three(int a, int b, int c) {
+    int d = 0;
+    d = 2;
+	return a * b + c;
+}
+
+int wain(int a, int b) {
+	return three(a, b, 20);
+}

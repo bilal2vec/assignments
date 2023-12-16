@@ -1,0 +1,4 @@
+int void() { return 0; }
+int wain(int a, int b) {
+  return a;
+}

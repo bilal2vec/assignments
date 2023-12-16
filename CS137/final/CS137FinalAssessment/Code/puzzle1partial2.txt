@@ -1,0 +1,4 @@
+2
+Guess(a,1) Guess(a,2)
+Guess(a,2) Guess(a,1)
+a 4 *

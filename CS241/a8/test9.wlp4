@@ -1,0 +1,8 @@
+int wain(int a, int b) {
+    if (a > b) {
+        println(a);
+    } else {
+        println(b);
+    }
+    return a;
+}

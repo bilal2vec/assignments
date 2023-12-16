@@ -1,0 +1,7 @@
+int wain (int a, int b) { 
+    int *c = NULL;
+
+    c = new int[5];
+    delete[] c;
+    return a;
+}
