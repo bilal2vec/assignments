@@ -1,0 +1,7 @@
+def decrypt(c, k):
+    a, b, X0 = k
+    m = ""
+    for i in range(len(c)):
+        X = (a * X + b) % 26
+        m += chr((ord(c[i]) - X) % 26 + ord('A'))
+    return m
