@@ -1,0 +1,256 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{bilal2vec}
+\usepackage{minted}
+
+\title{CO 487 - Assignment 4}
+\author{Bilal Khan (b54khan)\\
+\href{mailto:bilal.khan@student.uwaterloo.ca}{bilal.khan@student.uwaterloo.ca}}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section{1}
+
+\subsection{(a)}
+
+\begin{itemize}
+  \item using the timestamp of when the file was encrypted as the random seed, if the attacker knows around when the file was encrypted they can more easily bruteforce the key, you should use a proper PRNG here
+  \item Generating the prime $p$ by sampling a prime randomly from around $\sqrt{n}$ and then choosing $q$ as the next prime after it. We can exploit this by only searching for primes close to $\sqrt{n}$ and the next prime after that. You should generate two independently random primes.
+  \item Using ECB mode, identical plaintext blocks will be encrypted to identical ciphertext blocks. 
+  \item The encryption code checks if $\gcd(e, n) = 1$, not if $\gcd(e, \phi(n)) = 1$. 
+\end{itemize}
+
+\subsection{(b)}
+
+Calling factorint here is faster than using the sqrt method.
+
+\begin{minted}{python}
+def do_decryption():
+  # Read and parse the JSON data structure
+  with open("encrypted_assignment.json.txt", 'r') as fh:
+      input = json.loads(fh.read())
+  n = input["n"]
+  e = input["e"]
+  c_1 = input["c_1"]
+  c_2 = string2bytes(input["c_2"])
+
+  # TODO after midterms are over
+
+  p, q = factorint(n).keys()
+  #p = int(math.sqrt(n) + 1)
+  #while n % p != 0:
+  #    p -= 1
+  #q = n // p
+
+  assert (p * q == n)
+  assert (isprime(p))
+  assert (isprime(q))
+
+  phi = (p - 1) * (q - 1)
+  d = mod_inverse(e, phi)
+
+  aes_key_int = pow(c_1, d, n)
+  aes_key = aes_key_int.to_bytes(16, byteorder='big')
+
+  cipher = Cipher(algorithms.AES(aes_key), modes.ECB()).decryptor()
+  unpadder = padding.PKCS7(128).unpadder()
+
+  plaintext = cipher.update(c_2) + cipher.finalize()
+  plaintext = unpadder.update(plaintext) + unpadder.finalize()
+
+  # write the decrypted assignment to a file
+  with open("assignment_out.pdf", 'wb') as fh:
+      fh.write(plaintext)
+\end{minted}
+
+\subsection{(c)}
+
+The secret is $17853$
+
+\newpage
+
+\section{2}
+
+\subsection{(a)}
+
+To prove the contrapositive, if we have an algorithm that can solve CDH then given $g^a, g^b$, we can compute $g^{ab}$, and return the triple who's third element is $g^{ab}$, solving DDH.
+
+\subsection{(b)}
+
+To prove the contrapositive, if we have an algorithm that can solve DLP, then given $g^a, g^b$, we can compute the values of $a, b$, multiply them together, then compute $g^{ab}$ efficiently as it is just a simple exponentiation, solving CDH.
+
+\subsection{(c)}
+
+According to wikipedia (\url{https://en.wikipedia.org/wiki/Legendre_symbol}), the value of a Legendre symbol $x$ is $1$ when it can be represented as an even power of a generator $g$ of the group $x = g^i$ if $i$ is even (~half of all possible values), so approximately half of the values of the Legendre symbol in some prime order group is $1$ / is square modulo $p$ (SQP). We can use this property to give us an edge when guessing to solve this.
+
+If $g^a, g^b$ are both SQP, then $g^{ab}$ must also be a SQP since the power $ab$ can be written as a power of power of twos. In the cases where both $g^a, g^b$ are SQP but the proposed third element of the tuple is not, we can always correctly guess that this is not a valid triple. In all other cases we guess randomly with a $1/2$ probability of being correct. The chances of each element of a tuple being a SQP is independently $1/2$, so the chance of the first two elements being SQP but the third not being is $1/2 \times 1/2 \times 1/2 = 1/8$, and in every one of these cases we will guess correct. The probability of our adversary guessing correctly is $1/2 + 1/8 = 5/8$.
+
+\newpage
+
+\section{3}
+
+\subsection{(a)}
+
+$$
+\begin{align*}
+r_1 &= g^{s_0} \bmod p = 21^{123} \bmod 167 = 126 \\
+s_1 &= g^{r_1} \bmod p = 21^{126} \bmod 167 = 57 \\
+t_1 &= h^{r_1} \bmod p = 6^{126} \bmod 167 = 7
+\end{align*}
+$$
+
+$$
+\begin{align*}
+r_2 &= g^{s_1} \bmod p = 21^{57} \bmod 167 = 47 \\
+s_2 &= g^{r_2} \bmod p = 21^{47} \bmod 167 = 124 \\
+t_2 &= h^{r_2} \bmod p = 6^{47} \bmod 167 = 54
+\end{align*}
+$$
+
+$$
+\begin{align*}
+r_3 &= g^{s_2} \bmod p = 21^{124} \bmod 167 = 141 \\
+s_3 &= g^{r_3} \bmod p = 21^{141} \bmod 167 = 152 \\
+t_3 &= h^{r_3} \bmod p = 6^{141} \bmod 167 = 150
+\end{align*}
+$$
+
+\subsection{(b)}
+
+\begin{align*}
+  r_i &= g^{s_{i-1}} \bmod p \\
+  s_i &= g^{r_i} \bmod p \\
+  t_i &= h^{r_i} \bmod p \\
+  h &= g^{u} \bmod p
+\end{align*}
+
+\begin{align*}
+  t_1 &= h^{r_1} \bmod p \\
+  &= (g^u)^{r_1} \bmod p \\
+  \log_g t_1 &= u r_1 \bmod p \\
+  r_1 &= \frac{1}{u} \log_g t_1 \bmod p \\
+\end{align*}
+
+Given that we have $r_1$ now, we can now compute $s_1 = g^{r_1} \bmod p$. Given $s_1$, we can then compute $r_2 = g^{s_1} \bmod p$, $t_2 = h^{r_2} \bmod p$, and on.
+
+\subsection{(c)}
+
+We can add a secure one-way hash function on the output of the PRG to make it impossible to reverse the PRG by taking a log: $t_i = H(h^{r_i} \bmod p)$.
+
+\section{4}
+
+\subsection{(a)}
+
+Left does an inversion before an addition and right does an addition before an inversion.
+
+The very first operation we need to do when adding two points is an inversion, to compute $\delta = \dfrac{y_2 - y_1}{x_2 - x_1}$, since additions/subtractions don't count. After that is computed only then can we do the multiplications to compute the new points so the left graph is the result of computing $P + Q$ and the right graph is $P + P$, in which you can reorder operations to do a multiplication before an inversion.
+
+\subsection{(b)}
+
+We compute a key by performing a sclaar multiplciation of a point with a key, we can do this using the double-adn-add algorithm (\url{https://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication}). For zero bits we double, for one bits we double then add. Reading the power consumption graphs for $P + P$ and $P + Q$, the sequence is: 
+
+(double add) (double) (double) (double add) double
+
+in bits:
+
+1 0 0 1 0
+
+\subsection{(c)}
+
+We will compute $9P = 8P + P = 2(2(2P)) + P$.
+
+
+\subsection{(d)}
+
+A simple modification would be to always compute both the double and the add, but only use the result of the add if the value is a one bit.
+
+\newpage
+
+\section{5}
+
+\subsection{(a)}
+
+
+
+\begin{align*}
+  c_2 &= s^\prime b + e^\prime^\prime + \left\lfloor\frac{q}{2}\right\rfloor m \bmod q \\
+  &= s^\prime (As + e) + e^\prime^\prime + \left\lfloor\frac{q}{2}\right\rfloor m \bmod q \\
+  &= s^\prime As + s^\prime e + e^\prime^\prime + \left\lfloor\frac{q}{2}\right\rfloor m \bmod q \\
+  c_1 s &= (s^\prime A + e^\prime)s \bmod q \\
+  &= s^\prime As + e^\prime s \bmod q \\
+  c_2 - c_1 s &= (s^\prime As + s^\prime e + e^\prime^\prime + \left\lfloor\frac{q}{2}\right\rfloor m) - (s^\prime As + e^\prime s) \bmod q \\
+  &= s^\prime e + e^\prime^\prime - e^\prime s + \left\lfloor\frac{q}{2}\right\rfloor m \bmod q \\
+  &= (s^\prime e + e^\prime^\prime - e^\prime s) + \left\lfloor\frac{q}{2}\right\rfloor m \bmod q \\
+  c2 - c1s &= \left\lfloor\frac{q}{2}\right\rfloor m \bmod q \\
+\end{align*}
+
+Assuming error is small, then $m \approx \dfrac{c_2 - c_1 s}{\left\lfloor\frac{q}{2}\right\rfloor} \bmod 2$.
+
+Checkign the values in numpy:
+
+\begin{minted}{python3}
+import numpy as np
+
+n = 4
+q = 3329
+
+c1 = np.array([220, 1211, 2479, 1812])
+c2 = 1799
+s = np.array([-1, 1, 1, 0])
+
+tmp = (c2 - np.dot(c1, s)) % q
+m_hat = abs(tmp / (q // 2))
+
+print(f"m = {m_hat}")
+# m = 0.9963942307692307
+\end{minted}
+
+Which matches our expected value of $m = 1$.
+
+\subsection{(b)}
+
+if $e = 0$, then $b = As$, which we can easily invert to get the secret key $s = A^{-1}b$.
+
+\subsection{(c)}
+
+if $e^\prime = 0$, then
+
+\begin{align*}
+  c_1 &= s^\prime A \bmod q \\
+  s^\prime &= A^{-1} c_1  \bmod q \\
+  c_2 &= s^\prime b + e^\prime^\prime + \left\lfloor\frac{q}{2}\right\rfloor m \bmod q \\
+  c_2 - s^\prime b &= e^\prime^\prime + \left\lfloor\frac{q}{2}\right\rfloor m \bmod q \\
+  \dfrac{c_2 - s^\prime b}{\left\lfloor\frac{q}{2}\right\rfloor} &\approx  m \bmod 2 \\
+\end{align*}
+
+
+$e^\prime$ can be drawn from a small range of small values, and we know that $q$ is much larger, so and attacker could recover a value of $m$ close to its real value.
+
+\subsection{(d)}
+
+if $b = As + s = (A + I)s$, then assuming $A + I$ is invertible, we could sovle for $s$ as $s = (A + I)^{-1}b$.
+
+\subsection{(e)}
+
+As in (c):
+
+\begin{align*}
+  c_1 &= s^\prime A + s^\prime \bmod q \\
+  c_1 &= (A + I)s^\prime \bmod q \\
+  s^\prime &= (A + I)^{-1}c_1 \bmod q \\
+  c_2 &= s^\prime b + e^\prime^\prime + \left\lfloor\frac{q}{2}\right\rfloor m \bmod q \\
+  c_2 - s^\prime b &= e^\prime^\prime + \left\lfloor\frac{q}{2}\right\rfloor m \bmod q \\
+  \dfrac{c_2 - s^\prime b}{\left\lfloor\frac{q}{2}\right\rfloor} &\approx  m \bmod 2 \\
+\end{align*}
+
+
+Given that $A + I$ is invertible and $e^\prime$ can be drawn from a small range of small values, and we know that $q$ is much larger, so and attacker could recover a value of $m$ close to its real value.
+
+
+\end{document}
