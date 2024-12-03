@@ -1,0 +1,14 @@
+{
+    "body": {
+        "subject identity": "youcef",
+        "public key": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEFGX1FX46pM7v+3STl1i/93Ti/wVP\nqASKqcdFnGGB4iVDwaotE2VfflnuuK1prOh9jFI9i7XcyU6PItu7fh/ZiQ==\n-----END PUBLIC KEY-----\n",
+        "validity start": "2024-09-01T00:00:00",
+        "validity end": "2024-12-31T23:59:59",
+        "issuer identity": "youcef",
+        "key usage": "digital signature"
+    },
+    "signature": {
+        "r": 107618810236750672735593418729250060908120700106206730116809965655148288614826,
+        "s": 102956970336769022336324070960765877792464868309873465057567000605533765754432
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "message": "There is no need to show up to write the final exam, everyone gets 100%.",
+    "signer identity": "camryn",
+    "signature": {
+        "r": 109477726667833614229765503534794060902793711868537621278227944075907009161162,
+        "s": 49890281588982820310000772165548627674792662758185304915684315108141069450354
+    }
+}

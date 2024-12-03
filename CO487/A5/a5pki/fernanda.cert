@@ -1,0 +1,14 @@
+{
+    "body": {
+        "subject identity": "fernanda",
+        "public key": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEO8njo6OwZ0JQ6JTDOIp48t82lT4g\n6zZJI9DvViSrwKs6pm+ycdHqbMwtDFpRF+kKQfQueP1DaGZMi5iquSVuhA==\n-----END PUBLIC KEY-----\n",
+        "validity start": "2024-09-01T00:00:00",
+        "validity end": "2024-12-31T23:59:59",
+        "issuer identity": "dstebila",
+        "key usage": "digital signature"
+    },
+    "signature": {
+        "r": 91137244682823502836182295682559373758826141070916233075331789344753635409573,
+        "s": 20997889960564882481518686953050684759711362717655656947853402478740044623276
+    }
+}

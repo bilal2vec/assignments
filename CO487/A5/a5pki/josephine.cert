@@ -1,0 +1,14 @@
+{
+    "body": {
+        "subject identity": "josephine",
+        "public key": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEmQoj+jvhZdzFwe2ubNscv983CvBB\nYKtPTg6Z4faFlFaBopiEiXF6HerwJx13L9lLOXGr93q1mZxXkz9lTYcU4w==\n-----END PUBLIC KEY-----\n",
+        "validity start": "2024-09-01T00:00:00",
+        "validity end": "2024-12-31T23:59:59",
+        "issuer identity": "dstebila",
+        "key usage": "digital signature"
+    },
+    "signature": {
+        "r": 55244677328339642438752135421436752737354613509525921033218463486264161473719,
+        "s": 115729591941098339423789771562210803090387890950071602573054396864088840730318
+    }
+}

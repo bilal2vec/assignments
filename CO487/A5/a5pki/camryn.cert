@@ -1,0 +1,14 @@
+{
+    "body": {
+        "subject identity": "camryn",
+        "public key": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAETYoSCLaojnnMhAAKM+i1VWKCtJUx\nodUhYcG+G7/k3sUmnQNVwKztq5VpyoTnBY/lAOXslDZ9qYyHBLPBDwz96g==\n-----END PUBLIC KEY-----\n",
+        "validity start": "2024-09-01T00:00:00",
+        "validity end": "2024-12-31T23:59:59",
+        "issuer identity": "dstebila",
+        "key usage": "digital signature"
+    },
+    "signature": {
+        "r": 20852754990742307817360250870164619817745051637223632163239213569469368365813,
+        "s": 56202576230368241297569801291478201183654644301729764331051850536892954390250
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "body": {
+        "subject identity": "santiago",
+        "public key": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEuEA2yODX2T9WDVOPaH7/NmuNWJQd\ngg1bgsLyjnAypH0UoAviNOuMqniZ11qlw/rd8f2VlN8F4ZK8/MYK52ZEjQ==\n-----END PUBLIC KEY-----\n",
+        "validity start": "2024-09-01T00:00:00",
+        "validity end": "2024-12-31T23:59:59",
+        "issuer identity": "dstebila",
+        "key usage": "public key encryption"
+    },
+    "signature": {
+        "r": 56011890186408166017997130594670618387555663606135609210446295599391113670239,
+        "s": 103759255741430697468942410033973213038654064641450841813247761610418771439050
+    }
+}

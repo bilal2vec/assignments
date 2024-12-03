@@ -1,0 +1,14 @@
+{
+    "body": {
+        "subject identity": "nic",
+        "public key": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEpqRn3mrGuFgTbTcWR25iIL0e5Avn\n+iezcte+qGPmFtExbgIbnFnHlPJXzF9HdltM1IZUDCjc55SiLR6AaA88Uw==\n-----END PUBLIC KEY-----\n",
+        "validity start": "2025-01-01T00:00:00",
+        "validity end": "2025-12-31T23:59:59",
+        "issuer identity": "dstebila",
+        "key usage": "digital signature"
+    },
+    "signature": {
+        "r": 9505912999608651337137722944274184989585544243553720835239791813965838522517,
+        "s": 91658800556700527231105375939279339410959701368255179865571441219376625859135
+    }
+}
