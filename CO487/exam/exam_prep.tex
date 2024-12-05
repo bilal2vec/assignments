@@ -1,0 +1,157 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{bilal2vec}
+\usepackage{minted}
+
+\title{CO 487 - Final prep}
+\author{Bilal Khan (b54khan)\\
+\href{mailto:bilal.khan@student.uwaterloo.ca}{bilal.khan@student.uwaterloo.ca}}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section{Sample Final 1}
+
+\subsection{1}
+
+\subsubsection{a} Give 1-sentence informal definitions of the following fundamental goals of cryptography: conﬁdentiality, data integrity, data origin authentication, non-repudiation.
+
+\begin{itemize}
+  \item Confidentiality: Only people who are authorized to see the data can see it.
+  \item Integrity: Making sure the data hasn't been modified.
+  \item Authentication: Making sure the data is coming from who it says it is.
+  \item Non-repudiation: Making sure a sender cant deny sending the data.
+\end{itemize}
+
+\subsubsection{b} Explain the diﬀerence between MAC algorithms and signature schemes.
+
+MACs provide integrity and authentication guarantees, but not non-repudiation.
+
+\subsection{2} Recall that RC4 is a stream cipher which, on input consisting of a secret key $k$, outputs a keystream $RC4(k)$. The key stream is then used to encrypt a plaintext message by bitwise exclusive-or. What is the danger in using the same key $k$ to encrypt two different plaintext messages?
+
+Using the same key for two messages means 1) if you encrypt the same message twice, the ciphertexts are the same, and 2) xor-ing the ciphertexts gives you the xor of the plaintexts (the $RC4(k)$'s cancel out from being xor-ed).
+
+\subsection{3}
+
+\subsubsection{a} What type of interaction is required between the adversary and the legitimate user(s) in order to perform linear cryptanalysis? What goal can the adversary achieve under this interaction?
+
+You need to see the plaintexts/ciphertexts for some messages (KPA). The goal is to recover the key
+
+\subsubsection{b} What type of interaction is required between the adversary and the legitimate user(s) in order to perform diﬀerential cryptanalysis? What goal can the adversary achieve under this interaction?
+
+You need to see the plaintexts/ciphertexts for some \textit{related} messages (CPA). The goal again is to recover the key.
+
+\subsection{4}
+
+Recall the following notation, used in protocols such as DSA and Diﬃe-Hellman: $p$ is an odd prime, $q$ is a prime divisor of $p - 1$, and $g \in \mathcal{Z}^*_p$ is an element of order $q$.
+
+Here is one method for generating $g$, given $p$ and $q$:
+
+Repeat the following:
+
+Select $h \in \Z$ randomly from within the range $2 \leq h \leq p - 1$,
+
+Compute $g = h^{(p-1)/q} \mod p$,
+
+Until $g \neq 1$.
+
+Output($g$).
+
+Prove that this method works, i.e., prove that $g$ has order $q$.
+
+Since $h$ is not $1$ and is less than $p$, $\gcd(h, p) = 1$, and $h \in \Z^*_p$. $p - 1$ is divisible by $q$, so $h^{(p-1)/q} \equiv 1 \pmod{p}$ will also be an element of $\Z^*_p$.
+
+\begin{align*}
+  g^q &\equiv (h^{(p-1)/q})^q \pmod{p} \\
+  g^q &\equiv h^{p-1} \pmod{p} \\
+  g^q &\equiv 1 \pmod{p}
+\end{align*}
+
+The last step is true since we repeat until $g \neq 1$, so g is coprime to p, and by fermat's little theorem. $q$ is prime and $g \neq 1$, so $q$ is necessarily the smallest positive integer that makes the statement true (i.e. it has no factors that would make the statement true, except for $1$).
+
+\subsection{5} Why are RSA public and private keys so much longer than secret keys in a symmetric-key encryption scheme such as AES (for the same level of security)?
+
+Asymmetric encryption's hardness is based on the keys being hard to factor, symmetric encryption's hardness is based on the keys being hard to guess. We need comparatively longer keys for RSA because the keys themselves have mathematical structure that makes them easier to guess/brute force than AES keys (purely random keys).
+
+\subsection{6} Recall the speciﬁcation of (basic) hybrid encryption. We have a public-key cryptosystem $(\mathcal{G}, \mathcal{E}, \mathcal{D})$, and a symmetric-key cryptosystem $(E, D)$ with key length $\ell$. To send an encrypted message $m$, choose a random key $k \in \{0, 1\}^\ell$, compute
+
+$$(c_1, c_2) = (\mathcal{E}(pubkey, k), E(k, m))$$
+
+and transmit this data to the recipient. To decrypt (c1, c2), compute
+
+$$m = D(D(privkey, c_1), c_2).$$
+
+Throughout this problem, we will use the one-time pad as our symmetric-key cryptosystem
+
+\subsubsection{a} Suppose that the public-key cryptosystem is insecure in such a way that an adversary intercepts a ciphertext and learns some partial (but not complete) information about $k$. What information can the adversary learn about $m$?
+
+Since the key is bitwise xor-ed with the message, the adversary can learn information about individual bits of the message.
+
+\subsubsection{b} Suggest a practical modiﬁcation of basic hybrid encryption which prevents the adversary from learning any information about $m$ even if the public-key cryptosystem is compromised in the manner described in part (a).
+
+Use $k$ in a KDF to generate a key to encrypt $m$.
+
+\subsection{7} What is certiﬁcate revocation? Why is it important to have certiﬁcate revocation in a public-key infrastructure (PKI)?
+
+Certificate revocation lets you revoke certificates in the case that the private key used to generate them has been compromised.
+
+\subsection{8} Discuss the security implications for Bitcoin if: (a) SHA-2 is broken, (b) ECDSA is broken.
+
+Bitcoin uses SHA as the proof of work system, so if it is broken, it comes easier to generate new blocks and it becomes easier to fake transactions for longer e.g in a 51\% attack.
+
+ECDSA is used to sign and guarantee the authenticity of transactions, so if it is broken, you can forge transactions in ways that would seem legitimate to the network.
+
+\subsection{9} In an implementation of RSA, we may choose to blind the ciphertext $c$ as follows: after receiving the value of $c$, choose a random integer $r$, compute $c^\prime = (c \cdot r^e) \mod n$, and decrypt $c^\prime$ instead of $c$.
+
+\subsubsection{a} After decrypting $c^\prime$, how does the implementation recover the originally intended plaintext?
+
+We decrypt:
+
+\begin{align*}
+  m^\prime &= (c^\prime)^d \mod n \\
+  &= (c \cdot r^e)^d \mod n \\
+  &= c^d \cdot r^{ed} \mod n \\
+  &= c^d \cdot r^1 \mod n \\
+  m^\prime &= m \cdot r \mod n \\
+  m &= (m^\prime \cdot r^{-1}) \mod n \\
+  m &= ((c^{\prime})^d \cdot r^{-1}) \mod n
+\end{align*}
+
+\subsubsection{b} Does blinding protect against simple side-channel attacks, such as Simple Power Analysis (SPA)? Why or why not?
+
+??
+
+\subsubsection{c} Does blinding protect against second-order side-channel attacks, such as Diﬀerential Power Analysis (DPA)? Why or why not?
+
+??
+
+\subsection{10} Recall the speciﬁcation of Full Domain Hash RSA (RSA-FDH):
+
+\textbf{Key generation}: Same as in basic RSA. Let $\ell$ denote the bitlength of $n$.
+
+\textbf{Public parameters}: A hash function $H : \{0, 1\}^* \to \{0, 1\}^\ell$.
+
+\textbf{Signing}: The message space is $\{0, 1\}^*$. For any message $m \in \{0, 1\}^*$, the signature of $m$ is $s = H(m)^d \mod n$.
+
+\textbf{Veriﬁcation}: Given a signature $s$ of a message $m$, compute $s^e \mod n$ and check whether this value
+equals $H(m)$.
+
+\subsubsection{a} Describe how an adversary capable of mounting a known-message attack can forge Alice's signatures if $H$ is not 2nd-preimage resistant.
+
+Given a known (message, signature) pair $(m, s)$, we can find a $m^\prime \neq m$ such that $H(m^\prime) = H(m) = s$. We can now forge a signature for $m^\prime$.
+
+\subsubsection{b} Describe how an adversary capable of mounting a chosen-message attack can cheat if $H$ is not collision resistant.
+
+An adversary can find a pair of messages $m \neq m^\prime$ that yields a collisiaon: $H(m) = H(m^\prime)$. It can then choose to get a signature $s$ for $m$ from the oracle and then pass off $s$ as a signature for $m^\prime$.
+
+\subsubsection{c} Describe how Alice can repudiate signatures if $H$ is not collision resistant.
+
+If you want to repudiate a signature for a message $m$, you can find a $m^\prime \neq m$ such that $H(m^\prime) = H(m)$. You can then get a signature for $m^\prime$ from the oracle and claim that you never signed $m$.
+
+\end{document}
+
