@@ -153,5 +153,81 @@ An adversary can find a pair of messages $m \neq m^\prime$ that yields a collisi
 
 If you want to repudiate a signature for a message $m$, you can find a $m^\prime \neq m$ such that $H(m^\prime) = H(m)$. You can then get a signature for $m^\prime$ from the oracle and claim that you never signed $m$.
 
+\newpage
+
+\section{Sample Final 2}
+
+\subsection{1} Deﬁne what it means for a MAC scheme to be secure.
+
+If it is passes EUF-CMA (existential unforgeability under chosen message attacks) aka an attacker can't generate a tag for a message without the key.
+
+\subsection{2}  Explain why SHA-256 and AES-Small are said to have the same security level. (Recall that SHA-256 is a hash function with 256-bit hash values, and AES-Small is a block cipher with secret keys of bitlength 128
+
+To break SHA-256, a hash function, you need to find a collision, by the birthday paradox, you need to try $\approx 2^{128}$ values;
+
+To break AES-Small, a symmetric block cipher you need to brute force all $2^{128}$ keys
+
+\subsection{3} Alice is given two hash functions $F : \{0, 1\}^* \to \{0, 1\}^{160}$ and $G : \{0, 1\}^* \to \{0, 1\}^{160}$. She is told that one of these functions is collision resistant (and the other one is not collision resistant), but she does not know which is which. Alice wishes to use $F$ and $G$ to create a new hash function $H$ which is deﬁnitely collision resistant. She deﬁnes the hash function $H : \{0, 1\}^* \to \{0, 1\}^{320}$ as follows: $H(x) = F(x) || G(x)$ (where $\mathbin{|} $ denotes concatenation). Either prove that $H$ is collision resistant, or provide a counterexample which shows that $H$ is not necessarily collision resistant.
+
+We can prove this by contradiction. If $H$ is not collision resistant, then there exist two inputs $x \neq x^\prime$ such that $H(x) = H(x^\prime)$. This means that $F(x) || G(x) = F(x^\prime) || G(x^\prime)$. Since exactly one of $F$ or $G$ is collision resistant, this would be a contradiction and therefore the hash function $H$ is collision resistant.
+
+\subsection{4} Why is encryption exponent $e = 3$ commonly used in deployments of the RSA encryption scheme and the RSA signature scheme? Why not use $e = 2$?
+
+We didn't cover this? Claude says its an optimization to minimize the number of steps you need to take in the square-and-multiply algorithm
+
+\subsection{5} Recall that in the Diﬃe-Hellman key agreement protocol, Alice selects $x \in_\mathbb{R} [0, q - 1]$ and sends $g^x \mod p$ to Bob. Similarly, Bob selects $y \in_\mathbb{R} [0, q - 1]$ and sends $g^y \mod p$ to Alice. Their shared secret key is $k = H(K)$ where $K = g^{xy} \mod p$. (Here, $p$ is a prime, $q$ is a prime divisor of $p - 1$, $g$ is an element of order $q$ in $\mathbb{Z}^*_p$, and $H$ is a hash function.) Show that the protocol is insecure if the communications channel between Alice and Bob is not authenticated.
+
+A mitm attacker can intercept the key messages and instead select two new values $a,b \in_\mathbb{R} [0, q - 1]$ and pass off $g^a \mod p$ and $g^b \mod p$ as the messages from Alice and Bob respectively. The new shared secret keys are then $g^{xa} \mod p$ and $g^{yb} \mod p$ respectively. The attacker can decrypt and reencrypt messages.
+
+\subsection{6} We recall the DSA signature scheme. The public domain parameters consist of a $1024$-bit prime $p$, a $160$-bit prime divisor $q$ of $p - 1$, and an element $g \in \mathbb{Z}^*_p$ of order $q$. SHA-1 is a $160$-bit hash function. Alice's private key is $a \in_\mathbb{R} [0, q - 1]$, while her public key is $h = g^a \mod p$. To sign a message $M \in \{0, 1\}^*$, Alice does the following:
+
+\begin{enumerate}
+  \item Select $k \in_\mathbb{R} [1, q - 1]$.
+
+  \item Compute $m = \text{SHA-1}(M)$.
+
+  \item Compute $r = (g^k \mod p) \mod q$, and check that $r \neq 0$.
+
+  \item Compute $s = k^{-1}(m + ar) \mod q$, and check that $s \neq 0$.
+
+  \item Alice's signature on $M$ is $(r, s)$
+\end{enumerate}
+
+To verify Alice's signature $(r, s)$ on $M$, Bob does the following:
+
+\begin{enumerate}
+  \item Obtain an authentic copy of Alice's public key $h$.
+
+  \item Check that $1 \leq r, s \leq q - 1$.
+
+  \item Compute $m = \text{SHA-1}(M)$.
+
+  \item Compute $u_1 = ms^{-1} \mod q$ and $u_2 = rs^{-1} \mod q$.
+
+  \item Accept if and only if $r = (g^{u_1} h^{u_2} \mod p) \mod q$.
+\end{enumerate}
+
+Show that DSA is existentially forgeable under a key-only attack if SHA-1 is not preimage resistant. (A key-only attack means that the attacker knows Alice's public key, but does not have access to a signing oracle.)
+
+We can use the property that $H$ is not preimage resistant to sign a message without access to a signing oracle.
+
+Choose a random $u_1, u_2 \in_\mathbb{R} [1, q - 1]$. Compute $r = (g^{u_1} h^{u_2} \mod p) \mod q$ and check that $r \neq 0$. Set $s = u_2^{-1} r \mod q$. Set $m = u_1 s \mod q$. Invert the hash to find a $M$ such that $H(M) = m$. The signature is $(r, s)$.
+
+To verify this is a valid forged signature, note that $r,s$ are in the correct range, $m = H(M)$, $u_1 = m s^{-1} \mod q = (u_1 s) s^{-1} \mod q = u_1$, $u_2 = r s^{-1} \mod q = r (u_2^{-1} r)^{-1} \mod q = u_2$, and that $r = (g^{u_1} h^{u_2} \mod p) \mod q$ by definition.
+
+\subsection{7} N/a
+
+\subsection{8} N/a
+
+\subsection{9}  Explain why ECDSA (the elliptic curve analogue of DSA) may be advantageous over DSA.
+
+ECC provides greater security at smaller key sizes, so its more efficient and more future-proof against post-quantum attacks.
+
+\subsection{10} What is certiﬁcate revocation? Why is it important to have certiﬁcate revocation in a public-key infrastructure (PKI)?
+
+Certificate revocation lets you revoke certificates in the case that the private key used to generate them has been compromised.
+
+\subsection{11} N/a
+
 \end{document}
 
