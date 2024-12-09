@@ -93,7 +93,7 @@
 
 \paragraph{Collision resistance} Hard to find two different inputs that have the same hash values.
 
-\section{MACs} provides confidentiality (semantic security) and integrity (EUF-CMA).
+\section{MACs} provides integrity (EUF-CMA) and message origin authentication.
 
 \paragraph{HMAC} $HMAC(K, m) = H((K \oplus opad) \parallel H((K \oplus ipad) \parallel m))$, secure against length extension attacks.
 
@@ -115,7 +115,7 @@ Expanding a strong short key into a long key (e.g., stream cipher): $HMAC_k(1), 
 
 Deriving many keys from a single key: $HMAC_k(label)$
 
-\paragraph{Key derivation function} deterministic function that takes as input a random seed $k \in \{0, 1\}^\lambda$ and a (non-secret) label in $\{0, 1\}^*$ and outputs a random-looking binary string of length $\ell$.
+\paragraph{Key derivation function} Same as PRF, but KDF output should be indistinguishable from random even if the key $k$ is non-uniform but sufficiently high entropy.
 
 Turn longer non-uniform keys into shorter uniform keys $HMAC_{label}(k)$
 
