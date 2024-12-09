@@ -1,0 +1,327 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{bilal2vec}
+\usepackage{minted}
+
+\title{CO 487 - Notes}
+\author{Bilal Khan (b54khan)\\
+\href{mailto:bilal.khan@student.uwaterloo.ca}{bilal.khan@student.uwaterloo.ca}}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section{Symmetric Encryption}
+
+\paragraph{Kerckhoff's principle} The adversary knows everything about the SKES, except the particular key $k$ chosen by Alice and Bob. (Avoid security by obscurity!!)
+
+\paragraph{Adversary's Goals in Breaking Symmetric Key Encryption:}
+\begin{enumerate}
+    \item Recover the secret key.
+    \item Systematically recover plaintext from ciphertext (without necessarily learning the secret key).
+    \item Learn some partial information about the plaintext from the ciphertext (other than its length).
+\end{enumerate}
+
+\paragraph{Security Definitions}
+\begin{itemize}
+    \item If the adversary can achieve goals 1 or 2, the SKES is said to be \textit{totally insecure} (or \textit{totally broken}).
+    \item If the adversary cannot learn any partial information about the plaintext from the ciphertext (except possibly its length), the SKES is said to be \textit{semantically secure}.
+    \item Hiding length information is very hard. This topic falls under the heading of \textit{traffic analysis}.
+\end{itemize}
+
+\paragraph{Security by obscurity} The adversary knows everything about the SKES, except the particular key $k$ chosen by Alice and Bob.
+
+
+\paragraph{Passive attacks}
+\begin{itemize}
+    \item Ciphertext-only attack: The adversary only sees some encrypted ciphertexts.
+    \item Known-plaintext attack: The adversary also knows some plaintext and the corresponding ciphertext.
+\end{itemize}
+
+\paragraph{Active attacks:}
+\begin{itemize}
+    \item Chosen-plaintext attack: The adversary can also choose some plaintext(s) and obtain the corresponding ciphertext(s).
+    \item Chosen-ciphertext attack: The adversary can also choose some ciphertext(s) and obtain the corresponding plaintext(s). Includes the powers of chosen-plaintext attack.
+\end{itemize}
+
+\paragraph{Limits on Computational Powers}
+
+\begin{itemize}
+    \item Information-theoretic security: The adversary has infinite computational resources.
+    \item Complexity-theoretic security: The adversary is a "polynomial-time Turing machine".
+    \item Computational security: The adversary has $X$ number of real computers/workstations/supercomputers. ("computationally bounded"). Equivalently, the adversary can do $X$ basic operations, e.g., CPU cycles.
+\end{itemize}
+
+\paragraph{Pseudorandom bit generator (PRBG)} is a deterministic algorithm that takes as input a short random seed, and outputs a longer pseudorandom sequence, also known as a keystream.
+
+\paragraph{Indistinguishability} The output sequence should be indistinguishable from a random sequence.
+
+\paragraph{Unpredictability} If an adversary knows a portion $c_1$ of ciphertext and the corresponding plaintext $m_1$, then she can easily find the corresponding portion $k_1 = c_1 \oplus m_1$ of the output sequence. Thus, given portions of the output sequence, it should be infeasible to learn any information about the rest of the output sequence.
+
+\paragraph{Stream cipher period} For a good stream cipher we need that the period of the keystream output sequence is larger than the length of the plaintext.
+
+\paragraph{Stream ciphers} A5/1, RC4, Salsa20, ChaCha20, main idea: use a PRBG to generate a keystream, and then XOR the keystream with the plaintext to get the ciphertext.
+
+\paragraph{Security}
+\begin{itemize}
+    \item Diffusion: each ciphertext bit should depend on all plaintext and all key bits.
+    \item Confusion: the relationship between key bits, plaintext bits, and ciphertext bits should be complicated.
+    \item Cascade or avalanche effect: changing one bit of plaintext or key should change each bit of ciphertext with probability about 50\%
+    \item Key length: should be small, but large enough to preclude exhaustive key search.
+\end{itemize}
+
+
+\paragraph{AES/DES} substitution-permutation network. round key xor-ed into the state. DES uses a Feistel network.
+
+\paragraph{ECB mode} encrypt each block independently. violates semantic security. padding required.
+
+\paragraph{CBC mode} $C_i = E(K, C_{i-1} \oplus P_i), C_0 = IV$. padding required.
+
+\paragraph{CFB mode} $C_i = E(K, C_{i-1}) \oplus P_i, C_0 = IV$. semantically secure.
+
+\paragraph{OFB mode} $O_i = E(K, O_{i-1}), C_i = O_i \oplus P_i, O_0 = IV$. xor the plaintext into the ciphetext "stream".
+
+\section{Hash Functions} MD4, MD5, SHA-1, SHA-2, SHA-3
+
+\paragraph{Preimage resistance} Hard to invert given just an output.
+
+\paragraph{2nd preimage resistance} Hard to find a second input that has the same hash value as a given first input.
+
+\paragraph{Collision resistance} Hard to find two different inputs that have the same hash values.
+
+\section{MACs} provides confidentiality (semantic security) and integrity (EUF-CMA).
+
+\paragraph{HMAC} $HMAC(K, m) = H((K \oplus opad) \parallel H((K \oplus ipad) \parallel m))$, secure against length extension attacks.
+
+\paragraph{MAC-then-encrypt / MAC-and-encrypt}: Insecure, no guarantee MAC doesn't leak plaintext bits
+
+\paragraph{Encrypt-then-MAC}: Secure, but requires padding.
+
+\section{PRNGs} Indistinguishability.
+
+$$PRG : \{0, 1\}^\lambda \to \{0, 1\}^\ell$$
+$$PRF : \{0, 1\}^\lambda \times \{0, 1\}^* \to \{0, 1\}^\ell$$
+$$KDF : \{0, 1\}^\lambda \times \{0, 1\}^* \to \{0, 1\}^\ell$$
+
+\paragraph{Pseudorandom generator} deterministic function that takes as input a random seed $k \in \{0, 1\}^\lambda$ and outputs a random-looking binary string of length $\ell$.
+
+Expanding a strong short key into a long key (e.g., stream cipher): $HMAC_k(1), HMAC_k(2), HMAC_k(3), \ldots$
+
+\paragraph{Pseudorandom function} deterministic function that takes as input a random seed $k \in \{0, 1\}^\lambda$ and a (non-secret) label in $\{0, 1\}^*$ and outputs a random-looking binary string of length $\ell$.
+
+Deriving many keys from a single key: $HMAC_k(label)$
+
+\paragraph{Key derivation function} deterministic function that takes as input a random seed $k \in \{0, 1\}^\lambda$ and a (non-secret) label in $\{0, 1\}^*$ and outputs a random-looking binary string of length $\ell$.
+
+Turn longer non-uniform keys into shorter uniform keys $HMAC_{label}(k)$
+
+\section{Passwords}
+
+\begin{itemize}
+  \item Knowledge-Based (Something you know)
+  \item Object-Based (Something you have)
+  \item ID-Based (Something you are)
+  \item Location-based (Somewhere you are)
+\end{itemize}
+
+\paragraph{Rainbow tables} Hash begin/end of chain instead of every hash.
+
+\paragraph{Salting} protect against rainbow tables.
+
+\section{Public Key Cryptography} allows for non-repudiation.
+
+\paragraph{RSA}
+
+$$E((n, e), m) = m^e \mod n$$
+$$D((n, d), c) = c^d \mod n$$
+
+\begin{enumerate}
+    \item Choose random primes $p$ and $q$ with $\log_2 p \approx \log_2 q \approx \ell/2$.
+    \item Compute $n = pq$ and $\varphi(n) = (p-1)(q-1)$.
+    \item Choose an integer $e$ with $1 < e < \varphi(n)$ and $\gcd(e, \varphi(n)) = 1$.
+    \item Compute $d = e^{-1}$ in $\mathbb{Z}_{\varphi(n)}$.
+    \begin{enumerate}
+        \item Use the Extended Euclidean Algorithm to compute $d$.\\
+        If the Extended Euclidean Algorithm succeeds, then you are guaranteed that\\
+        $\gcd(e, \varphi(n)) = 1$.
+    \end{enumerate}
+    \item[] Note: $de \equiv 1 \pmod{\varphi(n)}$ by definition of $e^{-1}$.
+    \item The public key is $(n, e)$.
+    \item The private key is $(n, d)$.
+\end{enumerate}
+
+\paragraph{Fermat's Little Theorem}
+
+\begin{theorem}[Fermat's Little Theorem]
+Let $p$ be a prime. For all integers $a$, it holds that
+\[ a^p \equiv a \pmod{p} \]
+
+Moreover, if $a$ is coprime to $p$, then
+\[ a^{p-1} \equiv 1 \pmod{p} \]
+\end{theorem}
+
+\paragraph{Modular operations} addition/subtraction is $O(l)$, multiplication/inversion is $O(l^2)$, exponentiation is $O(l^3)$.
+
+\paragraph{Square-and-multiply} $a^b \mod n$, $\log n$ iterations of modular multiplications that each take $O(l^2)$ time, so $O(l^3)$ time total.
+
+\section{Diffie-Hellman}
+
+$$\mathbb{Z}_n^* = \{1, 2, \ldots, n-1 : \gcd(a, n) = 1\}$$
+
+\paragraph{Order of $x \in \mathbb{Z}_n^*$} Smallest positive integer $k$ such that $x^k \equiv 1 \pmod{n}$.
+
+\paragraph{Generator of $\mathbb{Z}_n^*$} An element $g \in \mathbb{Z}_n^*$ such that every $y \in \mathbb{Z}_n^*$ can be written as $g^k$ for some $k \in \mathbb{Z}$.
+
+\paragraph{$\mathbb{Z}_p^*$} for any prime $p$, every generator has order $p-1$.
+
+\paragraph{Group} a set $G$ with a binary operation $\cdot$ that satisfies:
+\begin{itemize}
+  \item Associativity: for all $a, b, c \in G$, $(a \cdot b) \cdot c = a \cdot (b \cdot c)$
+  \item Identity: there exists an element $\mathcal{O} \in G$ such that for all $a \in G$, $a \cdot \mathcal{O} = \mathcal{O} \cdot a = a$
+  \item Inverses: for all $a \in G$, there exists an element $a^{-1} \in G$ such that $a \cdot a^{-1} = a^{-1} \cdot a = \mathcal{O}$
+\end{itemize}
+
+\paragraph{Cyclic group} if it can be generated by a single element
+
+\paragraph{Diffie-Hellman key exchange} has forward secrecy.
+
+\begin{itemize}
+  \item Alice and Bob agree on a group $G$ and a generator $g$ of $G$
+  \item Alice chooses a random integer $a \in \mathbb{Z}_n^*$ and computes $g^a \mod p$
+  \item Bob chooses a random integer $b \in \mathbb{Z}_n^*$ and computes $g^b \mod p$
+  \item Alice and Bob exchange $g^a \mod p$ and $g^b \mod p$
+  \item Alice computes $(g^b)^a \mod p$
+  \item Bob computes $(g^a)^b \mod p$
+  \item Alice and Bob use $g^{ab} \mod p$ as their shared secret key
+\end{itemize}
+
+\paragraph{CDH} $g^{ab} \mod p$ is hard to compute given $g$, $g^a \mod p$, and $g^b \mod p$.
+
+\paragraph{DDH} hard to distinguish between $g^{ab} \mod p$ and a random element of $\mathbb{Z}_p^*$.
+
+\paragraph{DLOG} given $g$ and $g^a \mod p$, it is hard to compute $a$.
+
+\paragraph{ElGamal}
+
+\begin{itemize}
+  \item Publish one half of the Diffie-Hellman key exchange as the public key.
+  \item Include the other half of the key exchange as the first half of the ciphertext.
+  \item Encrypt the plaintext under the shared secret key as the second half of the ciphertext
+\end{itemize}
+
+\begin{itemize}
+  \item Alice and Bob agree on a large prime $p$ and a $g \in \mathbb{Z}_p^*$ of large prime order $q$
+  \item Choose a random $x \in \mathbb{Z}_q^*$
+  \item Set $k_{\text{pubkey}} = g^x \mod p$
+  \item Set $k_{\text{privkey}} = x$
+  \item To encrypt a message $m \in \mathbb{Z}_p^*$, choose a random $r \in \mathbb{Z}_q^*$
+  \item $E(k_{\text{pubkey}}, m) = (g^r \mod p, m \cdot k_{\text{pubkey}}^r \mod p)$
+  \item To decrypt a ciphertext $(c_1, c_2)$, compute $m = c_2 \cdot (c_1^x)^{-1} \mod p$
+\end{itemize}
+
+\paragraph{Attack types}
+
+\paragraph{Passive attacks}
+\begin{itemize}
+  \item Key-only attack: The adversary is given the public key(s).
+  We always assume the adversary has the public key(s).
+  \item Chosen-plaintext attack: The adversary can choose some plaintext(s) and obtain the
+  corresponding ciphertext(s). Equivalent to a key-only attack.
+\end{itemize}
+
+\paragraph{Active attacks}
+\begin{itemize}
+  \item Non-adaptive chosen-ciphertext attack: The adversary can choose some ciphertext(s)
+    and obtain the corresponding plaintext(s).
+  \item (Adaptive) chosen-ciphertext attack: Same as above, except the adversary can also
+    iteratively choose which ciphertexts to decrypt, based on the results of previous queries
+\end{itemize}
+
+\paragraph{Totally insecure} if the adversary can obtain the private key.
+
+\paragraph{One-way} if the adversary cannot decrypt a given ciphertext.
+
+\paragraph{Semantically secure} if the adversary cannot learn any partial information about a message.
+
+\paragraph{RSA security} Hard if integer factorization is hard. Not semantically secure since its deterministic. No deterministic encryption is semantically secure, but randomized encryption is not sufficient for semantic security.
+
+\paragraph{Subexponential time} representated as a pair of $L_n[\alpha, c]$ where the value of $\alpha$ determines the hardness.
+
+\paragraph{Shor's algorithm} $O(\log^2 n)$ gates to factor.
+
+\paragraph{Diffie-Hellman Integrated Encryption Scheme (DHIES)} elgamal encryption with a MAC.
+
+\section{Signatures}
+
+\paragraph{RSA malleability} given $c = m^e \mod n$ for an unknown $m$, for any $x \in \mathbb{Z}_n^*$, we can construct $c' = (x^e \cdot c) \mod n = (xm)^e \mod n$. Selective forgery under a chosen message attack.
+
+\paragraph{Full-domain hash RSA (FDH-RSA)} compute a signature on the hashed message. Hash function needs to be collision/preimage/second preimage resistant.
+
+\paragraph{Digital Signature Algorithm (DSA)}
+
+\begin{itemize}
+  \item Setup:
+  \begin{itemize}
+    \item A prime $p$, a prime $q$ dividing $p-1$, an element $g \in \mathbb{Z}_p^*$ of order $q$, a hash function $H: \{0,1\}^* \to \mathbb{Z}_q$
+  \end{itemize}
+  
+  \item Key generation:
+  \begin{itemize}
+    \item Choose $\alpha \in_R \mathbb{Z}_q^*$ at random. Return $(k_{\text{pubkey}}, k_{\text{privkey}}) = (g^\alpha \mod p, \alpha)$
+  \end{itemize}
+  
+  \item Signing: To sign a message $m \in \{0,1\}^*$,
+  \begin{itemize}
+    \item Choose $k \in_R \mathbb{Z}_q^*$ at random
+    \item Calculate $r = (g^k \mod p) \mod q$ and $s = \frac{H(m) + \alpha r}{k} \mod q$
+    \item Repeat if $k$, $r$, or $s$ are zero. Otherwise, return signature $\sigma = (r,s)$
+  \end{itemize}
+  
+  \item Verification: Given $k_{\text{pubkey}} = g^\alpha$, $m$, and $\sigma = (r,s)$,
+  \begin{itemize}
+    \item Check $0 < r < q$ and $0 < s < q$ and $(g^{\frac{H(m)}{s}} g^{\frac{\alpha r}{s}} \mod p) \mod q = r$
+  \end{itemize}
+\end{itemize}
+
+\paragraph{Elliptic Curve Digital Signature Algorithm (ECDSA)}
+
+\begin{itemize}
+  \item Setup:
+  \begin{itemize}
+    \item A prime $p$, a prime $q$, an elliptic curve $E$ over $\mathbb{Z}_p$ of cardinality $|E| = q$, a generator $P \in E$ of order $q$, and a hash function $H: \{0,1\}^* \to \mathbb{Z}_q$.
+  \end{itemize}
+  
+  \item Key generation:
+  \begin{itemize}
+    \item Choose $\alpha \in_R \mathbb{Z}_q^*$ at random.
+    \item $(k_{\text{pubkey}}, k_{\text{privkey}}) = (\alpha P, \alpha)$
+  \end{itemize}
+  
+  \item Signing: To sign a message $m \in \{0,1\}^*$,
+  \begin{itemize}
+    \item Choose $k \in_R \mathbb{Z}_q^*$ at random
+    \item Calculate $r = x_kP \mod q$, and $s = \frac{H(m) + \alpha r}{k} \mod q$
+    \item Repeat if $k$, $r$, or $s$ are zero.
+    \item The signature is $\sigma = (r, s)$.
+  \end{itemize}
+  
+  \item Verification: Given $\alpha P$, $m$, and $(r, s)$,
+  \begin{itemize}
+    \item Check $0 < r < q$ and $0 < s < q$
+    \item Check that the $x$-coordinate of $\frac{H(m)}{s} P + \frac{r}{s} (\alpha P)$ is congruent to $r$ modulo $q$.
+  \end{itemize}
+\end{itemize}
+
+\section{Key Management}
+
+\paragraph{Certificates} subject identity, subject public key, issuer signature, expiration date etc.
+
+\paragraph{TLS handshake} v1.3 generates a new ephemeral ECDSA key pair for each connection, signed by the server's certificate. Client always verifies server's key w its certificate. Optional client-to-server authentication.
+
+\paragraph{Bitcoin} Signs transaction (including prev transaction id) using ECDSA key pair. proof of work by finding a hash value of sha-256 with 47 leading zeros.
+
+\end{document}
