@@ -1,0 +1,687 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\title{CS445/CS645/ECE451 Final Exam - Fall 2019}
+\date{6 December 2019}
+
+\begin{document}
+
+\maketitle
+
+\section*{Instructions}
+\textit{Based on notes:}
+\begin{itemize}
+    \item \textbf{Requirements Types:} D (Scope Determined) and G (Scope Determining).
+    \item \textbf{Domain Modeling:} Domain Ignoramus, SYS, ENV, INTF, Shared Phenomena.
+    \item \textbf{RE Concepts:} ZJVF, Use Case, Scenario, NFR, SRS.
+    \item \textbf{Temporal Logic:} LTL, Temporal Connectives ($\Box$, $\Diamond$, $\bigcirc$, $\mathcal{U}$, $\mathcal{W}$).
+    \item \textbf{UI and Documentation:} UI, Platt's Law, Why Software Sucks, UM.
+    \item \textbf{Other:} Prescriptive vs. Descriptive Specs, Phenomenon A, Phenomenon B.
+\end{itemize}
+
+\section*{Question 1: Domain and Use Case Model of IEKS and Unknown Domains}
+
+\subsection*{(a) Adding Voice Command Backup}
+
+\textbf{Diagram Modification (Refer to the provided image):}
+\begin{enumerate}
+    \item Add a new component: \textbf{SE:VoiceRecognizer(1)} inside \textbf{S:CarRadio(1)}.
+    \item Add a link between \textbf{SE:Mic(1)} and \textbf{SE:VoiceRecognizer(1)} inside \textbf{S:CarRadio(1)}.
+    \item Add a link between \textbf{SE:VoiceRecognizer(1)} and \textbf{S:StarterAndDriving(1)} inside \textbf{PriusPREK}.
+    \item Add a link between \textbf{E:Driver(}) and \textbf{SE:Mic(1)}.
+    \item Highlight \textbf{S:CarRadio(1)} and \textbf{SE:Mic(1)}.
+\end{enumerate}
+
+\textbf{Text Modification:}
+\begin{itemize}
+    \item Under \textbf{S:CarRadio(1)}, add:
+    \begin{itemize}
+        \item \textbf{SE:VoiceRecognizer(1)}
+    \end{itemize}
+\end{itemize}
+\textit{Explanation}: We introduce a \textbf{VoiceRecognizer} as a new component of the \textbf{CarRadio}. It receives input from the existing \textbf{Mic} and communicates with the \textbf{StarterAndDriving} component. This reflects the domain knowledge that voice recognition requires a microphone and processing to trigger the start. We also highlight existing components used in the new feature.
+
+\textbf{Use Case Diagram Modification (Refer to the provided image):}
+\begin{enumerate}
+    \item Add a new use case bubble: \textbf{Speak Start Command}
+    \item Draw a line from \textbf{Driver} to \textbf{Speak Start Command}.
+\end{enumerate}
+
+\textbf{Use Case Text Modification:}
+\begin{itemize}
+    \item Add new use case: \textbf{StarterAndDriving.VoiceRecognizer.SpeakToStart [D,p]}
+\end{itemize}
+
+\textit{Explanation}: We add a new use case representing the driver speaking the start command. This aligns with the added domain entities and reflects the new interaction path. We specify that the Driver (D) interacts with the Prius (p) to perform this action. The use case is placed under the StarterAndDriving section because it directly impacts the car's starting mechanism.
+
+\subsection*{(b) Dilbert Domain Model and Use Case Model}
+
+\textbf{Domain Model (DM):}
+
+\begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{LDC} & \textbf{RFIT} & \textbf{ORCAT} & \textbf{MRT} \
+    <<actor>> & & & \
+    1 & 1 & 1 & 1 \
+    \hline
+    & NERKED: Boolean & & URPED: Boolean \
+    & NERK(P: ORCAT) & & URP() \
+    \hline
+    \end{tabular}
+    
+    \begin{tabular}{c c c c}
+    LDC & --- & RFIT & \
+    & & 
+    ↕
+    ↕
+     & \
+    & & ORCAT & --- MRT \
+    \end{tabular}
+    
+    \textit{Explanation}:
+    \begin{itemize}
+        \item \textbf{LDC}: Stereotype <<actor>>, multiplicity 1 (as it's the one initiating the action).
+        \item \textbf{RFIT}: Attribute NERKED, method NERK(P) with parameter P of type ORCAT. Multiplicity 1.
+        \item \textbf{ORCAT}:  Multiplicity 1.
+        \item \textbf{MRT}: Attribute URPED, method URP(). Multiplicity 1.
+        \item \textbf{Links}: LDC is linked to RFIT (as LDC does the NERKing). RFIT is linked to ORCAT (as RFIT gets NERKED to ORCAT). ORCAT is linked to MRT (as the action on ORCAT causes a reaction on MRT). The link between RFIT and ORCAT represents the parameter passing for the NERK method, satisfying the requirement that the DM shows how an ORCAT can be an argument.
+    \end{itemize}
+    
+    \textbf{Use Case Model (UCM):}
+    \begin{tabular}{c}
+        \hline
+        LDC \
+        \hline
+        \end{tabular}
+        \begin{tabular}{|c|}
+        \hline
+        IEKS \
+        \hline
+        \begin{tabular}{c}
+        NERK \
+        ↑
+        ↑
+         \
+        LDC \
+        \end{tabular}
+        \begin{tabular}{c}
+        URP \
+        ↑
+        ↑
+         \
+        LDC \
+        \end{tabular} \
+        \hline
+        \end{tabular}                
+
+\textit{Explanation}:
+\begin{itemize}
+    \item \textbf{Actor}: LDC.
+    \item \textbf{Use Cases}: NERK, URP (derived from the DM's methods).
+    \item \textbf{Links}: LDC is linked to both use cases, indicating that the LDC initiates these actions.
+\end{itemize}
+
+\textbf{Missing Class for Parameter (P):} \textbf{ORCAT} is the missing class.
+
+\section*{Question 2: RE Reference Model, Verification \& Validation, and Inspection}
+
+\subsection*{(a) Universal Statement CRSIN}
+
+\textbf{Complete the sentence:} to be part of S is considered dangerous because \textit{if CRSIN, which is part of D, is not true in the real world, but S assumes it is, then S will not satisfy R in that situation}.
+
+\textbf{Complete the sentence:} Therefore, S must not deal with only what happens when CRSIN is true. S must deal with also \textit{the case where CRSIN is false, meaning that a resident of Canada does not have a unique SIN, or even has no SIN}.
+
+\textbf{Complete the sentence:} Thus, the programmer must consider as two separate cases \textit{the case where CRSIN is true (which probably occurs more often at run time) and the case where CRSIN is false (which probably requires more code to handle the exception)}.
+
+\textit{Explanation}:
+\begin{itemize}
+    \item The danger lies in the assumption that D is always true. If S relies on D being true, but D is false in reality, then S won't fulfill the requirements (R).
+    \item S needs to account for both scenarios: when D (CRSIN) holds and when it doesn't.
+    \item The programmer must consider the "normal" case (CRSIN true, likely more frequent) and the exceptional case (CRSIN false, likely requiring more complex error handling).
+\end{itemize}
+
+\subsection*{(b) Formality}
+
+\textbf{Is R formal?} No.
+
+\textbf{Why or why not?} \textit{R is not formal because it describes desired changes in the real world, which is inherently informal. Whether R is satisfied depends on the real-world environment and user needs, which are not subject to formal mathematical proof but rather to empirical validation.}
+
+\textbf{Is M formal?} No.
+
+\textbf{Why or why not?} \textit{M is not formal because its behavior is learned from data (d) representing the real world. The real world is informal, so M's learned behavior is also informal and cannot be proven through mathematical logic.}
+
+\textit{Explanation}:
+\begin{itemize}
+    \item Formality implies mathematical provability.
+    \item R deals with real-world desires, making it informal.
+    \item M learns from real-world data, inheriting its informality.
+\end{itemize}
+
+\textbf{Is B formal?} No.
+
+\textbf{Why or why not?} \textit{B is not formal because its function depends on the physical and chemical properties of the real world (protein shapes and interactions). These are governed by physical laws, not mathematical logic, making B's behavior subject to empirical verification rather than formal proof.}
+
+\textit{Explanation}: B's operation relies on physical interactions, making it informal like the real world.
+
+\subsection*{(c) Inspection}
+Inspection of any document can be described as \underline{a search} for \underline{defects} in the inspected document. In this \underline{two-part} process, the first part, the \underline{preparation} step is done by the document \underline{inspectors} while the second part, the \underline{logging meeting} step is done by the document's \underline{author and the inspectors}, as they try to \underline{log all the defects} found in the inspected document.
+
+\textit{Explanation}: Inspection involves a systematic search for defects, with a preparation phase (individual review) followed by a logging meeting (collaborative defect identification).
+
+\subsection*{(d) Validation vs. Verification}
+
+\textit{Data from various sources, including the Iceberg slides, show that fixing defects found during operation (post-release) costs 10-200 times more than fixing defects found during development. Since validation (finding defects related to incorrect or missing requirements) often happens later in the development cycle or even post-release, this cost difference implies that validation is significantly harder (and more expensive) than verification (which typically occurs earlier during development).}
+
+\textit{Explanation}: The high cost of fixing post-release defects, many of which stem from validation issues, indicates that validation is more challenging.
+
+\subsection*{(e) Testing and Ambiguity}
+
+\textbf{Are we certain that the program is completely correct?} No.
+
+\textbf{Why or why not?} \textit{Even with 1,000,000 successful test cases, we cannot be certain the program is completely correct. Testing can only show the presence of defects, not their absence. There might be untested scenarios or edge cases where the program fails.}
+
+\textit{Explanation}: Testing proves defects exist, not that they don't.
+
+\textbf{Are we certain that the sentence is completely not ambiguous?} No.
+
+\textbf{Why or why not?} \textit{Even if 10 people agree on one interpretation, it's possible that they all share a common misunderstanding or that the sentence is ambiguous in a way not captured by their interpretations. There might be other contexts or perspectives where the sentence could be interpreted differently.}
+
+\textit{Explanation}: Agreement doesn't guarantee a lack of ambiguity.
+
+\subsection*{(f) Active Review}
+
+\textbf{Main drawback:} \textit{Like normal testing, an active review can only show the presence of defects, not their absence. It might not cover all possible scenarios or reveal all potential issues.}
+
+\textbf{Advantage:} \textit{An active review can be performed before any code is written, allowing for early detection and correction of requirements errors, which is much cheaper than fixing them later in the development cycle.}
+
+\textit{Explanation}: Active reviews share testing's limitations but offer early error detection.
+
+\section*{Question 3: Elicitation, User Interfaces, and User's Manuals}
+
+\subsection*{(a) Microsoft 365 for Corporate Buyers}
+
+\begin{itemize}
+    \item[i.] \textbf{Owner/Client:} Microsoft.
+    \item[ii.] \textbf{Customer:} The corporation buying the software (e.g., a company purchasing licenses for its employees).
+    \item[iii.] \textbf{User:} The employees of the corporation who use the software.
+\end{itemize}
+
+\subsection*{(b) Microsoft 365 for Individual Buyers}
+
+\begin{itemize}
+    \item[i.] \textbf{Owner/Client:} Microsoft.
+    \item[ii.] \textbf{Customer:} The individual buyer (you or me).
+    \item[iii.] \textbf{User:} The individual buyer (you or me).
+\end{itemize}
+
+\subsection*{(c) Program Developed for Own Use}
+
+\begin{itemize}
+    \item[i.] \textbf{Owner/Client:} You.
+    \item[ii.] \textbf{Customer:} You.
+    \item[iii.] \textbf{User:} You.
+\end{itemize}
+
+\subsection*{(d) Program Developed by Boeing's Software Developers}
+
+\begin{itemize}
+    \item[i.] \textbf{Owner/Client:} Boeing.
+    \item[ii.] \textbf{Customer:} Boeing's engineering department or a specific project within Boeing.
+    \item[iii.] \textbf{User:} Boeing's engineers.
+\end{itemize}
+
+\subsection*{(e) Sources Not to Use in Elicitation}
+
+\textbf{Is there any source of information about a CBS that you intend to build that you should not use in requirements elicitation?} Yes.
+
+\textbf{Why or why not?} \textit{You should not use sources that contain implementation details or design decisions that are not relevant to the user's needs or the system's external behavior. Focusing on such sources can lead to implementation bias, restricting design freedom and potentially creating a system that is not aligned with the actual user requirements. It's important to focus on the "what" (user needs, external behavior) rather than the "how" (implementation details) during elicitation.}
+
+\textit{Explanation}: Avoid sources with implementation bias that don't reflect user needs.
+
+\subsection*{(f) CBS with Heavy User Interaction}
+
+\begin{enumerate}[label=(\roman*)]
+    \item \textbf{Main reason:} \textit{The main reason is that the user interface is part of the system's external behavior and defines how users interact with the system's functions. The UI's design directly impacts how functions are invoked and how output is presented. Therefore, the UI and functions are tightly coupled and must be specified together to ensure consistency and usability.}
+    \item \textit{A failure to have this architecture from the beginning in an agile development of C leads to the necessity of major \underline{refactoring}.}
+\end{enumerate}
+
+\textit{Explanation}: The UI defines interaction; it's coupled with functions and needs specification to avoid inconsistencies. Missing this in agile leads to refactoring.
+
+\subsection*{(g) Distinguishing Word Uses}
+
+Here are four uses of the word \textit{enter}:
+
+Please \underline{press} the \textbf{enter} \underline{key} in order to see the text "\texttt{enter}" on the screen.
+
+\textit{Explanation}:
+\begin{itemize}
+    \item \textit{Italics}: Used for the word "enter" when referring to its meaning.
+    \item \underline{Underline} with added word "press": Used to indicate the action on a keyboard key.
+    \item \textbf{Bold}: Used for the name of a keyboard key.
+    \item \texttt{Monospace} with quotation marks: Used for the word "enter" when it appears as part of input or output.
+\end{itemize}
+
+\subsection*{(h) Code, Ideas, SRS, and UM}
+
+While code in a programming language is a very precise way to specify the behavior of software, it is very \underline{difficult} to \underline{modify} when it is found to be wrong for any reason.
+
+On the other hand, ideas in someone's mind about the behavior of software are very \underline{easy} to \underline{change} when they are found to be wrong for any reason. However, it is \underline{difficult} for anyone to know for sure what the ideas \underline{are}.
+
+The nice thing about an SRS or UM is that it both (1) is \underline{easier} to \underline{change} than is program code when it is found to be wrong for any reason and (2) is \underline{clearer} than are ideas for anyone to know for sure what the SRS or UM \underline{says}.
+
+\textit{Explanation}: Code is hard to change; ideas are easy to change but hard to communicate; SRS/UM is easier to change than code and clearer than ideas.
+
+\section*{Question 4: NFRs and Cost Estimation}
+
+\subsection*{(a) Verification or Validation?}
+
+\textit{This decision is \textbf{verification} if S contains only functional requirements.}
+
+\textit{Example of a functional requirement: If the user enters their PIN, and the PIN is correct, then the system shall grant access.}
+
+\textit{Explanation}: Verification checks if the system meets the specified requirements. For functional requirements, this is straightforward.
+
+\subsection*{(b) Problems with "The CBS shall be user friendly."}
+
+\begin{itemize}
+    \item \textit{The term "user-friendly" is subjective and not clearly defined. Different users may have different interpretations of what constitutes user-friendliness.}
+    \item \textit{It is difficult to measure or test whether a system is "user-friendly" in an objective way. There are no specific, quantifiable criteria to determine if this requirement is met.}
+\end{itemize}
+
+\textit{Explanation}: Subjectivity and lack of measurability make it hard to define and test.
+
+\subsection*{(c) Problems with "The CBS shall have a fast response time."}
+
+\begin{itemize}
+    \item \textit{The term "fast" is vague and relative. It does not specify a clear, measurable performance target.}
+    \item \textit{The required response time may vary depending on the specific operation or context. A single "fast" criterion may not be appropriate for all situations.}
+\end{itemize}
+
+\textit{Explanation}: Vagueness and context-dependency make it difficult to define and apply.
+
+\subsection*{(d) Linguists}
+
+Linguists consider a word like fast to be \underline{vague} because, in any situation, it has no clear, natural, obvious \underline{meaning}.
+
+\textit{Explanation}: "Fast" lacks a precise, universal meaning.
+
+\subsection*{(e) Mathematicians}
+
+Mathematicians consider whether a CBS has a fast response time to be (1) not Boolean, with answers \texttt{true} or \texttt{false} and nothing in between, but to be (2) \underline{continuous}, with answers having all values ranging from \underline{0} to \underline{$\infty$ (infinity)}.
+
+\textit{Explanation}: Response time is a continuous variable, not a binary true/false.
+
+\subsection*{(f) Sources of Error in Cost Prediction}
+
+\begin{itemize}
+    \item \textit{Incomplete or incorrect understanding of the requirements, leading to underestimation of the work involved.}
+    \item \textit{Unforeseen technical challenges or changes in technology that can increase development time and effort.}
+    \item \textit{Inaccurate estimation of the size or complexity of the software, leading to miscalculation of resource needs.}
+\end{itemize}
+
+\textit{Explanation}: Inaccurate requirements, unforeseen issues, and incorrect size/complexity estimates cause errors.
+
+\subsection*{(g) Biggest Influences on Cost}
+
+\begin{itemize}
+    \item \textit{The size and complexity of the software being developed.}
+    \item \textit{The experience and skill level of the development team.}
+    \item \textit{The number and type of Non-Functional Requirements (NFRs) and their associated constraints.}
+\end{itemize}
+
+\textit{Explanation}: Size/complexity, team skill, and NFRs are major cost drivers.
+
+\subsection*{(h) Function Point Analysis}
+
+Function Point Analysis shows how to estimate the number of \underline{function points} for a CBS from essentially the CBS's use cases, and then to estimate the CBS's code \underline{size} from these same \underline{function points}.
+
+\textit{Explanation}: Function points, derived from use cases, help estimate code size.
+
+\subsection*{(i) COCOMO}
+
+COCOMO shows how to estimate for a CBS, both its
+\begin{enumerate}
+    \item project \underline{effort} in person months, and
+    \item project \underline{duration} in months
+\end{enumerate}
+from the CBS's estimated code \underline{size} obtained from a Function Point Analysis of the CBS.
+
+\textit{Explanation}: COCOMO uses code size (from function points) to estimate effort and duration.
+
+\subsection*{(j) Team Size and Productivity}
+
+\textbf{Answer:} \underline{7}
+
+\textit{Explanation}: Let $n$ be the team size. The total productive work is $8n$. The communication overhead is $n(n-1)$. The net productive work is $8n - n(n-1)$.
+We want to find the smallest $n$ such that adding one more person (increasing the team size to $n+1$) reduces the net productive work. So we need to find $n$ such that:
+$8n - n(n-1) > 8(n+1) - (n+1)(n+1-1)$
+$8n - n^2 + n > 8n + 8 - n^2 - n$
+$9n - n^2 > 7n + 8 - n^2$
+$2n > 8$
+$n > 4$
+When $n=7$, adding one more person (to make it 8) reduces productive work.
+$8(7) - 7(6) = 56 - 42 = 14$
+$8(8) - 8(7) = 64 - 56 = 8$
+
+Hence, Fred Brooks said, "Adding more people to a late project makes it even \underline{later}.".
+
+\section*{Question 5: Ambiguity}
+
+\subsection*{(a) Distributing "only"}
+
+\begin{itemize}
+    \item[1.] \checkmark Only my e-key operates my Prius.
+    \item[2.] My only e-key operates my Prius.
+    \item[3.] My e-key only operates my Prius.
+    \item[4.] My e-key operates only my Prius.
+    \item[5.] \checkmark My e-key operates my only Prius.
+\end{itemize}
+
+\textbf{Sentence with as many onlys as possible:}
+My only e-key operates my only Prius.
+
+\textit{Explanation}:
+\begin{itemize}
+    \item Sentences 1 and 5 are true given A.
+    \item Sentence 1: Only one thing operates my Prius, and that is my e-key.
+    \item Sentence 5: I have only one Prius, and my e-key operates it.
+    \item The combined sentence emphasizes that I have one e-key and one Prius, and the e-key operates the Prius.
+\end{itemize}
+
+\subsection*{(b) Three Additional Methods}
+
+\begin{enumerate}[label=(\arabic*)]
+    \item My \underline{only} finger prints \underline{also} operate my Prius.
+    \item My \underline{only} PIN \underline{also} operates my Prius.
+    \item A cellphone loaded with an app that imitates my e-key \underline{also} operates \underline{only} my Prius.
+\end{enumerate}
+
+\textit{Explanation}:
+\begin{itemize}
+    \item "Only" is needed before "finger prints" and "PIN" to indicate that these are specific instances of those methods belonging to me.
+    \item "Also" is needed to indicate that these are additional methods besides the e-key.
+    \item In sentence 8, "only" is needed before "my Prius" to emphasize that the cellphone app only operates my specific Prius.
+\end{itemize}
+
+\subsection*{(c) Sentences Still True Given A and B}
+
+Given A and B, none of sentences 1 through 5 are still true.
+
+\textit{Explanation}: A and B state that other methods besides the e-key can operate the Prius, invalidating all the sentences.
+
+\subsection*{(d) Joe's Finger Prints}
+
+\begin{enumerate}[label=(\arabic*)]
+    \setcounter{enumi}{8}
+    \item Joe's \underline{only} finger prints \underline{also} operate \underline{only} my Prius.
+\end{enumerate}
+
+\textit{Explanation}:
+\begin{itemize}
+    \item "Only" before "finger prints" specifies Joe's prints, not just any finger prints.
+    \item "Also" indicates this is an additional method.
+    \item "Only" before "my Prius" clarifies that Joe's prints operate only my car.
+\end{itemize}
+
+\subsection*{(e) True Sentences Given A, B, and C}
+
+\begin{itemize}
+    \item[10.] Only my e-key operates my Prius.
+    \item[11.] Only an e-key operates my Prius.
+\end{itemize}
+
+\textit{Explanation}: Neither sentence is true because A, B, and C state that other methods besides an e-key (and specifically my e-key) can operate the Prius.
+
+\subsection*{(f) Correcting Incorrect Sentences}
+
+\begin{itemize}
+    \item[12.] Pay for \checkmark what only you need.
+    \item[13.] A paper's abstract summarizes \checkmark only the paper.
+    \item[14.] I smoke \checkmark only Winstons.
+    \item[15.] Of the two versions, please read the second \checkmark only in full detail.
+    \item[16.] I eat \checkmark only vegetables.
+    \item[17.] A hamburger should be eaten \checkmark only after cooking it.
+\end{itemize}
+
+\textit{Explanation}: In each case, "only" is moved to immediately precede the word or phrase it logically modifies.
+
+\subsection*{(g) Empirical Test}
+
+\textit{The empirical test involved giving people sentences with "only" misplaced before the main verb and asking them to correct the sentences. The observation was that most people incorrectly placed "only" before the main verb instead of before the word being limited.}
+
+\textit{Explanation}: People were tested on their placement of "only" in sentences.
+
+\subsection*{(h) Developer's Action on Ambiguous Statement}
+
+\textit{The developer should seek clarification from the stakeholders who provided the specification. They should ask for a more precise and unambiguous statement of the requirement to ensure that the implemented system meets the intended needs.}
+
+\textit{Explanation}: Clarify with stakeholders to resolve ambiguity.
+
+\section*{Question 6: State Machines and Linear Temporal Logic}
+
+\subsection*{(a) Modified State Machine}
+\begin{center}
+\begin{tabular}{c c c c c c}
+& & KULBP[CHK] & & DDUL+4ODL & \\
+TMK[$\neg$KIC] & $\swarrow$ & & & $\downarrow$ PIUDB[$\neg$KIC] \\
+ADL & & & & ADUL & \\
+& & KLBP[KOC \& CHK] & & $\nearrow$ BUP1[$\neg$CHK] \\
+& & & & $\downarrow$ [KIC] \\
+& & & & $\uparrow$ [KIC] \\
+& & & & PSP[KIC] \\
+& & HSSable & $\rightarrow$ & HSOn & \\
+& & & & $\leftarrow$ & \\
+& & & & PSP[CHK] &
+\end{tabular}
+\end{center}
+\textbf{Legend:}
+\begin{itemize}
+    \item ADL: all doors locked
+    \item DDUL+4ODL: driver door unlocked and 4 other doors locked
+    \item ADUL: all doors unlocked
+    \item HSSable: hybrid system startable
+    \item HSOn: hybrid system on
+    \item KULBP: key's unlock button pushed
+    \item KLBP: key's lock button pushed
+    \item PSP: power switch pushed
+    \item CHK: car hears key
+    \item Pw2SoA: pushed within 2 seconds of another
+    \item KIC: key in cabin
+    \item KOC: key outside cabin
+    \item TMK: Turn Manual Key
+    \item PIUDB: Push Interior Unlock-Doors Button
+    \item BUP1: Backup Method 1
+    \item BUP2: Backup Method 2
+\end{itemize}
+\textit{Explanation}:
+\begin{itemize}
+    \item \textbf{TMK}: Added a transition from ADL to DDUL+4ODL labeled "TMK[$\neg$KIC]" (Turn Manual Key when the key is not in the cabin).
+    \item \textbf{PIUDB}: Added a transition from DDUL+4ODL to ADUL labeled "PIUDB[$\neg$KIC]" (Push Interior Unlock-Doors Button when the key is not in the cabin).
+    \item \textbf{BUP1}: Added a transition from ADUL to HSSable labeled "BUP1[$\neg$CHK]" (Backup Method 1 when the car does not hear the key).
+    \item \textbf{BUP2}: The transition from ADL to HSSable will be replaced by a new state machine for Backup Method 2 as explained in part (b).
+\end{itemize}
+
+\subsection*{(b) Replacing Backup Method Transitions}
+
+\textbf{Complete the sentence:} To fully reflect the behavior of a backup method, each such simple transition should be replaced by \textit{a new state machine that describes the specific steps and conditions involved in that backup method, including any intermediate states and transitions}.
+
+\textit{Explanation}: A single transition is insufficient; a detailed state machine is needed for each backup method.
+
+\subsection*{(c) Linear Temporal Logic Specification of the Original State Machine}
+
+\begin{enumerate}
+    \item $\Box$(ADL $\wedge$ KULBP $\wedge$ CHK $\rightarrow$ $\bigcirc$DDUL+4ODL)
+    \item $\Box$(DDUL+4ODL $\wedge$ KULBP $\wedge$ CHK $\wedge$ Pw2SoA $\rightarrow$ $\bigcirc$ADUL)
+    \item $\Box$(ADUL $\wedge$ KIC $\rightarrow$ $\bigcirc$HSSable)
+    \item $\Box$(HSSable $\wedge$ PSP $\rightarrow$ $\bigcirc$HSOn)
+    \item $\Box$(HSOn $\wedge$ PSP $\rightarrow$ $\bigcirc$HSSable)
+    \item $\Box$(HSSable $\wedge$ KLBP $\wedge$ KOC $\wedge$ CHK$\rightarrow$ $\bigcirc$ADL)
+    \item $\Box$(ADL $\wedge$ KLBP $\wedge$ KOC $\wedge$ CHK $\rightarrow$ $\bigcirc$ADL)
+\end{enumerate}
+
+\textit{Explanation}: Each formula describes a transition in the original state machine using LTL connectives.
+
+\subsection*{(d) Temporal Logic Formulae}
+
+\begin{enumerate}
+    \item T (A) $\Rightarrow$ $\Diamond$(A)
+    \item F $\Diamond$(A) $\Rightarrow$ $\Box$(A)
+    \item T $\Box$(A) $\Rightarrow$ $\Box$($\Box$(A))
+    \item T $\Box$(A) $\Rightarrow$ $\Diamond$(A)
+    \item T $\Box$(A) $\Rightarrow$ $\bigcirc$(A)
+    \item F $\bigcirc$(A) $\Rightarrow$ $\Box$(A)
+    \item T $\Diamond$($\Box$(A)) $\Rightarrow$ $\bigcirc$($\Box$(A))
+    \item F $\bigcirc$($\Box$(A)) $\Rightarrow$ $\Diamond$($\Box$(A))
+    \item T $\Diamond$($\bigcirc$(A)) $\Rightarrow$ $\bigcirc$($\Diamond$(A))
+    \item T $\bigcirc$($\Diamond$(A)) $\Rightarrow$ $\Diamond$($\bigcirc$(A))
+    \item F $\bigcirc$($\Box$(A)) $\Rightarrow$ $\Box$($\bigcirc$(A))
+    \item F $\bigcirc$($\Diamond$(A)) $\Rightarrow$ $\Diamond$($\bigcirc$(A))
+    \item T $\Box$($\Diamond$(A)) $\Rightarrow$ $\Diamond$($\Box$(A))
+    \item T $\Diamond$($\Box$(A)) $\Rightarrow$ $\Box$($\Diamond$(A))
+    \item T (A $\mathcal{U}$ B) $\Rightarrow$ $\Diamond$(B)
+    \item F $\Diamond$(B) $\Rightarrow$ (A $\mathcal{U}$ B)
+    \item T $\Box$(A) $\Rightarrow$ ($\bigcirc$(A) $\vee$ $\Box$(A))
+    \item T ($\bigcirc$(A) $\vee$ $\Box$(A)) $\Rightarrow$ $\Diamond$(A)
+\end{enumerate}
+
+\textit{Explanation}: Each formula is evaluated based on the definitions of the LTL connectives.
+
+\section*{Question 7: Requirements Determination is Unstoppable and the Requirements Iceberg}
+
+\subsection*{(a) Reasons for Continued Requirements Determination}
+
+\textit{The most fundamental reasons are that (1) the initial specification S is often incomplete, meaning that not all necessary details or functionalities are captured, and (2) new requirements or changes to existing requirements may emerge during development as the stakeholders' understanding of the system evolves or as external factors change. As developers write code and encounter unforeseen issues or edge cases not covered by S, they need to determine how to handle them, effectively continuing the requirements determination process. Similarly, new insights or changing needs from the customer may necessitate revisiting and updating the requirements.}
+
+\textit{Explanation}: Incomplete initial specs and evolving needs/understanding necessitate continued requirements determination.
+
+\subsection*{(b) Informal and Formal in Jackson's Quotation}
+
+\textbf{Informal:} \textit{The informal part refers to the real-world needs, desires, and goals of the stakeholders, as well as the properties and constraints of the environment in which the system will operate. These are often expressed in natural language and are subject to interpretation and change.}
+
+\textbf{Formal:} \textit{The formal part refers to the precise, unambiguous specification of the system's behavior, often expressed using formal methods like logic, state machines, or mathematical models. This formal specification serves as the basis for implementation and verification.}
+
+\textit{Explanation}: Informal = real-world needs/environment; Formal = precise system specification.
+
+\subsection*{(c) Scope Determining and Scope Determined Requirements}
+
+\textbf{Scope Determining (G):}
+\begin{itemize}
+    \item \textit{The IEKS shall support unlocking the car using a smartphone app.}
+    \item \textit{The IEKS shall allow authorized users to start the car remotely.}
+\end{itemize}
+
+\textbf{Scope Determined (D):}
+\begin{itemize}
+    \item \textit{The IEKS shall recognize an unlock command within 2 seconds of receiving a valid signal from the key fob.}
+    \item \textit{The IEKS shall lock all doors when the key fob's lock button is pressed and the key fob is outside the car.}
+\end{itemize}
+
+\textit{Explanation}:
+\begin{itemize}
+    \item G requirements define new features (smartphone app, remote start).
+    \item D requirements specify details within the defined scope (unlock timing, lock conditions).
+\end{itemize}
+
+\subsection*{(d) Head Start a Poor Bet}
+
+\textit{This head start is a poor bet because it assumes that the developers' current understanding of the domain is accurate and complete, which is often not the case. A significant portion of the code written based on this incomplete understanding (potentially much more than (100-P)\%) may need to be changed or discarded when the actual requirements are determined. This can lead to wasted effort and rework, ultimately delaying the project rather than providing a head start. The larger P is, the smaller the wasted effort is, but the effort to talk to the customer to elicit the requirements is unaffected by P. Therefore, the larger P is, the smaller the fraction of total effort is wasted, but the smaller P is, the larger the fraction of effort is wasted. }
+
+\textit{A better use of the rest of the team would be to involve them in the requirements elicitation process, including activities like brainstorming, scenario development, and domain modeling. This helps ensure that everyone on the team develops a shared understanding of the requirements and reduces the risk of wasted effort later.}
+
+\textit{The Martin & Tsai study showed that involving the development team in the requirements elicitation process (in this case, by having them build a prototype based on an initial SRS) helped uncover significant errors and ambiguities in the SRS, which would have been much harder and costlier to discover later. This demonstrates the benefit of having the whole team engaged in understanding the requirements early on.}
+
+\subsection*{(e) Discover and Specify All Requirements}
+
+\textbf{Why is doing so impossible?} \textit{It's impossible to discover and specify all requirements upfront because (1) stakeholders' needs and understanding evolve over time, leading to new requirements or changes to existing ones, and (2) the complexity of real-world systems often makes it impossible to anticipate all possible scenarios and edge cases upfront.}
+
+\textbf{Why is doing so necessary?} \textit{While impossible to achieve fully, striving to discover and specify as many requirements as possible upfront is necessary to minimize the cost and effort of rework later. Clear and complete requirements provide a solid foundation for design and implementation, reducing the likelihood of costly changes and errors later in the development cycle.}
+
+\textbf{So, what is a solution?} \textit{A practical solution is to focus on identifying and specifying the scope-determining (G) requirements first. These establish the overall scope and provide a framework for defining the scope-determined (D) requirements. As the project progresses and more details become known, the D requirements can be added and refined iteratively, reducing the impact of evolving needs and unforeseen issues.}
+
+\subsection*{(f) Software vs. Program}
+
+\textbf{In what ways is each of the following software?}
+
+\textit{(1) A complete NL RS, S, is software because it represents an executable model of the desired system behavior, albeit at a high level of abstraction. It can be "executed" by humans to understand how the system is supposed to behave in different scenarios.}
+
+\textit{(2) A C program P that correctly implements S is software because it represents an executable model of the desired system behavior, albeit at a low level of abstraction. It can be "executed" by computer hardware to produce the actual system behavior.}
+
+\textbf{In what ways are the so-called computers that execute S and P different?}
+
+\textit{The "computer" that executes S is a human, who uses natural language processing and reasoning to understand and interpret the requirements. The "computer" that executes P is a computer hardware system, which uses electronic circuits and machine code to perform calculations and operations.}
+
+\subsection*{(g) ARPAnet/Internet}
+
+\textbf{Original Requirements:} The original requirements for the ARPAnet were that it be \textit{able to continue functioning even if parts of the network were destroyed or unavailable due to attack or failure}.
+
+\textbf{Does the Internet satisfy these original requirements?} \textit{Yes, the Internet largely satisfies these original requirements due to its decentralized architecture and routing protocols, allowing it to route traffic around failed or unavailable nodes. However, the increasing centralization of certain services and infrastructure introduces new vulnerabilities.}
+
+\textbf{Explain how the Internet is a classic E-type system:} \textit{The Internet is a classic E-type system because it evolves and adapts to changing user needs and technological advancements. It exhibits self-modifying behavior as new protocols, services, and applications are developed and deployed, continuously changing the system's functionality and complexity.}
+
+\textbf{Explain what often happens with a requirements-exploring prototype:} \textit{Often, the prototype is quickly developed with minimal concern for non-functional requirements like performance, security, and maintainability. When this prototype is then pressed into production, these neglected aspects become major problems, leading to instability, security vulnerabilities, and difficulties in maintenance and scaling.}
+
+\textbf{Explain what should happen in this case:} \textit{A new system should be built from scratch, taking into account all the learned requirements from the prototype, including both functional and non-functional requirements. The prototype serves as a valuable source of information but should not be directly used as the basis for the production system.}
+
+\textbf{What does Berry say needs to be done to fix the Internet to be secure?} \textit{Berry suggests that a fundamental redesign of the Internet's architecture and protocols is necessary to achieve true security. This would involve addressing issues like the lack of built-in authentication and authorization mechanisms, the vulnerability to spoofing and denial-of-service attacks, and the difficulty in tracking down malicious actors.}
+
+\textbf{What does Kleinrock say needs to be done to save the Internet from the dark side?} \textit{Kleinrock emphasizes the need for a layered approach to security, involving technological solutions, legal and regulatory frameworks, and ethical guidelines. He advocates for developing "architectural immunity" to make the Internet more resilient to attacks and for fostering a culture of responsible online behavior.}
+
+
+
+\section*{Question 8: Graduate Student Lectures}
+
+\subsection*{(a) Henry Pabst's Internship}
+
+\textbf{Major mistake during elicitation:} \textit{Henry's major mistake was not talking to the key stakeholders who actually perform the monthly key rotation. He relied on his own assumptions and understanding of the process, which turned out to be incomplete and inaccurate.}
+
+\textbf{Bad result of this mistake:} \textit{As a result, Henry developed a solution that did not fully address the stakeholders' needs and workflow. His automated tool did reduce the number of keys to manage but did not fit seamlessly into the existing process, ultimately not achieving the desired improvement in rotation speed.}
+
+\textbf{Other mistakes in elicitation:}
+\begin{itemize}
+    \item \textit{Not spending enough time understanding the existing system and its complexities.}
+    \item \textit{Making assumptions about the stakeholders' needs without validating them.}
+    \item \textit{Not considering the broader context of the key rotation process and its implications.}
+\end{itemize}
+
+\textbf{Realistic deployment expectation?} \textit{No, it was not realistic for Henry to expect deployment within his 4-month internship. His plan underestimated the time needed for requirements elicitation, system understanding, and development, as well as potential integration challenges.}
+
+\textbf{More reasonable deliverable:} \textit{A more reasonable deliverable would have been a detailed requirements specification, a working prototype demonstrating the core functionality of his tool, and a plan for integration and testing.}
+
+\subsection*{(b) RongHao Yang's Internships}
+
+\textbf{Advantages of I-company:}
+\begin{itemize}
+    \item \textit{More resources and support.}
+    \item \textit{Opportunity to work on a larger scale project.}
+    \item \textit{Potential for greater impact.}
+\end{itemize}
+
+\textbf{Advantages of W-company:}
+\begin{itemize}
+    \item \textit{More autonomy and ownership.}
+    \item \textit{Faster-paced development cycle.}
+    \item \textit{Greater opportunity to learn and grow.}
+\end{itemize}
+
+\textbf{**1** Why build an optimizing tool?} \textit{I-company wanted to build an optimizing tool to improve the performance of its flagship database (IDB), potentially attracting more customers and increasing revenue.}
+
+\textbf{Why AI unnecessary?} \textit{RongHao found that existing SQL optimization techniques were sufficient to achieve the desired performance improvements. The AI aspect added complexity without providing significant practical benefit.}
+
+\textbf{**2** Why an AI-based tool?} \textit{I-company likely wanted to market its database as being "AI-powered" to gain a competitive advantage and attract attention, even if the AI aspect wasn't technically necessary.}
+
+\textbf{Reason for secrecy:} \textit{I-company might have been keeping the AI aspect secret to avoid revealing its marketing strategy to competitors or to manage customer expectations about the actual role of AI in the tool.}
+
+\textbf{Kind of requirement (i):} \textit{Functional requirement}
+
+\textbf{Kind of requirement (ii):} \textit{Non-functional requirement (NFR)}
+
+\textbf{Refinement of "kind" classification:} As a refinement of this "kind" classification, Requirement (ii) is a \underline{technology} ability requirement.
+
+
+
+\end{document}
