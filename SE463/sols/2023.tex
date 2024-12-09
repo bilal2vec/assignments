@@ -1,0 +1,549 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+
+\title{SE463/CS445 Final Exam Answers}
+\author{Bard}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Question 1: Domain Model, Use Cases, Domain Assumptions, and Exceptions}
+
+\subsection*{(a) Domain Model (DM)}
+
+Here's the completed domain model.
+
+\begin{center}
+\begin{verbatim}
+                                    1       1     1       1
+                +---------------+  |       |-----+---------------+
+                | TelephoneNumber|--|-------|     |  TextMessage  |
+                +---------------+  |       |-----+---------------+
+                    |  1         *  |       |  *           |  1
+                    |               |       |              |
+                    |               |       |              |
+        1   +-------+-------+       |       |     +--------+--------+
+   +--------|    PSTNet     |-------+       +-----|     Internet    |--------+
+   |        +---------------+    1  |    *        +-----------------+        |
+   |                                |                                       |
+   |                                |                                       |
+   |          1      +------------+ |                                       |
+   |  +--------------|  SMSnet    |-+                                       |
+   |  |    1         +------------+                                        |
+   |  |                                                                    |
+   |  |                                                                    |
+   |  |                                                                    |
+Sys|  |                                                                    |
+   |  |               1        *                                           | 1
+   |  |  +----------------------------+       +-------------------------+ |
+   +--+--|       SourceCellphone      |-------|     TargetCellphone     |-+--+
+      |  +----------------------------+       +-------------------------+ |  |
+      |                 |                                |                |  |
+      |                 |                                |                |  |
+      |        1        | *                              | *       1       |  |
+      |  +--------------+--------------+       +-------+-------------+   |  |
+      |  |       CellphoneUser         |-------|     CellphoneUser   |   |  |
+      +--|          <<actor>>          |       |        <<actor>>    |---+  |
+         +-----------------------------+       +---------------------+      |
+                                                                          |
+                                                                    Env |
+                                                                          |
+\end{verbatim}
+\end{center}
+
+\textbf{Explanation:}
+
+\begin{itemize}
+    \item \textbf{Classes:}
+    \begin{itemize}
+        \item \texttt{CellphoneUser} (actor in the environment): Represents the user who interacts with the system.
+        \item \texttt{Cellphone}: Represents the mobile device, divided into \texttt{SourceCellphone} and \texttt{TargetCellphone} for clarity.
+        \item \texttt{TelephoneNumber}: Represents the unique identifier for a cellphone.
+        \item \texttt{TextMessage}: Represents the message sent between cellphones.
+        \item \texttt{SMSnet}: The system component handling SMS message transmission.
+        \item \texttt{PSTNet}: Part of the environment, representing the traditional phone network.
+        \item \texttt{Internet}: Part of the environment, representing the internet, which can be used for messaging in a broader context.
+    \end{itemize}
+    \item \textbf{Arcs and Multiplicities:}
+    \begin{itemize}
+        \item A \texttt{CellphoneUser} can use many \texttt{Cellphone}s (1 to *).
+        \item A \texttt{Cellphone} is used by one \texttt{CellphoneUser} (1 to 1).
+        \item A \texttt{SourceCellphone} sends a \texttt{TextMessage} to a \texttt{TargetCellphone} (1 to 1).
+        \item A \texttt{TextMessage} is sent by one \texttt{SourceCellphone} and received by one \texttt{TargetCellphone} (1 to 1).
+        \item A \texttt{TelephoneNumber} identifies one \texttt{Cellphone} (1 to 1).
+        \item A \texttt{Cellphone} has one \texttt{TelephoneNumber} (1 to 1).
+        \item \texttt{SMSnet} interacts with both \texttt{PSTNet} and \texttt{Internet} (1 to *).
+    \end{itemize}
+    \item \textbf{Sys and Env Boundaries:}
+    \begin{itemize}
+        \item \texttt{SMSnet}, \texttt{SourceCellphone}, and \texttt{TargetCellphone} are within the system (Sys) boundary.
+        \item \texttt{CellphoneUser}, \texttt{PSTNet}, and \texttt{Internet} are within the environment (Env) boundary.
+    \end{itemize}
+    \item \textbf{Actor:} \texttt{CellphoneUser} is marked as an actor because it initiates actions within the system.
+\end{itemize}
+
+\subsection*{(b) Use Case Containers and Invokers}
+
+\begin{itemize}
+    \item \textbf{composeTextMessage:}
+    \begin{itemize}
+        \item container: \texttt{SourceCellphone}
+        \item invoker: \texttt{CellphoneUser}
+    \end{itemize}
+    \item \textbf{displayTelephoneNumber:}
+    \begin{itemize}
+        \item container: \texttt{Cellphone}
+        \item invoker: \texttt{CellphoneUser}, \texttt{SMSnet}
+    \end{itemize}
+    \item \textbf{keyInTelephoneNumber:}
+    \begin{itemize}
+        \item container: \texttt{SourceCellphone}
+        \item invoker: \texttt{CellphoneUser}
+    \end{itemize}
+    \item \textbf{displayTextMessage:}
+    \begin{itemize}
+        \item container: \texttt{Cellphone}
+        \item invoker: \texttt{CellphoneUser}, \texttt{SMSnet}
+    \end{itemize}
+    \item \textbf{retrieveLatestReceivedTextMessage:}
+    \begin{itemize}
+        \item container: \texttt{TargetCellphone}
+        \item invoker: \texttt{CellphoneUser}
+    \end{itemize}
+    \item \textbf{sendComposedTextMessage:}
+    \begin{itemize}
+        \item container: \texttt{SourceCellphone}
+        \item invoker: \texttt{CellphoneUser}
+    \end{itemize}
+    \item \textbf{viewHistoryOfOneTargetTelephoneNumber:}
+    \begin{itemize}
+        \item container: \texttt{Cellphone}
+        \item invoker: \texttt{CellphoneUser}
+    \end{itemize}
+\end{itemize}
+
+\textbf{Explanation:}
+\begin{itemize}
+    \item \textbf{Container:} The class that "contains" the use case, meaning it's responsible for the logic and data related to that use case.
+    \item \textbf{Invoker:} The class that initiates or triggers the use case.
+\end{itemize}
+
+\subsection*{(c) Parameters of sendComposedTextMessage}
+
+\begin{itemize}
+    \item Parameter 1:
+    \begin{itemize}
+        \item Object/Name: \texttt{theTextMessage}
+        \item Class/Type: \texttt{TextMessage}
+    \end{itemize}
+    \item Parameter 2:
+    \begin{itemize}
+        \item Object/Name: \texttt{theTargetTelephoneNumber}
+        \item Class/Type: \texttt{TelephoneNumber}
+    \end{itemize}
+\end{itemize}
+
+\textbf{Explanation:} This use case needs the message content and the recipient's phone number to send the message.
+
+\subsection*{(d) Parameters of viewHistoryOfOneTargetTelephoneNumber}
+
+\begin{itemize}
+    \item Parameter 1:
+    \begin{itemize}
+        \item Object/Name: \texttt{theTargetTelephoneNumber}
+        \item Class/Type: \texttt{TelephoneNumber}
+    \end{itemize}
+\end{itemize}
+
+\textbf{Explanation:} To view the history, we need the target phone number to filter the relevant messages.
+
+\subsection*{(e) Parameters of sendTextMessage (Internal Use Case)}
+
+\begin{itemize}
+    \item Parameter 1:
+    \begin{itemize}
+        \item Object/Name: \texttt{theTextMessage}
+        \item Class/Type: \texttt{TextMessage}
+    \end{itemize}
+    \item Parameter 2:
+    \begin{itemize}
+        \item Object/Name: \texttt{theTargetTelephoneNumber}
+        \item Class/Type: \texttt{TelephoneNumber}
+    \end{itemize}
+\end{itemize}
+
+\textbf{Explanation:} Even for the internal use case, \texttt{SMSnet} still needs the message content and the target phone number.
+
+\subsection*{(f) Exceptions for sendComposedTextMessage}
+
+\begin{enumerate}
+    \item **Invalid Telephone Number:** The entered telephone number is not a valid format or does not exist.
+    \item **Network Unavailable:** The cellphone cannot connect to the SMS network.
+    \item **Message Too Long:** The composed message exceeds the 160-character limit.
+    \item **Target Device Off:** The target cellphone is powered off and cannot receive the message.
+\end{enumerate}
+
+\textbf{Explanation:} These are potential issues that could prevent successful message sending.
+
+\subsection*{(g) Domain Assumption A}
+
+\textbf{Domain Assumption A:} A cellphone must be powered on to send or receive text messages and to receive acknowledgments.
+
+\textbf{Explanation:} This is stated in R1, R2, R3, and R4.
+
+\subsection*{(h) Mitigation of Failure for A}
+
+No, failure for A (cellphone being powered off) cannot be mitigated by anything the cellphone can do.
+
+\textbf{Explanation:} If the phone is off, it has no power to execute any actions.
+
+\subsection*{(i) Relationship Between Arrival Time and Acknowledgment Time}
+
+(1) The actual arrival time of the \texttt{TextMessage} at the \texttt{TargetCellphone} will be \textbf{before or at the same time} as (2) the time reported in the acknowledgment at the \texttt{SourceCellphone}.
+
+\textbf{Explanation:} The acknowledgment is sent after the message is received. Network delays might cause the acknowledgment to arrive later, but it cannot arrive before the message is received. R3 says the target device sends an acknowledgement of delivery, therefore it must have been delivered before the acknowledgement is sent.
+
+\section*{Question 2: G and D Requirements}
+
+\begin{itemize}
+    \item (a) If the target device is shut down, then delay the transmission until the device is back on.
+    \begin{itemize}
+        \item \textbf{G Requirement.} \checkmark
+        \item D Requirement.
+    \end{itemize}
+    \item (b) A text message can be an image.
+    \begin{itemize}
+        \item \textbf{G Requirement.} \checkmark
+        \item D Requirement.
+    \end{itemize}
+    \item (c) If the target device is not capable of receiving text messages, don't transmit the message and inform the user.
+    \begin{itemize}
+        \item G Requirement.
+        \item \textbf{D Requirement.} \checkmark
+    \end{itemize}
+    \item (d) A text message can be a file of any format.
+    \begin{itemize}
+        \item \textbf{G Requirement.} \checkmark
+        \item D Requirement.
+    \end{itemize}
+    \item (e) If the phone number to which a message is being sent is not associated with any device, don't transmit the message and inform the user.
+    \begin{itemize}
+        \item G Requirement.
+        \item \textbf{D Requirement.} \checkmark
+    \end{itemize}
+    \item (f) If the target device of a text message is a cellphone, use the SMS network for transmitting the text message.
+    \begin{itemize}
+        \item G Requirement.
+        \item \textbf{D Requirement.} \checkmark
+    \end{itemize}
+    \item (g) If the target device of a text message is a landline phone, use the PSTN for transmitting the text message.
+    \begin{itemize}
+        \item \textbf{G Requirement.} \checkmark
+        \item D Requirement.
+    \end{itemize}
+    \item (h) If the phone number to which a message is being sent is not well-formed, don't transmit the message and inform the user.
+    \begin{itemize}
+        \item G Requirement.
+        \item \textbf{D Requirement.} \checkmark
+    \end{itemize}
+    \item (i) The acknowledgement of delivery of a text message shows the text message's recipient's phone number and actual arrival date and time.
+    \begin{itemize}
+        \item \textbf{G Requirement.} \checkmark
+        \item D Requirement.
+    \end{itemize}
+    \item (j) Pair a cellphone being used to send and receive text messages with a computer so that the computer's message app can send and receive text messages via the cellphone, as if the computer were the cellphone; the text messages are stored in the cellphone.
+    \begin{itemize}
+        \item \textbf{G Requirement.} \checkmark
+        \item D Requirement.
+    \end{itemize}
+    \item (k) An arriving text message shows the text message's sender's phone number and arrival date and time.
+    \begin{itemize}
+        \item \textbf{G Requirement.} \checkmark
+        \item D Requirement.
+    \end{itemize}
+    \item (l) If both the sending cellphone and the receiving device of a text message are currently connected to the Internet, use the Internet for transmitting the text message.
+    \begin{itemize}
+        \item \textbf{G Requirement.} \checkmark
+        \item D Requirement.
+    \end{itemize}
+    \item (m) An arriving text message shows the text message's sender's phone number and sending date and time.
+    \begin{itemize}
+        \item \textbf{G Requirement.} \checkmark
+        \item D Requirement.
+    \end{itemize}
+        \item (n) A text message can be sent to a set of telephone numbers.
+    \begin{itemize}
+        \item \textbf{G Requirement.} \checkmark
+        \item D Requirement.
+    \end{itemize}
+\end{itemize}
+
+\textbf{Explanation:}
+\begin{itemize}
+    \item \textbf{G (Scope Determining):} These requirements expand the scope of the system beyond the initial R1-R4. They introduce new features, functionalities, or target devices.
+    \item \textbf{D (Scope Determined):} These requirements specify details within the existing scope defined by R1-R4. They deal with error handling, specific network usage, and constraints within the defined functionality.
+\end{itemize}
+
+\subsection*{(o) Source of D Requirements}
+
+\subsection*{(o) Source of D Requirements}
+
+\textit{Question \textbf{1}, Subquestion \textbf{(f)}.}
+
+\textbf{Explanation:} The exceptions listed in 1(f) are D requirements because they specify how the system should behave in specific situations within the defined scope of sending text messages.
+
+\section*{Question 3: Linear Temporal Logic and State Machines}
+
+\subsection*{(a) Finite State Machine}
+
+\begin{verbatim}
+         But3      +-------+
+    +------------->|       |
+    |              |  ST   |
+    |     Mode     |       |
+    +------------->|       |
+    |              +-------+
++-------+             |  ^
+|       |             |  | But3 & TR
+|  S12  |             v  |
+|       |          +-------+
+|       |    Off   |       |
+|       +--------->|  SL   |
++-------+          |       |
+    ^              +-------+
+    |                 ^
+    |                 |
+    |      But2      |
+    |                |
+    |            +-------+
+    |            |       |
+    +------------+  S24  |
+         But3    |       |
+                 +-------+
+                    ^
+                    |
+                    | On
+                    |
+                 +-------+
+                 |       |
+                 |  SN   |
+                 |       |
+                 +-------+
+\end{verbatim}
+
+\textbf{Explanation:}
+
+\begin{itemize}
+    \item \textbf{States:} SN (ShowingNothing), S12 (Showing12hrClock), S24 (Showing24hrClock), ST (ShowingTimer), SL (ShowingLaptime).
+    \item \textbf{Initial State:} SN (marked with an incoming arrow).
+    \item \textbf{Transitions:} The transitions are derived directly from the LTL formulae. For example, `$((S12 \land Mode) \Rightarrow \bigcirc ST)$` translates to a transition from S12 to ST on the event "Mode".
+    \item \textbf{No Final State:} There are no final states specified in the LTL.
+\end{itemize}
+\subsection*{(b) Final State}
+
+No, the LTL formulae do not specify any state that is a final state.
+
+\textbf{Explanation:} The LTL formulae do not indicate that any state is terminal or absorbing.
+
+\subsection*{(c) State Machine Transitions in LTL}
+
+\[
+\Box(S1 \land e \land c \rightarrow \bigcirc S2)
+\]
+\[
+\Box(S1 \land e \land \neg c \rightarrow \bigcirc S3)
+\]
+
+**Explanation:**
+
+* $\Box(S1 \land e \land c \rightarrow \bigcirc S2)$: If the system is in state S1, event $e$ occurs, and condition $c$ is true, then in the next state, the system will be in S2.
+* $\Box(S1 \land e \land \neg c \rightarrow \bigcirc S3)$: If the system is in state S1, event $e$ occurs, and condition $c$ is false, then in the next state, the system will be in S3.
+* These two formulae cover all possible transitions from S1, as it's stated that there are no other events that can leave S1.
+
+\section*{Question 4: Ambiguity}
+
+\subsection*{(a) Ambiguous Sentence}
+
+\section*{Question 4: Ambiguity}
+
+\subsection*{(a) Ambiguous Sentence}
+
+\textbf{Ambiguous sentence:} \textbf{only} I eat eggs \textbf{only} at breakfast.
+
+\textbf{Explanation:} The placement of ``only" modifies what it refers to. This sentence means that you do not eat eggs at any meal other than breakfast, and you do not eat any other food at breakfast. This is equivalent to the logical statement.
+
+\subsection*{(b) ``A model is only as good..."}
+
+\textbf{Statement:} No, the sentence does not say what it is intended to mean.
+
+\textbf{Corrected sentence:} A model is as good only as its power to predict the outcomes in any situation.
+
+\textbf{Explanation:} The original sentence implies that a model's goodness is limited to its predictive power, but it doesn't explicitly say that its goodness cannot exceed its predictive power. The corrected sentence clarifies that the predictive power is the sole determining factor of the model's goodness.
+
+\subsection*{(c) ``Only pay for what you need."}
+
+\textbf{Statement:} No, the jingle does not say what it is intended to mean.
+
+\textbf{Corrected jingle:} Pay for only what you need.
+
+\textbf{Explanation:} The original jingle could be interpreted as ``the only thing you should do is pay for what you need." The corrected version clearly states that you should only pay for the coverage you require.
+
+\section*{Question 5: Nonfunctional Requirements}
+
+\subsection*{(a) NFR: The query response time is fast.}
+
+\begin{itemize}
+    \item \textbf{Measure:} The response time is less than \underline{1 second} for at least \underline{95\%} of the \underline{queries}. [No vagueness]
+    \item \textbf{Validity?:} Valid.
+\end{itemize}
+
+\textbf{Explanation:}
+
+\begin{itemize}
+    \item \textbf{Vagueness:} ``1 second" and ``95\%" are specific and measurable. ``Queries" could be vague, but in this context it is likely understood what types of queries are relevant.
+    \item \textbf{Validity:} The measure is valid because it provides a quantifiable way to assess response time.
+\end{itemize}
+
+\subsection*{(b) NFR: The system is reliable.}
+
+\begin{itemize}
+    \item \textbf{Measure:} The mean time to failure (MTTF) of the system is at least \underline{1 year}. [No vagueness]
+    \item \textbf{Validity?:} Valid.
+\end{itemize}
+
+\textbf{Explanation:}
+
+\begin{itemize}
+    \item \textbf{Vagueness:} ``1 year" is a specific time period.
+    \item \textbf{Validity:} MTTF is a standard metric for reliability, and ``at least 1 year" provides a clear threshold.
+\end{itemize}
+
+\subsection*{(c) NFR: The essay generated by ChatGPT is readable.}
+
+\begin{itemize}
+    \item \textbf{Measure:} The Flesch Reading Ease Score (FRES) of the essay is at least 60. [No vagueness]
+    \item \textbf{Validity?:} The measure may be invalid because a high FRES does not guarantee readability in all contexts or for all audiences. A very short essay can score very high, but not actually be readable. Or a simple sentence structure may score high, but not contain any meaning.
+\end{itemize}
+
+\textbf{Explanation:}
+
+\begin{itemize}
+    \item \textbf{Vagueness:} The FRES formula is well-defined, and ``at least 60" is a specific threshold.
+    \item \textbf{Validity:} While FRES is a common readability metric, it has limitations. It primarily considers sentence length and word complexity, but it doesn't assess the overall coherence, logic, or clarity of the content. Therefore, a high FRES doesn't guarantee true readability.
+\end{itemize}
+
+\subsection*{(d) NFR: The user interface (UI) is usable.}
+
+\begin{itemize}
+    \item \textbf{Measure:} At least 75\% of the \underline{users} in a \underline{test} of the UI say that the UI \underline{usable}. [No vagueness]
+    \item \textbf{Validity?:} The measure may be invalid because user opinions can be subjective and may not reflect actual usability. The term ``usable" is not defined, and neither is ``users" or ``test".
+\end{itemize}
+
+\textbf{Explanation:}
+
+\begin{itemize}
+    \item \textbf{Vagueness:} ``75\%" is specific, but ``users," ``test," and ``usable" are vague. What constitutes a ``user"? What kind of ``test" is conducted? What criteria define ``usable"?
+    \item \textbf{Validity:} Subjective user opinions can be unreliable indicators of usability. Users might rate a UI as usable even if they encounter difficulties or inefficiencies. Also, the definition of ``usable" can vary among individuals.
+\end{itemize}
+
+\subsection*{(e) NFR: The user interface (UI) is usable.}
+
+\begin{itemize}
+    \item \textbf{Measure:} At least 75\% of the \underline{users} in a \underline{test} of the UI are able to get a \underline{correct response} from the system in no more than \underline{2 minutes}. [No vagueness]
+    \item \textbf{Validity?:} The measure may be invalid because it depends on the complexity of the task and the definition of a ``correct response." ``Users" and ``test" are also not defined.
+\end{itemize}
+
+\textbf{Explanation:}
+
+\begin{itemize}
+    \item \textbf{Vagueness:} ``75\%" and ``2 minutes" are specific, but ``users," ``test," and ``correct response" are vague.
+    \item \textbf{Validity:} This measure is better than the previous one because it focuses on task completion. However, its validity depends on the chosen task's complexity and the definition of a ``correct response." A very simple task might be completed quickly even with a poor UI, while a complex task might take longer even with a good UI.
+\end{itemize}
+
+\subsection*{(f) NFR: The implementation is portable from a MSW platform to all other platforms.}
+
+\begin{itemize}
+    \item \textbf{Measure:} The implementation that is ported from a MSW platform to a \underline{Linux} platform passes all the \underline{regression tests}. [No vagueness]
+    \item \textbf{Validity?:} Invalid. Porting to only one other platform does not guarantee portability to all other platforms.
+\end{itemize}
+
+\textbf{Explanation:}
+
+\begin{itemize}
+    \item \textbf{Vagueness:} ``Linux platform" and ``regression tests" are relatively specific in this context, although the specific set of tests could influence the outcome.
+    \item \textbf{Validity:} This measure is invalid because testing on only one other platform (Linux) does not guarantee portability to all other platforms. Different operating systems, architectures, and environments can introduce unique challenges.
+\end{itemize}
+
+\section*{Question 6: Cost Estimation, Bad Bets, and ChatGPT}
+
+\subsection*{(a) MSF Comparison}
+
+MSF for humans' modifying their own code < MSF for humans' modifying ChatGPT-written code. \checkmark
+
+\textbf{Explanation:}
+
+It is generally more difficult and time-consuming to understand and modify someone else's code compared to one's own. ChatGPT's code, while potentially functional, might not follow the same style, logic, or conventions as the developers' code. This difference can make it harder to comprehend and modify, thus increasing the modification cost and the MSF.
+
+\subsection*{(b) Explanation of MSF Comparison}
+
+As explained above, modifying code written by someone else (or by a machine) typically requires more effort due to differences in coding style, logic, and documentation. Developers need to spend time understanding the foreign code before they can confidently modify it. This extra effort translates to a higher modification cost and, consequently, a higher MSF compared to modifying one's own code.
+
+\subsection*{(c) Formula for Modifying ChatGPT Code}
+
+Predicted total cost =  $F * P * C$
+
+\textbf{Explanation:}
+
+\begin{itemize}
+    \item $F$ (MSF for ChatGPT code): Represents the cost factor for modifying ChatGPT-written code.
+    \item $P$ (Fraction of code to be modified): The proportion of the ChatGPT code that needs changes.
+    \item $C$ (Cost to write from scratch): The cost to develop the same functionality manually.
+\end{itemize}
+The formula multiplies these factors to estimate the total cost of modifying the ChatGPT code.
+
+\subsection*{(d) Value of F for P = 10\%}
+
+If $P = 0.1$, then for the total cost to equal $C$, $F$ must be \textbf{10}.
+
+$C = F * P * C$
+$C = F * 0.1 * C$
+$1 = F * 0.1$
+$F = 10$
+
+\textbf{Explanation:}
+
+If the modification cost is to equal the cost of writing from scratch, and only 10\% needs modification, then the MSF must be 10.
+
+\subsection*{(e) Cost Comparison: Humans' Code vs. ChatGPT Code}
+
+cost for humans' writing their own code < cost for humans' modifying ChatGPT-written code. \checkmark
+
+\textbf{Explanation:}
+
+Based on the answer to (a), the MSF for modifying ChatGPT code is expected to be higher than for modifying one's own code. Even if a small portion of the ChatGPT code needs modification, the higher MSF can make the overall modification cost greater than the cost of writing the code from scratch. This is especially true because the code generated by ChatGPT may not be optimal for the exact requirements.
+
+\section*{Question 7: Internet and E-Type Systems}
+
+\subsection*{(a) Change to the Real World from ARPA-/Internet}
+
+\textbf{Change:} The widespread adoption of the Internet has dramatically increased the accessibility of information and communication globally.
+
+\textbf{Explanation:} The Internet has transformed how people access information, communicate, conduct business, learn, and entertain themselves. It has created a global network connecting billions of people and devices.
+
+\subsection*{(b) New, Unanticipated Use}
+
+\textbf{New Use:} The rise of e-commerce, using the internet to buy and sell goods and services online, often across international borders.
+
+\textbf{Explanation:} While the original ARPAnet was designed for research and communication, the ability to conduct secure transactions and exchange goods and services online was not initially anticipated. E-commerce has revolutionized retail and created new business models.
+
+\subsection*{(c) Requirement Change}
+
+\textbf{Requirement Change:} The need for robust security measures to protect against cyber threats, such as hacking, phishing, and data breaches.
+
+\textbf{Explanation:} The open nature of the early Internet made it vulnerable to malicious actors. As the Internet became increasingly used for sensitive activities like online banking and e-commerce, the need for security became paramount. This led to the development of new security protocols, encryption techniques, and cybersecurity measures.
+\end{document}
