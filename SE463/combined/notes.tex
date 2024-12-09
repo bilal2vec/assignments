@@ -1,0 +1,604 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{hyperref}
+
+\title{SE463 Exam Notes}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{TLDR - Key Definitions and Concepts}
+
+\paragraph{Requirements Types:}
+
+\begin{itemize}
+    \item \textbf{D Requirements (Scope Determined):} Define the specifics of a given scope. Essential to "build the system right." Very expensive to fix if discovered late (10-200x). \textit{Examples:} Exception handling, edge cases, implied functionalities (e.g., denominator cannot be 0 in division).
+    \item \textbf{G Requirements (Scope Determining):} Determine the overall project scope. Needed to build "the right system." Can change and expand the project's scope. \textit{Examples:} Adding new features (e.g., adding a "log" function to a calculator).
+\end{itemize}
+
+\paragraph{Domain Modeling:}
+
+\begin{itemize}
+    \item \textbf{Domain Ignoramus:} A computing expert with limited knowledge of the project's application domain. They avoid tacit assumptions, ask clarifying questions, think outside the box, find "holes" in documentation, and avoid channeling. A mixed team of domain ignoramuses and domain experts is hypothesized to generate better requirements.
+    \item \textbf{SYS (System Model):} Represents the system being built. Should have only one item not in the interface (INTF), representing the "black box" that hides implementation details.
+    \item \textbf{ENV (Environment Model):} Includes anything that might affect or be affected by the system through the interface. Should include items from assumptions, exceptions, variations, and domain assumptions (D).
+    \item \textbf{INTF (Interface Model):} Includes items that a user must be aware of, control, or sense to use the system's features and understand its responses. The level of detail depends on the system's purpose and user interaction.
+    \item \textbf{Shared Phenomena:} Key to defining the interface and interactions between the system and its environment.
+\end{itemize}
+
+\paragraph{Requirements Engineering Concepts:}
+
+\begin{itemize}
+    \item \textbf{ZJVF (Zave-Jackson Validation Formula):} D, S $\vdash$ R. \textit{Means:} Specification (S) with Domain Knowledge (D) satisfies Requirements (R). A guideline, not a formal proof due to real-world complexities.
+    \item \textbf{Use Case (UC):} A specific way a user interacts with a system to achieve a goal. Expressed as a simple imperative sentence (e.g., "Insert a coin into the coinSlot").
+    \item \textbf{Scenario:} A particular sequence of interaction steps between a user and a system for a specific use case. A single use case can have many scenarios.
+    \item \textbf{NFR (Non-Functional Requirement):} Attributes and characteristics of a system, not specific functions. Describe \textit{how} the system performs, not \textit{what} it does. Often called "quality attributes" or "the -ilities" (e.g., performance, reliability, usability, security). Can conflict and need prioritization.
+    \item \textbf{SRS (Software Requirements Specification):} Defines software requirements in detail for developers, testers, and customers. Follows IEEE standard: Section 1 (Introduction), Section 2 (Overall Description), Section 3 (Specific Requirements - the "meat"). Section 3 has detailed input/output descriptions and UML diagrams.
+\end{itemize}
+
+\paragraph{Temporal Logic:}
+
+\begin{itemize}
+    \item \textbf{LTL (Linear Temporal Logic):} A system for describing how system states change over time. Focuses on the order of events.
+    \item \textbf{Temporal Connectives:}
+    \begin{itemize}
+        \item \textbf{Henceforth ($\Box$):} $\Box f$ means $f$ is true now and in all future states.
+        \item \textbf{Eventually ($\Diamond$):} $\Diamond f$ means $f$ is true now or in some future state.
+        \item \textbf{Next State ($\bigcirc$):} $\bigcirc f$ means $f$ is true in the next state.
+        \item \textbf{Until ($\mathcal{U}$):} $f \ \mathcal{U} \ g$ means $g$ will eventually be true, and $f$ is true until then.
+        \item \textbf{Unless ($\mathcal{W}$):} $f \ \mathcal{W} \ g$ means $f$ is true indefinitely or until $g$ becomes true (but $g$ is not guaranteed to become true).
+    \end{itemize}
+    \textit{Note:} When scanning a temporal logic formula from left to right, each temporal operator introduces a new implied bound time variable which is at the same time or later than the previous.
+\end{itemize}
+
+\paragraph{UI and Documentation:}
+\begin{itemize}
+    \item \textbf{UI (User Interface):} Should be specified during requirements, not left to implementers. Bad UIs cause user confusion. Design with functional requirements. Validate with usability testing.
+    \item \textbf{Platt's Law:} "Know Thy User, for He Is Not Thee."
+    \item \textbf{Why Software Sucks (Platt):} The core reason is bad UIs, often designed by programmers for themselves, not for the typical user.
+    \item \textbf{UM (User's Manual):} A well-written UM, focusing on user perspective and functionality, can be an effective RS for many systems, especially those with a UI focus. Not suitable for all, especially those with complex, hidden NFRs or no direct user interaction.
+\end{itemize}
+
+\paragraph{Other Important Concepts:}
+\begin{itemize}
+    \item \textbf{Prescriptive Specifications:} Model-based, describe system behavior state-by-state based on inputs (e.g., state diagrams).
+    \item \textbf{Descriptive Specifications:} Describe system-wide properties over time, using logic (e.g., temporal logic).
+    \item \textbf{Phenomenon A:} Upfront requirements analysis leads to faster completion, but often impractical.
+    \item \textbf{Phenomenon B:} New requirements emerge over time, requiring iterative development.
+\end{itemize}
+
+\section{Course Introduction and Grading}
+
+\paragraph{TLDR} The course focuses on software requirements specification and analysis. The grading breakdown is 40\% for the project, 10\% for assignments, and 50\% for the final exam. For help, contact \texttt{se463 ATT uwaterloo DOTT ca}.
+
+\begin{itemize}
+    \item \textbf{Grading:} Project (40\%), Assignments (10\%), Final Exam (50\%).
+    \item \textbf{Website:} \url{http://www.student.cs.uwaterloo.ca/~se463}
+    \item \textbf{Contact:} \texttt{se463 ATT uwaterloo DOTT ca}
+    \item \textbf{Instructor:} Daniel Berry (available by appointment, prefers Zoom)
+\end{itemize}
+
+\section{Scope Determining (G) vs. Scope Determined (D) Requirements}
+
+\paragraph{TLDR} D requirements define the specifics of a given scope, are essential to "build the system right," and are very expensive to fix if found late. G requirements determine the overall project scope, are needed to build "the right system," and can change, expanding the project's scope. Agile is good for G, but each sprint needs thorough upfront RE to find all D requirements for that sprint's scope.
+
+\begin{itemize}
+    \item \textbf{Phenomenon A (Waterfall):} Upfront requirements analysis leads to faster completion, but is often impractical in real-world scenarios.
+    \item \textbf{Phenomenon B (Agile):} New requirements emerge over time, necessitating iterative development.
+    \item \textbf{D Requirements:}
+    \begin{itemize}
+        \item \textbf{Definition:} Define the specifics of a given scope. Necessary to build the system correctly.
+        \item \textbf{Cost:} Expensive to fix if discovered late (10-200x).
+        \item \textbf{Examples:} Exception handling, edge cases, implied functionalities (e.g., the denominator cannot be 0 in a division operation).
+    \end{itemize}
+    \item \textbf{G Requirements:}
+    \begin{itemize}
+        \item \textbf{Definition:} Determine the overall project scope. Needed to build the correct system.
+        \item \textbf{Change:** Can change and expand the project's scope.}
+        \item \textbf{Examples:} Adding new features (e.g., adding a "log" function to a calculator).
+    \end{itemize}
+    \item \textbf{Impact on Development:}
+    \begin{itemize}
+        \item \textbf{Waterfall:} Better for projects where D requirements are dominant.
+        \item \textbf{Agile:} More suitable when G requirements are prevalent. Modified Agile approach: Iterate to define the scope of each sprint (deal with G requirements), then perform thorough upfront RE within each sprint to discover all D requirements for that sprint's scope.
+    \end{itemize}
+\end{itemize}
+
+\section{Identifying Classes and Relationships (UML Class Diagrams)}
+
+\paragraph{TLDR} In requirements engineering, classes are used to model problem domain concepts. The world is divided into the System (what you are building) and the Environment (what it interacts with). The shared interface is where they meet. Nouns often become classes, verbs become operations, and adjectives/adverbs become attributes or non-functional requirements (NFRs). The requirements engineer builds an initial model to understand the problem, often "encoding ignorance" by including unfamiliar terms as placeholders to be clarified later.
+
+\begin{itemize}
+    \item \textbf{Classes in Requirements Engineering:} Classes represent key concepts in the problem domain and their relationships, helping to model the system's environment and interactions. They are not just for implementation.
+    \item \textbf{Dividing the World:}
+    \begin{itemize}
+        \item \textbf{System:} What you are building (the software).
+        \item \textbf{Environment:} What the system interacts with (the real world).
+        \item \textbf{Shared Interface:} Where the system and environment meet; a crucial area for analysis.
+    \end{itemize}
+    \item \textbf{Identifying Classes:} Start by identifying nouns, verbs, adjectives, and adverbs in the problem description.
+    \begin{itemize}
+        \item Nouns often become classes.
+        \item Verbs often become operations.
+        \item Adjectives and adverbs often become attributes or non-functional requirements.
+    \end{itemize}
+    \item \textbf{Shared Phenomena:} Focus on the phenomena shared between the system and its environment. These are key to defining the interface and interactions.
+    \item \textbf{Use Cases:} Use cases are identified as operations within the interface classes, accessible to and performed by actors (elements in the environment).
+    \item \textbf{Role of the Requirements Engineer:} The requirements engineer (REng) builds an initial model, often with incomplete information. This model clarifies the problem domain, identifies areas needing more information, and facilitates communication with the client. Don't be afraid to "encode ignorance" by placing unfamiliar terms from the problem description into the model as placeholders for future clarification.
+    \item \textbf{Multiplicities:}
+    \begin{itemize}
+        \item \textbf{Class Multiplicities:} Symbols like \*, +, n, 0, 1, 2 indicate how many instances of one class can be related to instances of another class.
+        \item \textbf{Arc Multiplicities:} Numbers on association lines, where each end of the arc has its own multiplicity.
+        \item \textbf{Example:} For A ---m---n---B:
+        \begin{itemize}
+            \item Each A \textit{verbs} n Bs.
+            \item Each B \textit{is verbed by} m As.
+        \end{itemize}
+          Remember to describe the relationship from both directions, using a relevant verb.
+    \end{itemize}
+    \item \textbf{Examples:} Turnstile system, WhenIsGood.net, Car, Classroom Podium.
+\end{itemize}
+
+\section{Importance of Ignorance}
+
+\paragraph{TLDR} A "domain ignoramus" is a computing expert who is unfamiliar with the specific application domain of a project. They are beneficial because they challenge assumptions, ask clarifying questions, find holes in documentation and systems, and improve the requirements elicitation process.
+
+\begin{itemize}
+    \item \textbf{Domain Ignoramus:}
+    \begin{itemize}
+        \item \textbf{Definition:} A computing expert with limited knowledge of the project's application domain. They are language-smart, able to detect inconsistencies even without full domain understanding.
+        \item \textbf{Advantages:}
+        \begin{itemize}
+            \item Avoids tacit assumptions.
+            \item Asks clarifying questions.
+            \item Thinks outside the domain box.
+            \item Finds "holes" in documentation and systems.
+            \item Avoids channeling (getting stuck in familiar patterns).
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Hypothesis:} A mixed team composed of both domain ignoramuses and domain experts generates better requirements than teams composed solely of either group.
+    \item \textbf{Immigration to projects:} Domain ignorance can be helpful for new project members, allowing them to be immediately useful and learn the domain gradually.
+\end{itemize}
+
+\section{Domain Modeling: SYS, ENV, and INTF}
+
+\paragraph{TLDR} Model the system from the user's perspective. The system model (SYS) should have only one item not in the interface (INTF), representing the "black box" that hides implementation details. The environment (ENV) includes anything that might affect or be affected by the system through the interface. The interface (INTF) should include items that a user must be aware of, control, or sense to use the system's features and understand its responses.
+\begin{itemize}
+    \item \textbf{SYS:}
+    \begin{itemize}
+        \item The system model should have only one item not in the interface, representing the black box that hides implementation details. This is referred to as the "X system".
+        \item If there are more than one item in the system (SYS) that is not also in the environment (ENV), you probably have too many.
+        \item Decomposition of the system is acceptable later, but the pieces should be apparent to the user and part of the ENV, not just implementation details.
+    \end{itemize}
+    \item \textbf{ENV:}
+    \begin{itemize}
+        \item Include anything that might affect or be affected by the system through the interface.
+        \item Items mentioned in assumptions, exceptions, variations, and domain assumptions (D) should be included.
+        \item It's better to include too much than too little; you can always remove items later.
+    \end{itemize}
+    \item \textbf{INTF:}
+    \begin{itemize}
+        \item The interface should include items that a user must be aware of, control, or sense to use the system's features and understand its responses.
+        \item What constitutes an INTF item depends on the system's features.
+        \item For an operating system, items like the screen, keyboard, and mouse are appropriate.
+        \item For a specific application, specific buttons, menu items, and windows are appropriate.
+        \item The appropriate level of detail for INTF items depends on what the system is supposed to do and how it appears to the user.
+    \end{itemize}
+\end{itemize}
+\paragraph{Most Important Overall Advice}
+\begin{itemize}
+    \item   It depends on what the system is supposed to do and how it appears to the user!!!
+    \item   A good place to start is your team's abstract, because you were careful to write it at the user level so as to attract non-techie investors. :-)
+    \item   Remember that the abstract is written at the user level, so it is a good place to start for determining what should be in the INTF.
+\end{itemize}
+
+\section{Reference Model for Requirements Engineering}
+
+\paragraph{TLDR} The reference model divides the world into the System (SUD), the Environment, and the Interface (shared phenomena between the two). Requirements (R) describe desired changes to the environment, expressed in terms of environment phenomena. The Specification (S) describes the proposed behavior of the system, expressed in terms of interface (shared) phenomena. Domain Knowledge (D) represents guaranteed properties of the environment that are assumed to be true. The Zave-Jackson Validation Formula (ZJVF) states: D, S $\vdash$ R, meaning that the specification (S), given the domain knowledge (D), is sufficient to satisfy the requirements (R).
+
+\begin{itemize}
+    \item \textbf{Reference Model:} Divides the world into the \textit{System} (SUD), the \textit{Environment}, and the \textit{Interface} (shared phenomena between the two). The boundary of the environment is fuzzy.
+    \item \textbf{Requirements (R):} Statements of \textit{desired changes} to the environment, expressed solely in terms of environment phenomena. They describe \textit{what} the system must do.
+    \item \textbf{Specification (S):} Description of the \textit{proposed behavior} of the system. Expressed in terms of interface (shared) phenomena. Explains \textit{how} the system will satisfy the requirements. Avoids design and implementation bias.
+    \item \textbf{Domain Knowledge (D):} Guaranteed properties of the environment \textit{assumed to be true}. Necessary for the system to fully meet the requirements.
+    \item \textbf{Zave-Jackson Validation Formula (ZJVF):}  D, S $\vdash$ R
+    \begin{itemize}
+      \item \textbf{Meaning:} The specification (S), given the domain knowledge (D), is sufficient to satisfy the requirements (R).
+      \item This formula is a guideline, not a precise, formal proof due to the complexities of the real world.
+    \end{itemize}
+    \item \textbf{Key Distinctions:}
+    \begin{itemize}
+        \item \textbf{Requirements vs. Specification:} Requirements focus on \textit{what} needs to be changed in the environment, while the specification describes \textit{how} the system will achieve those changes.
+        \item \textbf{Environment vs. Interface:} The environment encompasses all relevant real-world aspects, while the interface only includes the phenomena shared by the system and environment.
+    \end{itemize}
+    \item \textbf{Context Diagram:} A graphical model representing the environment, system, and their components, highlighting shared phenomena. Also called a Domain Model, Class Model, or Class Diagram. Connections in the diagram represent shared phenomena.
+    \item \textbf{Deriving Specifications:} The process of identifying actions, functions, and constraints on shared phenomena (the specification) that satisfy the requirements.
+    \item \textbf{Correctness and ZJVF:} If the ZJVF (D, S $\vdash$ R) cannot be "proven" (argued convincingly), then:
+    \begin{enumerate}
+        \item Strengthen the specification.
+        \item Strengthen the domain knowledge.
+        \item Weaken the requirements.
+    \end{enumerate}
+    \item \textbf{Uncertainty:} The real world doesn't perfectly behave like any model. D and R are approximations of the real world. Simpler models are easier to work with but less accurate. Formal proof of correctness is difficult; arguments and justifications are used instead.
+    \item \textbf{Important Considerations:}
+    \begin{itemize}
+        \item \textbf{Scoping:} The environment and interface should be scoped to include only what's necessary to express the requirements and specification—no more, no less.
+        \item \textbf{Humans in the System:} If humans are part of the system, their behavior must be specified, with the understanding that they may not always behave as expected.
+        \item \textbf{User Interface:} The user interface is part of the specification, \textit{not} an implementation detail. It describes how the user interacts with the system through shared phenomena.
+    \end{itemize}
+\end{itemize}
+
+\section{Use Cases and Scenarios}
+
+\paragraph{TLDR} A Use Case (UC) is a general way a user interacts with a system to achieve a goal. A Scenario is a specific instance of a use case, represented as a sequence of interaction steps. A Typical Scenario is the "normal" or most common sequence. Alternatives (As) are variations of a UC that achieve the main goal through different steps. Exceptions (Es) handle conditions deviating from the typical scenario. Misuse Cases are use cases that a system should be protected against (e.g., security breaches).
+\begin{itemize}
+    \item \textbf{Use Case (UC):}
+    \begin{itemize}
+        \item \textbf{Definition:} A specific way a user interacts with a system (S) to achieve a goal.
+        \item Expressed as a simple imperative sentence (e.g., "Insert a coin into the coinSlot").
+    \end{itemize}
+    \item \textbf{Scenario:}
+    \begin{itemize}
+        \item \textbf{Definition:} A particular sequence of interaction steps between a user and a system for a specific use case.
+        \item A single use case can have many scenarios.
+    \end{itemize}
+    \item \textbf{Typical Scenario:} The "normal" or most common sequence of steps within a use case, as defined by stakeholders.
+    \item \textbf{Alternatives (As):} Variations of a UC that achieve the main goal through different steps or fail to achieve the goal although following most of the steps. They are considered sub-use-cases.
+    \item \textbf{Exceptions (Es):} Sub-use-cases that handle conditions deviating from the typical scenario or other covered sub-use-cases.
+    \item \textbf{Misuse Cases:} Use cases that a system should be protected against (e.g., security breaches).
+    \begin{itemize}
+      \item \textbf{Example:} For UC "Insert a coin into the coinSlot", a misuse case could be "Insert a counterfeit coin into the coinSlot".
+    \end{itemize}
+    \item \textbf{Sub-use-cases:} Shared subsequences of steps within different scenarios of a use case. Sub-use-cases may be worth treating as use cases of their own if they can be used by other use cases.
+    \item \textbf{Distinctions:}
+    \begin{itemize}
+        \item \textbf{Use Case vs. Scenario:} A use case is a general way of using the system, while a scenario is a specific instance of that use.
+        \item \textbf{Alternatives vs. Exceptions:} Both are variations, but the distinction isn't critical as long as you find all of them. Think of them as prompts.
+    \end{itemize}
+    \item \textbf{Relationships:}
+    \begin{itemize}
+        \item A single use case contains many scenarios.
+        \item Scenarios of a use case share subsequences of steps.
+        \item Alternatives and exceptions are variations within a use case.
+    \end{itemize}
+    \item \textbf{Purpose and Applications of Scenarios and Use Cases:}
+    \begin{itemize}
+        \item Requirements elicitation.
+        \item User manuals/help documentation.
+        \item Test case generation.
+        \item User validation.
+        \item Active specification reviews.
+        \item Rapid prototyping.
+    \end{itemize}
+    \item \textbf{Advantages (according to Jo Atlee):}
+    \begin{itemize}
+        \item Simple and easy to create.
+        \item Understandable by clients.
+        \item Reflect user's essential requirements.
+        \item Separate normal from exceptional behavior.
+    \end{itemize}
+    \item \textbf{Disadvantages (according to Jo Atlee):}
+    \begin{itemize}
+        \item Don't scale well in size or complexity.
+    \end{itemize}
+    \item \textbf{Example:}
+    \begin{itemize}
+        \item \textbf{UC:} Insert a coin into the coinSlot
+        \begin{itemize}
+            \item \textbf{Typical Scenario:}
+            \begin{enumerate}
+                \item Visitor drops a coin into the coinSlot.
+                \item Coin is accepted.
+                \item CoinSlot informs the system that someone paid.
+            \end{enumerate}
+            \item \textbf{As \& Es:} Fail to insert coin, insert a coin that is returned unused, hit the coinSlot in anger, curse the coinSlot in anger.
+        \end{itemize}
+        \item \textbf{UC:} Push and walk through the barrier
+        \begin{itemize}
+            \item \textbf{Typical Scenario:}
+            \begin{enumerate}
+                \item Visitor places both hands on the barrier.
+                \item Visitor applies horizontal force.
+                \item Barrier starts to move.
+                \item Visitor walks through.
+            \end{enumerate}
+            \item \textbf{As \& Es:} Push but don't walk through, push and walk through only part way, push and find it locked, hit the barrier in anger, curse the barrier in anger.
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Methodology:}
+    \begin{itemize}
+      \item \textbf{Brainstorming:} Find as many alternatives and exceptions as possible.
+      \item \textbf{Feedback Loop:} Expect to iterate between defining use cases, scenarios, and the domain model.
+    \end{itemize}
+\end{itemize}
+
+\section{Non-Functional Requirements (NFRs)}
+
+\paragraph{TLDR} NFRs are attributes and characteristics of a system, not specific functions. They describe *how* the system should perform its functions, acting as constraints. Often called "quality attributes" or "the -ilities," they differentiate products with similar functionality (e.g., performance, reliability, usability, security). NFRs can conflict and often require prioritization to make trade-off decisions.
+
+\begin{itemize}
+    \item \textbf{What are NFRs?}
+    \begin{itemize}
+        \item \textbf{Attributes and characteristics} of a system, not specific functions.
+        \item Describe \textbf{how} the system should perform its functions, not \textit{what} it should do, acting as constraints on the way the software operates.
+        \item Often called "quality attributes" or "the -ilities".
+        \item Differentiate products with similar functionality. (e.g. performance, reliability, usability, security).
+    \end{itemize}
+    \item \textbf{Key Concepts}
+    \begin{itemize}
+        \item \textbf{Functional vs. Non-Functional:}
+        \begin{itemize}
+            \item Functional requirements are like verbs (actions the system performs).
+            \item NFRs are like adjectives or adverbs (qualities or characteristics).
+        \end{itemize}
+        \item \textbf{Customer Perspective:} Customers often focus on functional requirements, but NFRs heavily impact user experience.
+        \item \textbf{Motherhood Requirements:} Terms like "reliable" and "user-friendly" are expected, but the \textbf{degree} and \textbf{relative importance} vary.
+        \item \textbf{Fit for Use:} Quality means how well software meets its intended purpose and environment, rather than an absolute measure of "goodness."
+    \end{itemize}
+    \item \textbf{Types of NFRs}
+    \begin{itemize}
+        \item \textbf{Product-Oriented}
+        \begin{itemize}
+            \item \textbf{Performance:} Speed, response time, throughput.
+            \item \textbf{Reliability:} Fault tolerance, mean-time to failure.
+            \item \textbf{Usability:} Ease of learning, user productivity.
+            \item \textbf{Security:} Access control, data protection.
+            \item \textbf{Robustness:} Handling invalid input, graceful degradation.
+            \item \textbf{Scalability:} Handling increasing workloads, users, data.
+            \item \textbf{Efficiency:} Resource utilization, user productivity.
+            \item \textbf{Accuracy/Precision:} Tolerance of errors, precision of results.
+            \item \textbf{Adaptability:} Ease of adding new functionality, reusability.
+        \end{itemize}
+        \item \textbf{Process-Oriented}
+        \begin{itemize}
+            \item \textbf{Process requirements:} Restrictions on development process, resources, personnel.
+            \item \textbf{Design constraints:} Pre-determined design decisions (e.g., platform, components).
+            \item \textbf{Product family requirements:} Integration with other products.
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Measuring NFRs}
+    \begin{itemize}
+        \item \textbf{Fitness Criteria:} Quantify the extent to which an NFR must be met. (e.g., "90\% of users can complete a task within 4 minutes").
+        \item \textbf{Measurable Metrics:} Define specific ways to measure NFRs (e.g., response time, mean-time to failure, user error rates).
+        \item \textbf{Challenges:} Some NFRs are hard to test before delivery (e.g., long-term reliability).
+    \end{itemize}
+    \item \textbf{Techniques for Handling Difficult NFRs}
+    \begin{itemize}
+        \item \textbf{Monte Carlo Techniques:} Estimate unknown quantities using known quantities (e.g., estimating bugs remaining in a program).
+        \item \textbf{Quality-Function Deployment (QFD):} Relate unmeasurable NFRs to measurable functional requirements.
+    \end{itemize}
+    \item \textbf{Prioritizing NFRs}
+    \begin{itemize}
+        \item \textbf{Conflicts:} NFRs often conflict (e.g., maintainability vs. robustness, performance vs. security).
+        \item \textbf{Trade-offs:} Prioritization helps make decisions when conflicts arise.
+        \item \textbf{Stakeholder Input:} Different stakeholders may have different priorities.
+        \item \textbf{Quality Grid:} A tool for classifying NFRs by importance (critical, important, as usual, unimportant, ignore).
+    \end{itemize}
+\end{itemize}
+
+\section{Software Requirements Specification (SRS)}
+
+\paragraph{TLDR} The SRS defines software requirements in detail for developers, testers, and customers. It typically follows the IEEE standard, which includes: Section 1 (Introduction), Section 2 (Overall Description), and Section 3 (Specific Requirements - the "meat" of the document). Section 3 contains detailed input/output descriptions, use cases, and UML diagrams.
+
+\begin{itemize}
+    \item \textbf{SRS Basics:}
+    \begin{itemize}
+        \item \textbf{Purpose:} Defines software requirements in detail for developers, testers, and customers.
+        \item \textbf{Main Issues Addressed:}
+        \begin{itemize}
+            \item \textbf{Functionality:} What the software does.
+            \item \textbf{External Interfaces:} Interactions with users, hardware, and other software.
+            \item \textbf{Performance:} Speed, availability, response time.
+            \item \textbf{Quality Attributes (NFRs):} Portability, correctness, maintainability, security.
+            \item \textbf{Design Constraints:} Limitations on acceptable solutions (standards, languages, policies).
+        \end{itemize}
+        \item \textbf{Typically NOT Included:} Process requirements, design decisions.
+    \end{itemize}
+    \item \textbf{IEEE SRS Organization:}
+    \begin{itemize}
+        \item \textbf{Section 1: Introduction}
+        \begin{itemize}
+            \item \textbf{1.1 Purpose:} SRS purpose, audience, usage.
+            \item \textbf{1.2 Scope:} Product name, overview (what it will/won't do), application summary, boundaries.
+            \item \textbf{1.3 Acronyms, Abbreviations, Definitions, Notational Conventions:} Domain-level definitions, naming/notational conventions.
+            \item \textbf{1.4 References:} Sources of information (project documentation, interviews, external sources).
+            \item \textbf{1.5 Overview:} Structure of the rest of the SRS.
+        \end{itemize}
+        \item \textbf{Section 2: Overall Description} (Background, not specific requirements)
+        \begin{itemize}
+            \item \textbf{2.1 Product Perspective:} System environment, context diagram, overview of interfaces.
+            \item \textbf{2.2 Product Features:} Overview of main features (list of UC names or brief summaries).
+            \item \textbf{2.3 User Characteristics:} Assumptions about user background/training.
+            \item \textbf{2.4 General Constraints:} Sources of constraints (regulations, hardware, audit/control functions, security, standards, laws).
+            \item \textbf{2.5 Assumptions and Dependencies:} Assumptions about input/environment, potential failure conditions, environmental changes affecting requirements.
+        \end{itemize}
+        \item \textbf{Section 3: Specific Requirements} (The "meat" of the SRS)
+        \begin{itemize}
+            \item \textbf{3.1 External Interfaces:} Detailed input/output descriptions (name, purpose, source/destination, range, units, timing, formats).
+            \item \textbf{3.2 Functional Requirements:} Use case descriptions, sequence diagrams, domain model, functional specifications, state machine model, constraints. It can be organized by user, feature, or stimulus (use case view).
+            \item \textbf{3.3 Performance Requirements:} Concrete terms (number of users/terminals, information handled, transactions processed, workload conditions).
+            \item \textbf{3.4 Design Constraints:}
+            \item \textbf{3.5 Quality Attributes:} Testable non-functional properties (besides performance).
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Example:} ATM SRS
+    \begin{itemize}
+        \item Illustrates the different sections with a real-world example.
+        \item Highlights definitions, abbreviations, user characteristics, and product perspective.
+    \end{itemize}
+    \item \textbf{Key Takeaways for the Exam:}
+    \begin{itemize}
+      \item Understand the purpose and main components of an SRS.
+      \item Know the IEEE SRS structure (Sections 1, 2, 3 and their sub-sections).
+      \item Be able to differentiate between what belongs in each section.
+      \item Recognize the different ways to organize functional requirements in Section 3.2.
+      \item Understand the concept of quality attributes (NFRs) and how they are expressed.
+      \item Be able to identify examples of definitions, abbreviations, assumptions, and constraints from the ATM example.
+      \item Remember that Section 3 is the most detailed, containing all UML diagrams and input/output behavior specifications.
+      \item The IEEE standard describes what information should be included in a SRS document, and how that information should be arranged.
+      \item The main issues that a SRS document should address are functionality, external interfaces, performance, quality attributes, and design constraints.
+      \item An SRS document should generally not include process requirements or design decisions.
+      \item The introduction of an SRS document should include its purpose, the scope of the software product, and any definitions, acronyms, abbreviations, or notational conventions used in the document.
+      \item The overall description section provides a background on the system, which is further detailed in Section 3, and should include product perspective, product functions, user characteristics, general constraints, and assumptions and dependencies.
+      \item Section 3 should include descriptions of all interfaces to the system, all functions performed by the system, and should be at a level of detail sufficient to enable designers and testers to do their jobs.
+    \end{itemize}
+\end{itemize}
+
+\section{Temporal Logic}
+
+\paragraph{TLDR} Temporal logic is a system for describing how system states change over time. It uses temporal connectives like Henceforth ($\Box$), Eventually ($\Diamond$), Next State ($\bigcirc$), Until ($\mathcal{U}$), and Unless ($\mathcal{W}$). When scanning a temporal logic formula from left to right, each temporal operator introduces a new implied bound time variable which is at the same time or later than the previous.
+
+\begin{itemize}
+    \item \textbf{Prescriptive vs. Descriptive Specifications:}
+    \begin{itemize}
+        \item \textbf{Prescriptive:} Model-based, describe system behavior state-by-state based on inputs (e.g., state diagrams).
+        \item \textbf{Descriptive:} Describe system-wide properties over time, using logic (e.g., temporal logic).
+    \end{itemize}
+    \item \textbf{Predicate Logic Review:}
+    \begin{itemize}
+        \item Used for expressing properties about fixed-valued variables.
+        \item Key components:
+        \begin{itemize}
+            \item Typed variables (Booleans, Integers, Sets, Objects)
+            \item Functions on variables (+, -, *, /, $\cup$, $\cap$, $\wedge$, $\vee$, $\neg$)
+            \item Predicates (<, >, $\subset$, $\in$)
+            \item Equivalence (=)
+            \item Propositional connectives ($\neg$, $\wedge$, $\vee$, $\to$, $\leftrightarrow$)
+            \item Quantifiers ($\forall$, $\exists$)
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Time-Dependent Logic:}
+    \begin{itemize}
+        \item Variables are treated as time-functions (e.g., \texttt{coin(t)} means the value of \texttt{coin} at time \texttt{t}).
+        \item Formulas express relationships between variable values at different times.
+        \begin{itemize}
+          \item \textbf{Example:} $\forall t \in Time : (coin(t) \rightarrow \neg locked(t + 1))$ (If a coin is inserted at time t, the system will be unlocked at time t+1).
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Linear Temporal Logic (LTL):}
+    \begin{itemize}
+        \item Focuses on the order of events, abstracting away exact time.
+        \item \textbf{System State:} A snapshot of all variable values at a specific point in time.
+        \item \textbf{Execution:} A sequence of system states ($\sigma = s_0, s_1, s_2, ...$).
+    \end{itemize}
+    \item \textbf{Temporal Connectives:}
+    \begin{itemize}
+        \item \textbf{Henceforth ($\Box$):} $\Box f$ means $f$ is true now and in all future states.
+        \item \textbf{Eventually ($\Diamond$):} $\Diamond f$ means $f$ is true now or in some future state.
+        \item \textbf{Next State ($\bigcirc$):} $\bigcirc f$ means $f$ is true in the next state.
+        \item \textbf{Until ($\mathcal{U}$):} $f \ \mathcal{U} \ g$ means $g$ will eventually be true, and $f$ is true until then.
+        \item \textbf{Unless ($\mathcal{W}$):} $f \ \mathcal{W} \ g$ means $f$ is true indefinitely or until $g$ becomes true (but $g$ is not guaranteed to become true).
+    \end{itemize}
+    \item \textbf{Important Concepts:}
+    \begin{itemize}
+        \item $\Box(\Diamond f)$: $f$ happens infinitely often.
+        \item $\Diamond(\Box f)$: Eventually, $f$ is true forever.
+        \item When scanning a temporal logic formula from left to right, each temporal operator introduces a new implied bound time variable which is at the same time or later than the previous.
+        \begin{itemize}
+          \item \textbf{Example:} ($\Box$(coin $\rightarrow$ $\bigcirc$ $\neg$Locked)) means for all times i, if coin is true at time i then at a later time i+1 locked will be false.
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Describing State Machines with LTL:} LTL can describe the behavior of finite state machines by expressing properties about transitions and states over time.
+\end{itemize}
+
+\section{User Interface (UI) Design in Requirements}
+
+\paragraph{TLDR} UIs should be considered and specified during the requirements phase, not left solely to the implementers. Poor UIs can lead to user confusion and errors. UIs must be designed in conjunction with functional requirements to ensure consistency. Usability testing with real users is crucial to validate proposed UIs. Remember Platt's Law: "Know Thy User, for He Is Not Thee."
+
+\begin{itemize}
+    \item \textbf{UI as a Requirement:} UIs should be considered and specified during the requirements phase, not left solely to the implementers. Poor UIs can lead to user confusion and errors.
+    \item \textbf{UI and Functional Requirements:} UIs must be designed in conjunction with functional requirements to ensure consistency.
+    \item \textbf{UI Validation:} Usability testing with real users is crucial to validate proposed UIs.
+    \item \textbf{Specifying UIs:} A recommended method is to attach screen diagrams to scenario steps, showing screen appearance, user interactions, and system responses.
+    \item \textbf{Why Software Sucks (According to Platt):} The core reason is bad UIs, often designed by programmers for themselves, not for the typical user.
+    \item \textbf{Programmers vs. Users:} Programmers value control, while users value ease of use.
+    \item \textbf{Platt's Law of UI Design:} "Know Thy User, for He Is Not Thee."
+    \item \textbf{Good UI Principles:}
+    \begin{itemize}
+        \item Design should make manuals and help systems unnecessary.
+        \item Guide users through solutions.
+        \item Default behavior should align with common user needs.
+        \item Offer guided preference settings.
+        \item Make operations undoable/redoable when possible.
+    \end{itemize}
+    \item \textbf{Lostness Formula (Tullis and Albert):} A way to quantify user lostness on a website:
+    \begin{itemize}
+        \item $L = \sqrt{((N/S) - 1)^2 + ((R/N) - 1)^2}$
+        \item $R$ = minimum pages needed for a task.
+        \item $N$ = number of different pages visited.
+        \item $S$ = total pages visited (including revisits).
+        \item $L$ ranges from 0 (not lost) to 1 (totally lost). 0.4 is considered bad.
+    \end{itemize}
+    \item \textbf{Examples of poor UI choices}
+    \begin{itemize}
+        \item Asking the user if they want to save changes when closing a file, instead of asking if they want to lose their changes.
+        \item Asking the user to confirm sending a file to the recycle bin.
+    \end{itemize}
+    \item \textbf{General Advice:} KIS (Keep it Simple!)
+\end{itemize}
+
+\section{User's Manual (UM) as Requirements Specification (RS)}
+
+\paragraph{TLDR} A well-written User's Manual (UM), focusing on the user's perspective and functionality, can serve as an effective Requirements Specification (RS) for many types of Computer-Based Systems (CBSs), particularly those with a user interface focus. However, it's not suitable for all systems, especially those with complex, hidden NFRs or those lacking a direct user interaction component.
+
+\begin{itemize}
+    \item \textbf{Key Arguments for UM as RS:}
+    \begin{itemize}
+        \item \textbf{UM as a useful tool:} When done correctly, a UM can serve as a valuable tool for elicitation, analysis, and validation during requirements engineering, and it can even function as the RS itself.
+        \item \textbf{Focus on user's perspective:} A good UM describes the CBS's function from the user's point of view, not the implementer's, aligning with the goals of an RS.
+        \item \textbf{Avoids implementation details:} Like a good RS, a UM should describe \textit{what} the system does, not \textit{how} it does it, leaving design freedom to the implementers.
+        \item \textbf{Historical support:} Several industry figures (Brooks, DeMarco, McConnell) and projects (Lisa, Macintosh) have advocated for or successfully used UMs as RSs.
+    \end{itemize}
+    \item \textbf{UMs and the 5 Roles of an RS:} The creation and use of a UM can fulfill the five roles of an RS:
+    \begin{enumerate}
+        \item \textbf{Learning requirements:} Writing a UM helps in understanding the CBS's requirements.
+        \item \textbf{Reconciling stakeholder differences:} The process helps align different stakeholder perspectives.
+        \item \textbf{Customer validation:} A UM allows customers to validate that the system meets their needs before implementation.
+        \item \textbf{Implementation clarity:} A UM clarifies what needs to be built.
+        \item \textbf{Verification basis:} A UM provides a basis for deriving test cases and verifying the implementation.
+    \end{enumerate}
+    \item \textbf{Elements of a Good UM:}
+    \begin{enumerate}
+        \item \textbf{Lexicon:} Descriptions of underlying concepts.
+        \item \textbf{Use Cases:} Graduated examples showing user problems, interactions, and system responses.
+        \item \textbf{Command Summary:} A systematic overview of all commands.
+        \item \textbf{Domain Model:} Organization around abstractions in the problem domain, explaining objects, their actions, and what is done to them.
+    \end{enumerate}
+    \item \textbf{Fairley's Preliminary UM Outline:}
+    \begin{enumerate}
+        \item \textbf{Introduction:} Overview, terminology, formats, and manual outline.
+        \item \textbf{Getting Started:} Sign-on, help mode, sample run.
+        \item \textbf{Modes of Operation:} Commands/Dialogues/Reports (essentially scenarios).
+        \item \textbf{Advanced Features:}
+        \item \textbf{Command Syntax and System Options:}
+    \end{enumerate}
+    \item \textbf{When UMs as RSs Work (and When They Don't):}
+    \begin{itemize}
+        \item \textbf{Suitable CBSs:}
+        \begin{itemize}
+            \item Have at least one type of user.
+            \item Provide functionality through a user interface that's clear to the user.
+            \item Have well-understood, easily described Non-Functional Requirements (NFRs).
+        \end{itemize}
+        \item \textbf{Unsuitable CBSs:}
+        \begin{itemize}
+            \item Autonomous systems with no human users.
+            \item CBSs where complex algorithms are the main focus, not the UI.
+            \item CBSs with complex NFRs (security, reliability) not directly visible to the user.
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Help Systems as RSs:}
+    \begin{itemize}
+        \item Modern alternative to UMs.
+        \item Provide a good set of scenarios.
+        \item Can be used as the RS.
+        \item Scenarios often focus on specific user tasks, making them potentially better than traditional UMs for requirements specification.
+    \end{itemize}
+\end{itemize}
+
+\end{document}
