@@ -1,0 +1,616 @@
+\glsdefs@newdocentry{D-requirements}%
+{%
+name={D Requirements (Scope Determined)},%
+sort={D Requirements (Scope Determined)},%
+type={main},%
+first={D Requirements (Scope Determined)},%
+firstplural={D Requirements (Scope Determined)s},%
+text={D Requirements (Scope Determined)},%
+plural={D Requirements (Scope Determined)s},%
+description={Define the specifics of a given scope. Essential to "build the system right." Very expensive to fix if discovered late (10-200x). Examples: exception handling, edge cases, implied functionalities (e.g., denominator cannot be 0 in division).},%
+descriptionplural={Define the specifics of a given scope. Essential to "build the system right." Very expensive to fix if discovered late (10-200x). Examples: exception handling, edge cases, implied functionalities (e.g., denominator cannot be 0 in division).},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{G-requirements}%
+{%
+name={G Requirements (Scope Determining)},%
+sort={G Requirements (Scope Determining)},%
+type={main},%
+first={G Requirements (Scope Determining)},%
+firstplural={G Requirements (Scope Determining)s},%
+text={G Requirements (Scope Determining)},%
+plural={G Requirements (Scope Determining)s},%
+description={Determine the overall project scope. Needed to build "the right system." Can change and expand the project's scope. Examples: adding new features (e.g., adding a "log" function to a calculator).},%
+descriptionplural={Determine the overall project scope. Needed to build "the right system." Can change and expand the project's scope. Examples: adding new features (e.g., adding a "log" function to a calculator).},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{domain-ignoramus}%
+{%
+name={Domain Ignoramus},%
+sort={Domain Ignoramus},%
+type={main},%
+first={Domain Ignoramus},%
+firstplural={Domain Ignoramuss},%
+text={Domain Ignoramus},%
+plural={Domain Ignoramuss},%
+description={A computing expert with limited knowledge of the project's application domain. They avoid tacit assumptions, ask clarifying questions, think outside the box, find "holes" in documentation, and avoid channeling. A mixed team of domain ignoramuses and domain experts is hypothesized to generate better requirements.},%
+descriptionplural={A computing expert with limited knowledge of the project's application domain. They avoid tacit assumptions, ask clarifying questions, think outside the box, find "holes" in documentation, and avoid channeling. A mixed team of domain ignoramuses and domain experts is hypothesized to generate better requirements.},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{SYS}%
+{%
+name={SYS (System Model)},%
+sort={SYS (System Model)},%
+type={main},%
+first={SYS (System Model)},%
+firstplural={SYS (System Model)s},%
+text={SYS (System Model)},%
+plural={SYS (System Model)s},%
+description={Represents the system being built. Should have only one item not in the interface (INTF), representing the "black box" that hides implementation details.},%
+descriptionplural={Represents the system being built. Should have only one item not in the interface (INTF), representing the "black box" that hides implementation details.},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{ENV}%
+{%
+name={ENV (Environment Model)},%
+sort={ENV (Environment Model)},%
+type={main},%
+first={ENV (Environment Model)},%
+firstplural={ENV (Environment Model)s},%
+text={ENV (Environment Model)},%
+plural={ENV (Environment Model)s},%
+description={Includes anything that might affect or be affected by the system through the interface. Should include items from assumptions, exceptions, variations, and domain assumptions (D).},%
+descriptionplural={Includes anything that might affect or be affected by the system through the interface. Should include items from assumptions, exceptions, variations, and domain assumptions (D).},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{INTF}%
+{%
+name={INTF (Interface Model)},%
+sort={INTF (Interface Model)},%
+type={main},%
+first={INTF (Interface Model)},%
+firstplural={INTF (Interface Model)s},%
+text={INTF (Interface Model)},%
+plural={INTF (Interface Model)s},%
+description={Includes items that a user must be aware of, control, or sense to use the system's features and understand its responses. The level of detail depends on the system's purpose and user interaction.},%
+descriptionplural={Includes items that a user must be aware of, control, or sense to use the system's features and understand its responses. The level of detail depends on the system's purpose and user interaction.},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{ZJVF}%
+{%
+name={ZJVF (Zave-Jackson Validation Formula)},%
+sort={ZJVF (Zave-Jackson Validation Formula)},%
+type={main},%
+first={ZJVF (Zave-Jackson Validation Formula)},%
+firstplural={ZJVF (Zave-Jackson Validation Formula)s},%
+text={ZJVF (Zave-Jackson Validation Formula)},%
+plural={ZJVF (Zave-Jackson Validation Formula)s},%
+description={D, S $\vdash $ R. Means: Specification (S) with Domain Knowledge (D) satisfies Requirements (R). A guideline, not a formal proof due to real-world complexities.},%
+descriptionplural={D, S $\vdash $ R. Means: Specification (S) with Domain Knowledge (D) satisfies Requirements (R). A guideline, not a formal proof due to real-world complexities.},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{use-case}%
+{%
+name={Use Case (UC)},%
+sort={Use Case (UC)},%
+type={main},%
+first={Use Case (UC)},%
+firstplural={Use Case (UC)s},%
+text={Use Case (UC)},%
+plural={Use Case (UC)s},%
+description={A specific way a user interacts with a system to achieve a goal. Expressed as a simple imperative sentence (e.g., "Insert a coin into the coinSlot").},%
+descriptionplural={A specific way a user interacts with a system to achieve a goal. Expressed as a simple imperative sentence (e.g., "Insert a coin into the coinSlot").},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{scenario}%
+{%
+name={Scenario},%
+sort={Scenario},%
+type={main},%
+first={Scenario},%
+firstplural={Scenarios},%
+text={Scenario},%
+plural={Scenarios},%
+description={A particular sequence of interaction steps between a user and a system for a specific use case. A single use case can have many scenarios.},%
+descriptionplural={A particular sequence of interaction steps between a user and a system for a specific use case. A single use case can have many scenarios.},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{NFR}%
+{%
+name={NFR (Non-Functional Requirement)},%
+sort={NFR (Non-Functional Requirement)},%
+type={main},%
+first={NFR (Non-Functional Requirement)},%
+firstplural={NFR (Non-Functional Requirement)s},%
+text={NFR (Non-Functional Requirement)},%
+plural={NFR (Non-Functional Requirement)s},%
+description={Attributes and characteristics of a system, not specific functions. Describe how the system performs, not what it does. Often called "quality attributes" or "the -ilities" (e.g., performance, reliability, usability, security). Can conflict and need prioritization.},%
+descriptionplural={Attributes and characteristics of a system, not specific functions. Describe how the system performs, not what it does. Often called "quality attributes" or "the -ilities" (e.g., performance, reliability, usability, security). Can conflict and need prioritization.},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{SRS}%
+{%
+name={SRS (Software Requirements Specification)},%
+sort={SRS (Software Requirements Specification)},%
+type={main},%
+first={SRS (Software Requirements Specification)},%
+firstplural={SRS (Software Requirements Specification)s},%
+text={SRS (Software Requirements Specification)},%
+plural={SRS (Software Requirements Specification)s},%
+description={Defines software requirements in detail for developers, testers, and customers. Follows IEEE standard: Section 1 (Introduction), Section 2 (Overall Description), Section 3 (Specific Requirements - the "meat"). Section 3 has detailed input/output descriptions and UML diagrams.},%
+descriptionplural={Defines software requirements in detail for developers, testers, and customers. Follows IEEE standard: Section 1 (Introduction), Section 2 (Overall Description), Section 3 (Specific Requirements - the "meat"). Section 3 has detailed input/output descriptions and UML diagrams.},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{LTL}%
+{%
+name={LTL (Linear Temporal Logic)},%
+sort={LTL (Linear Temporal Logic)},%
+type={main},%
+first={LTL (Linear Temporal Logic)},%
+firstplural={LTL (Linear Temporal Logic)s},%
+text={LTL (Linear Temporal Logic)},%
+plural={LTL (Linear Temporal Logic)s},%
+description={A system for describing how system states change over time. Focuses on the order of events. Uses temporal connectives: Henceforth ($\Box $), Eventually ($\Diamond $), Next State ($\bigcirc $), Until ($\mathcal {U}$), Unless ($\mathcal {W}$).},%
+descriptionplural={A system for describing how system states change over time. Focuses on the order of events. Uses temporal connectives: Henceforth ($\Box $), Eventually ($\Diamond $), Next State ($\bigcirc $), Until ($\mathcal {U}$), Unless ($\mathcal {W}$).},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{temporal-connectives}%
+{%
+name={Temporal Connectives},%
+sort={Temporal Connectives},%
+type={main},%
+first={Temporal Connectives},%
+firstplural={Temporal Connectivess},%
+text={Temporal Connectives},%
+plural={Temporal Connectivess},%
+description={ \begin {itemize} \item \textbf {Henceforth ($\Box $):} $\Box f$ means $f$ is true now and in all future states. \item \textbf {Eventually ($\Diamond $):} $\Diamond f$ means $f$ is true now or in some future state. \item \textbf {Next State ($\bigcirc $):} $\bigcirc f$ means $f$ is true in the next state. \item \textbf {Until ($\mathcal {U}$):} $f \ \mathcal {U} \ g$ means $g$ will eventually be true, and $f$ is true until then. \item \textbf {Unless ($\mathcal {W}$):} $f \ \mathcal {W} \ g$ means $f$ is true indefinitely or until $g$ becomes true (but $g$ is not guaranteed to become true). \end {itemize} When scanning a temporal logic formula from left to right, each temporal operator introduces a new implied bound time variable which is at the same time or later than the previous. },%
+descriptionplural={ \begin {itemize} \item \textbf {Henceforth ($\Box $):} $\Box f$ means $f$ is true now and in all future states. \item \textbf {Eventually ($\Diamond $):} $\Diamond f$ means $f$ is true now or in some future state. \item \textbf {Next State ($\bigcirc $):} $\bigcirc f$ means $f$ is true in the next state. \item \textbf {Until ($\mathcal {U}$):} $f \ \mathcal {U} \ g$ means $g$ will eventually be true, and $f$ is true until then. \item \textbf {Unless ($\mathcal {W}$):} $f \ \mathcal {W} \ g$ means $f$ is true indefinitely or until $g$ becomes true (but $g$ is not guaranteed to become true). \end {itemize} When scanning a temporal logic formula from left to right, each temporal operator introduces a new implied bound time variable which is at the same time or later than the previous. },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{UI}%
+{%
+name={UI (User Interface)},%
+sort={UI (User Interface)},%
+type={main},%
+first={UI (User Interface)},%
+firstplural={UI (User Interface)s},%
+text={UI (User Interface)},%
+plural={UI (User Interface)s},%
+description={Should be specified during requirements, not left to implementers. Bad UIs cause user confusion. Design with functional requirements. Validate with usability testing. "Know Thy User, for He Is Not Thee."},%
+descriptionplural={Should be specified during requirements, not left to implementers. Bad UIs cause user confusion. Design with functional requirements. Validate with usability testing. "Know Thy User, for He Is Not Thee."},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{UM}%
+{%
+name={UM (User's Manual)},%
+sort={UM (User's Manual)},%
+type={main},%
+first={UM (User's Manual)},%
+firstplural={UM (User's Manual)s},%
+text={UM (User's Manual)},%
+plural={UM (User's Manual)s},%
+description={A well-written UM, focusing on user perspective and functionality, can be an effective RS for many systems, especially those with a UI focus. Not suitable for all, especially those with complex, hidden NFRs or no direct user interaction.},%
+descriptionplural={A well-written UM, focusing on user perspective and functionality, can be an effective RS for many systems, especially those with a UI focus. Not suitable for all, especially those with complex, hidden NFRs or no direct user interaction.},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{prescriptive-spec}%
+{%
+name={Prescriptive Specifications},%
+sort={Prescriptive Specifications},%
+type={main},%
+first={Prescriptive Specifications},%
+firstplural={Prescriptive Specificationss},%
+text={Prescriptive Specifications},%
+plural={Prescriptive Specificationss},%
+description={Model-based, describe system behavior state-by-state based on inputs (e.g., state diagrams).},%
+descriptionplural={Model-based, describe system behavior state-by-state based on inputs (e.g., state diagrams).},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{descriptive-spec}%
+{%
+name={Descriptive Specifications},%
+sort={Descriptive Specifications},%
+type={main},%
+first={Descriptive Specifications},%
+firstplural={Descriptive Specificationss},%
+text={Descriptive Specifications},%
+plural={Descriptive Specificationss},%
+description={Describe system-wide properties over time, using logic (e.g., temporal logic).},%
+descriptionplural={Describe system-wide properties over time, using logic (e.g., temporal logic).},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{phenomenon-A}%
+{%
+name={Phenomenon A},%
+sort={Phenomenon A},%
+type={main},%
+first={Phenomenon A},%
+firstplural={Phenomenon As},%
+text={Phenomenon A},%
+plural={Phenomenon As},%
+description={Upfront requirements analysis leads to faster completion, but often impractical.},%
+descriptionplural={Upfront requirements analysis leads to faster completion, but often impractical.},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{phenomenon-B}%
+{%
+name={Phenomenon B},%
+sort={Phenomenon B},%
+type={main},%
+first={Phenomenon B},%
+firstplural={Phenomenon Bs},%
+text={Phenomenon B},%
+plural={Phenomenon Bs},%
+description={New requirements emerge over time, requiring iterative development.},%
+descriptionplural={New requirements emerge over time, requiring iterative development.},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{platts-law}%
+{%
+name={Platt's Law},%
+sort={Platt's Law},%
+type={main},%
+first={Platt's Law},%
+firstplural={Platt's Laws},%
+text={Platt's Law},%
+plural={Platt's Laws},%
+description={"Know Thy User, for He Is Not Thee."},%
+descriptionplural={"Know Thy User, for He Is Not Thee."},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{shared-phenomena}%
+{%
+name={Shared Phenomena},%
+sort={Shared Phenomena},%
+type={main},%
+first={Shared Phenomena},%
+firstplural={Shared Phenomenas},%
+text={Shared Phenomena},%
+plural={Shared Phenomenas},%
+description={Key to defining the interface and interactions between the system and its environment.},%
+descriptionplural={Key to defining the interface and interactions between the system and its environment.},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{platt-software-sucks}%
+{%
+name={Why Software Sucks (Platt)},%
+sort={Why Software Sucks (Platt)},%
+type={main},%
+first={Why Software Sucks (Platt)},%
+firstplural={Why Software Sucks (Platt)s},%
+text={Why Software Sucks (Platt)},%
+plural={Why Software Sucks (Platt)s},%
+description={The core reason is bad UIs, often designed by programmers for themselves, not for the typical user.},%
+descriptionplural={The core reason is bad UIs, often designed by programmers for themselves, not for the typical user.},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+
