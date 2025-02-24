@@ -1,0 +1,47 @@
+METHOD 1
+
+node split_order: 1: split on 'christian' feature: 193 i_g = 0.5002058812081454 n_doc: 1500
+  [leaf] pred = 1 n_doc: 35
+  node split_order: 2: split on 'atheism' feature: 4662 i_g = 0.5001930379077578 n_doc: 1465
+    [leaf] pred = 1 n_doc: 24
+    node split_order: 3: split on 'christians' feature: 1239 i_g = 0.4998761311331795 n_doc: 1441
+      [leaf] pred = 1 n_doc: 19
+      node split_order: 4: split on 'beliefs' feature: 3522 i_g = 0.49955393402780074 n_doc: 1422
+        [leaf] pred = 1 n_doc: 19
+        node split_order: 5: split on 'atheists' feature: 600 i_g = 0.49876616865890067 n_doc: 1403
+          [leaf] pred = 1 n_doc: 12
+          node split_order: 6: split on 'brain' feature: 4194 i_g = 0.49824746138343784 n_doc: 1391
+            [leaf] pred = 1 n_doc: 10
+            node split_order: 7: split on 'aa' feature: 1148 i_g = 0.4976745554887392 n_doc: 1381
+              [leaf] pred = 1 n_doc: 7
+              node split_order: 8: split on 'murder' feature: 2383 i_g = 0.4973448755060428 n_doc: 1374
+                [leaf] pred = 1 n_doc: 7
+                node split_order: 9: split on 'proof' feature: 1417 i_g = 0.49692956104154307 n_doc: 1367
+                  [leaf] pred = 1 n_doc: 6
+                  node split_order: 10: split on 'logic' feature: 1552 i_g = 0.4966008344300007 n_doc: 1361
+                    [leaf] pred = 1 n_doc: 6
+                    [leaf] pred = 2 n_doc: 1355
+
+METHOD 2
+
+node split_order: 1: split on 'book' feature: 1135 i_g = 0.07701870448050996 n_doc: 1500
+  node split_order: 2: split on 'bible' feature: 5983 i_g = 0.1153579525217801 n_doc: 155
+    [leaf] pred = 1 n_doc: 4
+    node split_order: 3: split on 'call' feature: 197 i_g = 0.06945862991358603 n_doc: 151
+      [leaf] pred = 1 n_doc: 2
+      node split_order: 4: split on 'sent' feature: 2124 i_g = 0.0842240762131076 n_doc: 149
+        [leaf] pred = 1 n_doc: 2
+        node split_order: 9: split on 'controlling' feature: 292 i_g = 0.058758157105190834 n_doc: 147
+          [leaf] pred = 1 n_doc: 1
+          [leaf] pred = 2 n_doc: 146
+  node split_order: 5: split on 'books' feature: 2437 i_g = 0.059926184812467476 n_doc: 1345
+    node split_order: 6: split on 'sure' feature: 1228 i_g = 0.0976949604997708 n_doc: 83
+      node split_order: 7: split on 'free' feature: 3840 i_g = 0.9182958340544896 n_doc: 3
+        [leaf] pred = 2 n_doc: 1
+        [leaf] pred = 1 n_doc: 2
+      node split_order: 8: split on 'spirit' feature: 5369 i_g = 0.09694460606247315 n_doc: 80
+        [leaf] pred = 1 n_doc: 1
+        [leaf] pred = 2 n_doc: 79
+    node split_order: 10: split on 'religion' feature: 5240 i_g = 0.03567340704855959 n_doc: 1262
+      [leaf] pred = 1 n_doc: 65
+      [leaf] pred = 1 n_doc: 1197
