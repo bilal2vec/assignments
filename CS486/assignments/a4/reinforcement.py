@@ -1,6 +1,9 @@
 import random
 import numpy as np
 import sys
+import math
+from copy import deepcopy
+import matplotlib.pyplot as plt
 
 
 class Sender:
@@ -9,7 +12,9 @@ class Sender:
 
     """
 
-    def __init__(self, num_sym:int, grid_rows:int, grid_cols:int, alpha_i:float, alpha_f:float, num_ep:int, epsilon:float, discount:float):
+    def __init__(self, num_sym: int, grid_rows: int, grid_cols: int,
+                 alpha_i: float, alpha_f: float, num_ep: int, epsilon: float,
+                 discount: float):
         """
         Initializes this agent with a state, set of possible actions, and a means of storing Q-values
 
@@ -37,7 +42,12 @@ class Sender:
         self.num_ep = num_ep
         self.epsilon = epsilon
         self.discount = discount
-        self.q_vals = None # Your code here!
+        self.q_vals = np.zeros((grid_rows * grid_cols, num_sym))
+        self.grid_rows = grid_rows
+        self.grid_cols = grid_cols
+
+    def state2idx(self, state):
+        return state[1] * self.grid_cols + state[0]
 
     def select_action(self, state):
         """
@@ -49,8 +59,13 @@ class Sender:
         :return: The symbol to be transmitted (must be an int < N)
         :rtype: int
         """
-        # Your code here!
-        return 0
+        state_idx = self.state2idx(state)
+        if random.random() < self.epsilon:
+            return random.choice(self.actions)
+        else:
+            if np.all(self.q_vals[state_idx, :] == self.q_vals[state_idx, 0]):
+                return random.choice(self.actions)
+            return np.argmax(self.q_vals[state_idx, :])
 
     def update_q(self, old_state, action, reward):
         """
@@ -64,9 +79,10 @@ class Sender:
         :param reward: the reward that was received
         :type reward: float
         """
-        # Your code here!
-        pass
-
+        old_state_idx = self.state2idx(old_state)
+        old_q_val = self.q_vals[old_state_idx, action]
+        self.q_vals[old_state_idx,
+                    action] = old_q_val + self.alpha * (reward - old_q_val)
 
 
 class Receiver:
@@ -75,7 +91,9 @@ class Receiver:
 
     """
 
-    def __init__(self, num_sym:int, grid_rows:int, grid_cols:int, alpha_i:float, alpha_f:float, num_ep:int, epsilon:float, discount:float):
+    def __init__(self, num_sym: int, grid_rows: int, grid_cols: int,
+                 alpha_i: float, alpha_f: float, num_ep: int, epsilon: float,
+                 discount: float):
         """
         Initializes this agent with a state, set of possible actions, and a means of storing Q-values
 
@@ -96,14 +114,23 @@ class Receiver:
         :param discount: The discount factor
         :type discount: float
         """
-        self.actions = [0,1,2,3] # Note: these correspond to [up, down, left, right]
+        self.actions = [0, 1, 2,
+                        3]  # Note: these correspond to [up, down, left, right]
         self.alpha = alpha_i
         self.alpha_i = alpha_i
         self.alpha_f = alpha_f
         self.num_ep = num_ep
         self.epsilon = epsilon
         self.discount = discount
-        self.q_vals = None # Your code here!
+        self.q_vals = np.zeros(
+            (num_sym * grid_rows * grid_cols, len(self.actions)))
+        self.grid_rows = grid_rows
+        self.grid_cols = grid_cols
+        self.num_sym = num_sym
+
+    def state2idx(self, state):
+        msg, x, y = state
+        return msg * (self.grid_rows * self.grid_cols) + y * self.grid_cols + x
 
     def select_action(self, state):
         """
@@ -115,8 +142,13 @@ class Receiver:
         :return: The direction to move, where 0 is up, 1 is down, 2 is left, and 3 is right
         :rtype: int
         """
-        # Your code here!
-        return 0
+        state_idx = self.state2idx(state)
+        if random.random() < self.epsilon:
+            return random.choice(self.actions)
+        else:
+            if np.all(self.q_vals[state_idx, :] == self.q_vals[state_idx, 0]):
+                return random.choice(self.actions)
+            return np.argmax(self.q_vals[state_idx, :])
 
     def update_q(self, old_state, new_state, action, reward):
         """
@@ -132,12 +164,17 @@ class Receiver:
         :param reward: the reward that was received
         :type reward: float
         """
-        # Your code here!
-        pass
+        old_state_idx = self.state2idx(old_state)
+        new_state_idx = self.state2idx(new_state)
+
+        old_q_val = self.q_vals[old_state_idx, action]
+        new_max_q = np.max(self.q_vals[new_state_idx, :])
+
+        self.q_vals[old_state_idx, action] = old_q_val + self.alpha * (
+            reward + self.discount * new_max_q - old_q_val)
 
 
-
-def get_grid(grid_name:str):
+def get_grid(grid_name: str):
     """
     This function produces one of the three grids defined in the assignment as a nested list
 
@@ -146,7 +183,8 @@ def get_grid(grid_name:str):
     :return: The corresponding grid, where True indicates a wall and False a space
     :rtype: list[list[bool]]
     """
-    grid = [[False for i in range(5)] for j in range(5)] # default case is 'empty'
+    grid = [[False for i in range(5)] for j in range(5)
+           ]  # default case is 'empty'
     if grid_name == 'fourroom':
         grid[0][2] = True
         grid[2][0] = True
@@ -167,7 +205,7 @@ def get_grid(grid_name:str):
     return grid
 
 
-def legal_move(posn_x:int, posn_y:int, move_id:int, grid:list[list[bool]]):
+def legal_move(posn_x: int, posn_y: int, move_id: int, grid: list[list[bool]]):
     """
     Produces the new position after a move starting from (posn_x,posn_y) if it is legal on the given grid (i.e. not
     out of bounds or into a wall)
@@ -183,19 +221,20 @@ def legal_move(posn_x:int, posn_y:int, move_id:int, grid:list[list[bool]]):
     :return: The new (x,y) position if the move was legal, or the old position if it was not
     :rtype: (int, int)
     """
-    moves = [[0,-1],[0,1],[-1,0],[1,0]]
+    moves = [[0, -1], [0, 1], [-1, 0], [1, 0]]
     new_x = posn_x + moves[move_id][0]
     new_y = posn_y + moves[move_id][1]
-    result = (new_x,new_y)
+    result = (new_x, new_y)
     if new_x < 0 or new_y < 0 or new_x >= len(grid[0]) or new_y >= len(grid):
-        result = (posn_x,posn_y)
+        result = (posn_x, posn_y)
     else:
         if grid[new_y][new_x]:
-            result = (posn_x,posn_y)
+            result = (posn_x, posn_y)
     return result
 
 
-def run_episodes(sender:Sender, receiver:Receiver, grid:list[list[bool]], num_ep:int, delta:float):
+def run_episodes(sender: Sender, receiver: Receiver, grid: list[list[bool]],
+                 num_ep: int, delta: float):
     """
     Runs the reinforcement learning scenario for the specified number of episodes
 
@@ -223,62 +262,251 @@ def run_episodes(sender:Sender, receiver:Receiver, grid:list[list[bool]], num_ep
         # Choose prize position
         prize_x = np.random.randint(len(grid[0]))
         prize_y = np.random.randint(len(grid))
-        while grid[prize_y][prize_x] or (prize_x == receiver_x and prize_y == receiver_y):
+        while grid[prize_y][prize_x] or (prize_x == receiver_x and
+                                         prize_y == receiver_y):
             prize_x = np.random.randint(len(grid[0]))
             prize_y = np.random.randint(len(grid))
 
         # Initialize new episode
-        # (sender acts)
-        # Your code here!
+
+        sender_state = (prize_x, prize_y)
+        message = sender.select_action(sender_state)
+        eps_reward = 0.0
 
         # Receiver loop
-        # (receiver acts, check for prize, check for random termination, update receiver Q-value)
         terminate = False
-        while not terminate:
-            # Your code here!
-            pass
 
-        #Finish up episode
-        # (update sender Q-value, update alpha values, append reward to output list)
-        # Your code here!
+        receiver_state = (message, receiver_x, receiver_y)
+
+        while not terminate:
+            receiver_action = receiver.select_action(receiver_state)
+            new_receiver_x, new_receiver_y = legal_move(receiver_x, receiver_y,
+                                                        receiver_action, grid)
+            new_receiver_state = (message, new_receiver_x, new_receiver_y)
+
+            reward = 0.0
+            if new_receiver_x == prize_x and new_receiver_y == prize_y:
+                reward = 1.0
+                eps_reward = 1.0
+                terminate = True
+
+            if not terminate and random.random() < delta:
+                terminate = True
+
+            receiver.update_q(receiver_state, new_receiver_state,
+                              receiver_action, reward)
+
+            receiver_x, receiver_y = new_receiver_x, new_receiver_y
+            receiver_state = new_receiver_state
+
+        sender.update_q(sender_state, message, eps_reward)
+
+        alpha_decay = (sender.alpha_i - sender.alpha_f) / sender.num_ep
+        sender.alpha = max(sender.alpha_f, sender.alpha - alpha_decay)
+        receiver.alpha = max(receiver.alpha_f, receiver.alpha - alpha_decay)
+
+        reward_vals.append(eps_reward)
 
     return reward_vals
 
 
-if __name__ == "__main__":
-    # You will need to edit this section to produce the plots and other output required for hand-in
+def plot_results(nep_values,
+                 results,
+                 title,
+                 xlabel='log(Nep)',
+                 ylabel='Average Discounted Reward'):
+    """
+    Generates plots for the experimental results.
 
-    # Define parameters here
-    num_learn_episodes = 100000
+    :param nep_values: List of Nep values used.
+    :param results: Dictionary mapping labels (e.g., epsilon values) to tuples of (means, std_devs).
+    :param title: Title for the plot.
+    :param xlabel: Label for the x-axis.
+    :param ylabel: Label for the y-axis.
+    """
+    plt.figure()
+    log_nep = [math.log10(n) for n in nep_values]
+    for label, (means, std_devs) in results.items():
+        plt.errorbar(log_nep,
+                     means,
+                     yerr=std_devs,
+                     label=str(label),
+                     fmt='-o',
+                     capsize=5)
+
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.title(title)
+    plt.legend()
+    plt.grid(True)
+    plt.savefig(title.replace(" ", "_") + ".png")
+
+
+if __name__ == "__main__":
+    num_tests = 10
     num_test_episodes = 1000
-    grid_name = 'fourroom' # 'fourroom', 'maze', or 'empty'
-    grid = get_grid(grid_name)
-    num_signals = 4
     discount = 0.95
     delta = 1 - discount
-    epsilon = 0.1
     alpha_init = 0.9
     alpha_final = 0.01
 
-    # Initialize agents
-    sender = Sender(num_signals, len(grid), len(grid[0]), alpha_init, alpha_final, num_learn_episodes, epsilon, discount)
-    receiver = Receiver(num_signals, len(grid), len(grid[0]), alpha_init, alpha_final, num_learn_episodes, epsilon, discount)
+    nep_values = [10, 100, 1000, 10000, 50000, 100000]
+    eps = [0.01, 0.1, 0.4]
+    n_values_q3 = [2, 4, 10]
+    n_values_q4 = [2, 3, 5]
+    n_value_q5 = 1
+    epsilon_q345 = 0.1
 
-    # Learn
-    learn_rewards = run_episodes(sender, receiver, grid, num_learn_episodes, delta)
+    print('q2')
+    grid_name_q2 = 'fourroom'
+    grid_q2 = get_grid(grid_name_q2)
+    num_signals_q2 = 4
+    results_q2 = {}
 
-    # Test
-    sender.epsilon = 0.0
-    sender.alpha = 0.0
-    sender.alpha_i = 0.0
-    sender.alpha_f = 0.0
-    receiver.epsilon = 0.0
-    receiver.alpha = 0.0
-    receiver.alpha_i = 0.0
-    receiver.alpha_f = 0.0
-    test_rewards = run_episodes(sender, receiver, grid, num_test_episodes, delta)
+    for epsilon in eps:
+        avg_rewards_eps = []
+        std_devs_eps = []
 
-    # Print results
-    print("Average reward during learning: " + str(np.average(learn_rewards)))
-    print("Average reward during testing: " + str(np.average(test_rewards)))
+        for nep in nep_values:
+            print(f"{nep=}")
+            test_rewards_all_tests = []
+            for test in range(num_tests):
+                sender = Sender(num_signals_q2, len(grid_q2), len(grid_q2[0]),
+                                alpha_init, alpha_final, nep, epsilon, 0.0)
+                receiver = Receiver(num_signals_q2, len(grid_q2),
+                                    len(grid_q2[0]), alpha_init, alpha_final,
+                                    nep, epsilon, discount)
 
+                run_episodes(sender, receiver, grid_q2, nep, delta)
+
+                sender_test = deepcopy(sender)
+                receiver_test = deepcopy(receiver)
+                sender_test.epsilon = 0.0
+                sender_test.alpha = 0.0
+                receiver_test.epsilon = 0.0
+                receiver_test.alpha = 0.0
+
+                test_rewards = run_episodes(sender_test, receiver_test, grid_q2,
+                                            num_test_episodes, delta)
+                test_rewards_all_tests.append(np.average(test_rewards))
+
+            avg_rewards_eps.append(np.mean(test_rewards_all_tests))
+            std_devs_eps.append(np.std(test_rewards_all_tests))
+
+        results_q2[f"ε={epsilon}"] = (avg_rewards_eps, std_devs_eps)
+
+    plot_results(nep_values, results_q2,
+                 "Q2: Four Rooms - Avg Reward vs log(Nep)")
+
+    print("q3")
+    grid_name_q3 = 'fourroom'
+    grid_q3 = get_grid(grid_name_q3)
+    results_q3 = {}
+
+    for n_sig in n_values_q3:
+        print(f"{n_sig=}")
+        avg_rewards_n = []
+        std_devs_n = []
+
+        for nep in nep_values:
+            print(f"{nep=}")
+            test_rewards_all_tests = []
+            for test in range(num_tests):
+                sender = Sender(n_sig, len(grid_q3), len(grid_q3[0]),
+                                alpha_init, alpha_final, nep, epsilon_q345, 0.0)
+                receiver = Receiver(n_sig, len(grid_q3), len(grid_q3[0]),
+                                    alpha_init, alpha_final, nep, epsilon_q345,
+                                    discount)
+                run_episodes(sender, receiver, grid_q3, nep, delta)
+                sender_test = deepcopy(sender)
+                receiver_test = deepcopy(receiver)
+                sender_test.epsilon = 0.0
+                sender_test.alpha = 0.0
+                receiver_test.epsilon = 0.0
+                receiver_test.alpha = 0.0
+                test_rewards = run_episodes(sender_test, receiver_test, grid_q3,
+                                            num_test_episodes, delta)
+                test_rewards_all_tests.append(np.average(test_rewards))
+
+            avg_rewards_n.append(np.mean(test_rewards_all_tests))
+            std_devs_n.append(np.std(test_rewards_all_tests))
+
+        results_q3[f"N={n_sig}"] = (avg_rewards_n, std_devs_n)
+
+    plot_results(nep_values, results_q3,
+                 "Q3: Four Rooms - Avg Reward vs log(Nep) (ε=0.1)")
+
+    print("q4")
+    grid_name_q4 = 'maze'
+    grid_q4 = get_grid(grid_name_q4)
+    results_q4 = {}
+
+    for n_sig in n_values_q4:
+        print(f"{n_sig=}")
+        avg_rewards_n = []
+        std_devs_n = []
+
+        for nep in nep_values:
+            print(f"{nep=}")
+            test_rewards_all_tests = []
+            for test in range(num_tests):
+                sender = Sender(n_sig, len(grid_q4), len(grid_q4[0]),
+                                alpha_init, alpha_final, nep, epsilon_q345, 0.0)
+                receiver = Receiver(n_sig, len(grid_q4), len(grid_q4[0]),
+                                    alpha_init, alpha_final, nep, epsilon_q345,
+                                    discount)
+                run_episodes(sender, receiver, grid_q4, nep, delta)
+                sender_test = deepcopy(sender)
+                receiver_test = deepcopy(receiver)
+                sender_test.epsilon = 0.0
+                sender_test.alpha = 0.0
+                receiver_test.epsilon = 0.0
+                receiver_test.alpha = 0.0
+                test_rewards = run_episodes(sender_test, receiver_test, grid_q4,
+                                            num_test_episodes, delta)
+                test_rewards_all_tests.append(np.average(test_rewards))
+
+            avg_rewards_n.append(np.mean(test_rewards_all_tests))
+            std_devs_n.append(np.std(test_rewards_all_tests))
+
+        results_q4[f"N={n_sig}"] = (avg_rewards_n, std_devs_n)
+
+    plot_results(nep_values, results_q4,
+                 "Q4: Maze - Avg Reward vs log(Nep) (ε=0.1)")
+
+    print("q5")
+    grid_name_q5 = 'empty'
+    grid_q5 = get_grid(grid_name_q5)
+    results_q5 = {}
+    n_sig_q5 = n_value_q5
+    print(f"{n_sig_q5=}")
+    avg_rewards_n = []
+    std_devs_n = []
+
+    for nep in nep_values:
+        print(f"{nep=}")
+        test_rewards_all_tests = []
+        for test in range(num_tests):
+            sender = Sender(n_sig_q5, len(grid_q5), len(grid_q5[0]), alpha_init,
+                            alpha_final, nep, epsilon_q345, 0.0)
+            receiver = Receiver(n_sig_q5, len(grid_q5), len(grid_q5[0]),
+                                alpha_init, alpha_final, nep, epsilon_q345,
+                                discount)
+            run_episodes(sender, receiver, grid_q5, nep, delta)
+            sender_test = deepcopy(sender)
+            receiver_test = deepcopy(receiver)
+            sender_test.epsilon = 0.0
+            sender_test.alpha = 0.0
+            receiver_test.epsilon = 0.0
+            receiver_test.alpha = 0.0
+            test_rewards = run_episodes(sender_test, receiver_test, grid_q5,
+                                        num_test_episodes, delta)
+            test_rewards_all_tests.append(np.average(test_rewards))
+
+        avg_rewards_n.append(np.mean(test_rewards_all_tests))
+        std_devs_n.append(np.std(test_rewards_all_tests))
+
+    results_q5[f"N={n_sig_q5}"] = (avg_rewards_n, std_devs_n)
+
+    plot_results(nep_values, results_q5,
+                 "Q5: Empty - Avg Reward vs log(Nep) (ε=0.1, N=1)")

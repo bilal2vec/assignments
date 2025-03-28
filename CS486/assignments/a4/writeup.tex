@@ -29,6 +29,8 @@ T, S, F, G states: 0 (Absent), 1 (Present)
 
 Structure: $D \rightarrow S$, $T \rightarrow S$, $D \rightarrow F$, $D \rightarrow G$
 
+We choose 0.2 and 0.8 for high/low probabilities respectively in the cases where the prior probabilities aren't given.
+
 \subsection{b}
 
 \begin{minted}{python}
@@ -359,5 +361,44 @@ if __name__ == "__main__":
 \subsection{c}
 
 \includegraphics[width=1.0\textwidth]{em_accuracy_vs_delta.png}
+
+\section{2}
+
+\subsection{a}
+
+The optimal search strategy so it does not cross its own path is a spiral starting at the center. E.g. so numbering steps from 0-24:
+
+$$
+\begin{bmatrix}
+    12 & 11 & 10 & 9 & 24 \\
+    13 & 2 & 1 & 8 & 23 \\
+    14 & 3 & 0 & 7 & 22 \\
+    15 & 4 & 5 & 6 & 21 \\
+    16 & 17 & 18 & 19 & 20
+\end{bmatrix}
+$$
+
+The reward is then $1/24 \sum_{i=1}^{24} 0.95^i \approx 0.56$
+
+\subsection{b}
+
+\includegraphics{Q2:_Four_Rooms_-_Avg_Reward_vs_log(Nep).png}
+
+\subsection{c}
+
+\includegraphics{Q3:_Four_Rooms_-_Avg_Reward_vs_log(Nep)_(ε=0.1).png}
+
+\subsection{d}
+
+\includegraphics{Q4:_Maze_-_Avg_Reward_vs_log(Nep)_(ε=0.1).png}
+
+\subsection{e}
+
+\includegraphics{Q5:_Empty_-_Avg_Reward_vs_log(Nep)_(ε=0.1,_N=1).png}
+
+\subsection{f}
+
+We experimentally reach an upper bound of about 0.35 at logn = 5 or 100k, so to get to 0.56 it will probably take 6-7+
+
 
 \end{document}
