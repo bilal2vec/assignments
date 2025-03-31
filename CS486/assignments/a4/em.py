@@ -3,49 +3,6 @@ import matplotlib.pyplot as plt
 import copy
 from tqdm import tqdm
 
-initial_cpts = {
-    'D': np.array([0.5, 0.25, 0.25]),
-    'T': np.array([0.9, 0.1]),
-}
-
-initial_cpts_f = {  #P(F|D)
-    (0,): 0.2,
-    (1,): 0.8,
-    (2,): 0.2,
-}
-
-initial_cpts_g = {  #P(G|D)
-    (0,): 0.2,
-    (1,): 0.2,
-    (2,): 0.8,
-}
-
-initial_cpts_s = {  #P(S|D,T)
-    (0, 0): 0.2,
-    (1, 0): 0.8,
-    (2, 0): 0.8,
-    (0, 1): 0.01,
-    (1, 1): 0.01,
-    (2, 1): 0.01,
-}
-
-
-def expand_cpt(cpt_dict):
-    full_cpt = {}
-    for key, p_state1 in cpt_dict.items():
-        full_cpt[key] = np.array([1.0 - p_state1, p_state1])
-    return full_cpt
-
-
-initial_cpts['F'] = expand_cpt(initial_cpts_f)
-initial_cpts['G'] = expand_cpt(initial_cpts_g)
-initial_cpts['S'] = expand_cpt(initial_cpts_s)
-
-
-def load_data(filename):
-    data = np.loadtxt(filename, dtype=int)
-    return data
-
 
 def add_noise(cpts, delta):
     noisy_cpts = copy.deepcopy(cpts)
@@ -240,8 +197,7 @@ def predict(patient_data, cpts):
         prob_d = get_prob(cpts['D'], d_state)
         posterior_probs[d_state] = prob_s_dt * prob_f_d * prob_g_d * prob_d
 
-    prediction = np.argmax(posterior_probs)
-    return prediction
+    return np.argmax(posterior_probs)
 
 
 def calculate_acc(test_data, cpts):
@@ -255,13 +211,48 @@ def calculate_acc(test_data, cpts):
         if predicted_d_state == true_d_state:
             n_correct += 1
 
-    acc = n_correct / n_total
-    return acc
+    return n_correct / n_total
 
 
-def run_experiment(train_file, test_file, initial_cpts_base):
-    train_data = load_data(train_file)
-    test_data = load_data(test_file)
+if __name__ == "__main__":
+    initial_cpts = {
+        'D': np.array([0.5, 0.25, 0.25]),
+        'T': np.array([0.9, 0.1]),
+    }
+
+    initial_cpts_f = {  #P(F|D)
+        (0,): 0.2,
+        (1,): 0.8,
+        (2,): 0.2,
+    }
+
+    initial_cpts_g = {  #P(G|D)
+        (0,): 0.2,
+        (1,): 0.2,
+        (2,): 0.8,
+    }
+
+    initial_cpts_s = {  #P(S|D,T)
+        (0, 0): 0.2,
+        (1, 0): 0.8,
+        (2, 0): 0.8,
+        (0, 1): 0.01,
+        (1, 1): 0.01,
+        (2, 1): 0.01,
+    }
+
+    def expand_cpt(cpt_dict):
+        full_cpt = {}
+        for key, p_state1 in cpt_dict.items():
+            full_cpt[key] = np.array([1.0 - p_state1, p_state1])
+        return full_cpt
+
+    initial_cpts['F'] = expand_cpt(initial_cpts_f)
+    initial_cpts['G'] = expand_cpt(initial_cpts_g)
+    initial_cpts['S'] = expand_cpt(initial_cpts_s)
+
+    train_data = np.loadtxt('traindata.txt', dtype=int)
+    test_data = np.loadtxt('testdata.txt', dtype=int)
 
     delta_values = np.linspace(0.0, 4.0, 20)
     num_trials = 20
@@ -272,7 +263,7 @@ def run_experiment(train_file, test_file, initial_cpts_base):
 
     for delta in tqdm(delta_values):
         for trial in range(num_trials):
-            noisy_initial_cpts = add_noise(initial_cpts_base, delta)
+            noisy_initial_cpts = add_noise(initial_cpts, delta)
 
             accuracy_before = calculate_acc(test_data, noisy_initial_cpts)
             results_before_em[delta].append(accuracy_before)
@@ -308,14 +299,4 @@ def run_experiment(train_file, test_file, initial_cpts_base):
     plt.legend()
     plt.grid(True)
     plt.ylim(0, 1.05)
-    plot_filename = 'em_accuracy_vs_delta.png'
-    plt.savefig(plot_filename)
-    print(f"\nPlot saved to {plot_filename}")
-
-    return plot_filename
-
-
-if __name__ == "__main__":
-    train_filename = 'traindata.txt'
-    test_filename = 'testdata.txt'
-    plot_file = run_experiment(train_filename, test_filename, initial_cpts)
+    plt.savefig('em_accuracy_vs_delta.png')

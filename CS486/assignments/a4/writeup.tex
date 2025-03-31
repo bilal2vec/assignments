@@ -13,74 +13,29 @@
 \maketitle
 \tableofcontents
 
-I used the cursor (cursor.com) code editor to help write the code for this assignment.
+I used the cursor (cursor.com) code editor to help create the plots in this assignment.
 
 \section{1}
 
-\subsection{a}
+\subsection{1}
 
-A textual form of the BN is:
-
-Variables: D (Dunetts), T (TRIMONO), S (Sloepnea), F (Foriennditis), G (Degar)
+Variables: D (Dunetts), T (TRIMONO-HT/S), S (Sloepnea), F (Foriennditis), G (Degar)
 
 D states: 0 (None), 1 (Mild), 2 (Severe)
 
 T, S, F, G states: 0 (Absent), 1 (Present)
 
-Structure: $D \rightarrow S$, $T \rightarrow S$, $D \rightarrow F$, $D \rightarrow G$
+Bayesian Network: $D \rightarrow S$, $T \rightarrow S$, $D \rightarrow F$, $D \rightarrow G$
 
-We choose 0.2 and 0.8 for high/low probabilities respectively in the cases where the prior probabilities aren't given.
+We arbitrarily choose 0.2 and 0.8 for high/low probabilities respectively in the cases where the prior probabilities aren't given.
 
-\subsection{b}
+\subsection{2}
 
 \begin{minted}{python}
 import numpy as np
 import matplotlib.pyplot as plt
 import copy
 from tqdm import tqdm
-
-initial_cpts = {
-    'D': np.array([0.5, 0.25, 0.25]),
-    'T': np.array([0.9, 0.1]),
-}
-
-initial_cpts_f = {  #P(F|D)
-    (0,): 0.2,
-    (1,): 0.8,
-    (2,): 0.2,
-}
-
-initial_cpts_g = {  #P(G|D)
-    (0,): 0.2,
-    (1,): 0.2,
-    (2,): 0.8,
-}
-
-initial_cpts_s = {  #P(S|D,T)
-    (0, 0): 0.2,
-    (1, 0): 0.8,
-    (2, 0): 0.8,
-    (0, 1): 0.01,
-    (1, 1): 0.01,
-    (2, 1): 0.01,
-}
-
-
-def expand_cpt(cpt_dict):
-    full_cpt = {}
-    for key, p_state1 in cpt_dict.items():
-        full_cpt[key] = np.array([1.0 - p_state1, p_state1])
-    return full_cpt
-
-
-initial_cpts['F'] = expand_cpt(initial_cpts_f)
-initial_cpts['G'] = expand_cpt(initial_cpts_g)
-initial_cpts['S'] = expand_cpt(initial_cpts_s)
-
-
-def load_data(filename):
-    data = np.loadtxt(filename, dtype=int)
-    return data
 
 
 def add_noise(cpts, delta):
@@ -234,8 +189,7 @@ def llh(data, weights, cpts):
                 log_prob_f_d = get_prob(log_cpts['F'][(d_state,)], f_val)
                 log_prob_g_d = get_prob(log_cpts['G'][(d_state,)], g_val)
 
-                log_joint = log_prob_s_dt + log_prob_f_d +
-                  log_prob_g_d + log_prob_t + log_prob_d
+                log_joint = log_prob_s_dt + log_prob_f_d + log_prob_g_d + log_prob_t + log_prob_d
                 patient_ll += weights[i, d_state] * log_joint
 
         log_likelihood += patient_ll
@@ -277,8 +231,7 @@ def predict(patient_data, cpts):
         prob_d = get_prob(cpts['D'], d_state)
         posterior_probs[d_state] = prob_s_dt * prob_f_d * prob_g_d * prob_d
 
-    prediction = np.argmax(posterior_probs)
-    return prediction
+    return np.argmax(posterior_probs)
 
 
 def calculate_acc(test_data, cpts):
@@ -292,13 +245,48 @@ def calculate_acc(test_data, cpts):
         if predicted_d_state == true_d_state:
             n_correct += 1
 
-    acc = n_correct / n_total
-    return acc
+    return n_correct / n_total
 
 
-def run_experiment(train_file, test_file, initial_cpts_base):
-    train_data = load_data(train_file)
-    test_data = load_data(test_file)
+if __name__ == "__main__":
+    initial_cpts = {
+        'D': np.array([0.5, 0.25, 0.25]),
+        'T': np.array([0.9, 0.1]),
+    }
+
+    initial_cpts_f = {  #P(F|D)
+        (0,): 0.2,
+        (1,): 0.8,
+        (2,): 0.2,
+    }
+
+    initial_cpts_g = {  #P(G|D)
+        (0,): 0.2,
+        (1,): 0.2,
+        (2,): 0.8,
+    }
+
+    initial_cpts_s = {  #P(S|D,T)
+        (0, 0): 0.2,
+        (1, 0): 0.8,
+        (2, 0): 0.8,
+        (0, 1): 0.01,
+        (1, 1): 0.01,
+        (2, 1): 0.01,
+    }
+
+    def expand_cpt(cpt_dict):
+        full_cpt = {}
+        for key, p_state1 in cpt_dict.items():
+            full_cpt[key] = np.array([1.0 - p_state1, p_state1])
+        return full_cpt
+
+    initial_cpts['F'] = expand_cpt(initial_cpts_f)
+    initial_cpts['G'] = expand_cpt(initial_cpts_g)
+    initial_cpts['S'] = expand_cpt(initial_cpts_s)
+
+    train_data = np.loadtxt('traindata.txt', dtype=int)
+    test_data = np.loadtxt('testdata.txt', dtype=int)
 
     delta_values = np.linspace(0.0, 4.0, 20)
     num_trials = 20
@@ -309,7 +297,7 @@ def run_experiment(train_file, test_file, initial_cpts_base):
 
     for delta in tqdm(delta_values):
         for trial in range(num_trials):
-            noisy_initial_cpts = add_noise(initial_cpts_base, delta)
+            noisy_initial_cpts = add_noise(initial_cpts, delta)
 
             accuracy_before = calculate_acc(test_data, noisy_initial_cpts)
             results_before_em[delta].append(accuracy_before)
@@ -345,26 +333,16 @@ def run_experiment(train_file, test_file, initial_cpts_base):
     plt.legend()
     plt.grid(True)
     plt.ylim(0, 1.05)
-    plot_filename = 'em_accuracy_vs_delta.png'
-    plt.savefig(plot_filename)
-    print(f"\nPlot saved to {plot_filename}")
-
-    return plot_filename
-
-
-if __name__ == "__main__":
-    train_filename = 'traindata.txt'
-    test_filename = 'testdata.txt'
-    plot_file = run_experiment(train_filename, test_filename, initial_cpts)
+    plt.savefig('em_accuracy_vs_delta.png')
 \end{minted}
 
-\subsection{c}
+\subsection{3}
 
 \includegraphics[width=1.0\textwidth]{em_accuracy_vs_delta.png}
 
 \section{2}
 
-\subsection{a}
+\subsection{1}
 
 The optimal search strategy so it does not cross its own path is a spiral starting at the center. E.g. so numbering steps from 0-24:
 
@@ -380,25 +358,25 @@ $$
 
 The reward is then $1/24 \sum_{i=1}^{24} 0.95^i \approx 0.56$
 
-\subsection{b}
+\subsection{2}
 
 \includegraphics{Q2:_Four_Rooms_-_Avg_Reward_vs_log(Nep).png}
 
-\subsection{c}
+\subsection{3}
 
 \includegraphics{Q3:_Four_Rooms_-_Avg_Reward_vs_log(Nep)_(ε=0.1).png}
 
-\subsection{d}
+\subsection{4}
 
 \includegraphics{Q4:_Maze_-_Avg_Reward_vs_log(Nep)_(ε=0.1).png}
 
-\subsection{e}
+\subsection{5}
 
 \includegraphics{Q5:_Empty_-_Avg_Reward_vs_log(Nep)_(ε=0.1,_N=1).png}
 
-\subsection{f}
+\subsection{6}
 
-We experimentally reach an upper bound of about 0.35 at logn = 5 or 100k, so to get to 0.56 it will probably take 6-7+
+We experimentally reach an upper bound of about $0.35$ at $\log n = 5$ or $100k$, so to get to $0.56$ it will probably take 6-7 $\log n$ (1-10M) episodes if the trendlines hold.
 
 
 \end{document}
